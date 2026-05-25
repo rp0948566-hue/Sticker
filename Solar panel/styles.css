@@ -3680,6 +3680,7 @@ body.cart-open .connect-menu { opacity: 0; pointer-events: none; }
   .hero-meta .lbl { font-size: 9.5px; }
   .hero-meta .val strong { font-size: 24px; }
   * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+  .eco-diagram { display: none !important; }
 }
 
 /* User requested styling overrides */
