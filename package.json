@@ -1,0 +1,13 @@
+{
+  "name": "solar-rex",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "vite \"Solar panel\"",
+    "build": "vite build \"Solar panel\" --outDir dist --emptyOutDir",
+    "preview": "vite preview --outDir dist"
+  },
+  "devDependencies": {
+    "vite": "^5.0.0"
+  }
+}
