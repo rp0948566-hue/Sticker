@@ -312,6 +312,7 @@
 
   // ── Auto-init for every <img data-liquid> ──────────────────────────────
   function init() {
+    if (window.innerWidth < 768) return; // DISABLE heavy WebGL on mobile to fix lag!
     const targets = document.querySelectorAll('img[data-liquid]');
     targets.forEach((img) => {
       // Wait until the image dimensions are known so the canvas sizes correctly.
