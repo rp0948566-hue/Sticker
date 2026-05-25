@@ -582,16 +582,18 @@ section {
 
 /* ── Manifesto ─────────────────────────────────────────────────────────── */
 .manifesto {
-  height: 100vh;
+  min-height: 100vh;
   display: flex;
   align-items: center;
+  justify-content: flex-end;
   padding: 0 var(--pad);
   background: var(--bg-2);
   position: relative;
 }
 .manifesto-inner {
-  max-width: 1200px;
-  margin: 0 auto;
+  max-width: 860px;
+  margin: 0;
+  padding-right: 4vw;
 }
 .manifesto-label {
   font-family: var(--font-mono);
@@ -630,6 +632,28 @@ section {
 .manifesto-sig::before {
   content: '';
   width: 32px; height: 1px; background: var(--text);
+}
+
+.manifesto-scroll-msg {
+  margin-top: 60px;
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  opacity: 0.6;
+}
+.manifesto-scroll-msg .scroll-line {
+  width: 60px;
+  height: 1px;
+  background: var(--text);
+  opacity: 0.4;
+}
+@media (max-width: 768px) {
+  .manifesto-inner { padding-right: 0; }
+  .manifesto-scroll-msg { margin-top: 40px; }
 }
 
 /* ── Silent Power: asymmetric split ───────────────────────────────────── */
