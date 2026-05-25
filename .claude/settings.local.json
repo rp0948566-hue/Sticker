@@ -1,0 +1,7 @@
+{
+  "enabledMcpjsonServers": [
+    "ruflo",
+    "ruv-swarm",
+    "flow-nexus"
+  ]
+}
