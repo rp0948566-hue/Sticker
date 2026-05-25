@@ -3,9 +3,9 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "vite \"Solar panel\"",
-    "build": "vite build \"Solar panel\" --outDir ../dist --emptyOutDir",
-    "preview": "vite preview --outDir dist"
+    "dev": "vite",
+    "build": "vite build --emptyOutDir",
+    "preview": "vite preview"
   },
   "devDependencies": {
     "vite": "^5.0.0"
