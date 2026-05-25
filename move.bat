@@ -1,0 +1,16 @@
+mkdir "Solar panel"
+move .gitignore "Solar panel\"
+move *.html "Solar panel\"
+move *.js "Solar panel\"
+move *.css "Solar panel\"
+move *.json "Solar panel\"
+move .thumbnail "Solar panel\"
+move "Animated Product Slider" "Solar panel\"
+move "Social Navigation Menu" "Solar panel\"
+move "node_modules" "Solar panel\"
+move "screenshots" "Solar panel\"
+move "uploads" "Solar panel\"
+move ".claude" "Solar panel\"
+git add -A
+git commit -m "Moved all files into Solar panel folder"
+git push
