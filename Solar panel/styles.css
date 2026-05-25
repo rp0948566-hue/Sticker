@@ -733,9 +733,9 @@ section {
 /* ── Architecture: full-bleed villa with floating type ───────────────── */
 .architecture {
   position: relative;
-  height: 130vh;
-  overflow: hidden;
+  min-height: 80vh;
   background: var(--ink);
+
 }
 .arch-img {
   position: absolute;
