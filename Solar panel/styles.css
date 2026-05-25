@@ -3682,6 +3682,18 @@ body.cart-open .connect-menu { opacity: 0; pointer-events: none; }
   * { backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
 }
 
+/* User requested styling overrides */
+.arch-footer .box-card {
+  background: rgba(255, 255, 255, 0.04);
+  padding: 32px;
+  border-radius: 6px;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.cursor, .cursor-dot { display: none !important; }
+* { cursor: auto !important; }
+a, button, [data-magnetic] { cursor: pointer !important; }
+
 /* ── Touch devices: kill custom cursor on burger / drawer ── */
 @media (pointer: coarse) {
   .nav-burger, .mobile-nav-close, .mobile-nav-links a, .mobile-nav-cta { cursor: pointer; }
