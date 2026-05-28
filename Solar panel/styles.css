@@ -3740,3 +3740,119 @@ a, button, [data-magnetic] { cursor: pointer !important; }
 @media (pointer: coarse) {
   .nav-burger, .mobile-nav-close, .mobile-nav-links a, .mobile-nav-cta { cursor: pointer; }
 }
+
+/* ── USER REQUEST: REMOVE ALL BUTTON ANIMATIONS AND TRANSITIONS ── */
+.btn-hero, 
+.nav-cta, 
+.nav-cart, 
+.eng-add, 
+.btn-cart-cta, 
+.btn-cart-ghost, 
+.btn-cta-tile, 
+.connect-toggle, 
+.connect-fan a, 
+.cart-close, 
+.mobile-nav-close, 
+.mobile-nav-cta, 
+.nav-burger,
+.btn-hero *, 
+.nav-cta *, 
+.nav-cart *, 
+.eng-add *, 
+.btn-cart-cta *, 
+.btn-cart-ghost *, 
+.btn-cta-tile *, 
+.connect-toggle *, 
+.connect-fan a *, 
+.cart-close *, 
+.mobile-nav-close *, 
+.mobile-nav-cta *, 
+.nav-burger *,
+.btn-hero::before, .btn-hero::after,
+.nav-cta::before, .nav-cta::after,
+.nav-cart::before, .nav-cart::after,
+.eng-add::before, .eng-add::after,
+.btn-cart-cta::before, .btn-cart-cta::after,
+.btn-cart-ghost::before, .btn-cart-ghost::after,
+.btn-cta-tile::before, .btn-cta-tile::after,
+.connect-toggle::before, .connect-toggle::after {
+  transition: none !important;
+  animation: none !important;
+  transform: none !important;
+}
+
+/* Neutralize translation and scaling of elements on hover */
+.btn-hero:hover, 
+.nav-cta:hover, 
+.nav-cart:hover, 
+.eng-add:hover, 
+.btn-cart-cta:hover, 
+.btn-cart-ghost:hover, 
+.btn-cta-tile:hover, 
+.connect-toggle:hover, 
+.connect-fan a:hover, 
+.cart-close:hover, 
+.mobile-nav-close:hover, 
+.mobile-nav-cta:hover, 
+.nav-burger:hover {
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+/* Neutralize individual child transitions (like SVG arrows sliding or icon bounces) */
+.btn-hero:hover svg, 
+.btn-cart-cta:hover svg, 
+.btn-cta-tile:hover .arr {
+  transform: none !important;
+  transition: none !important;
+}
+
+/* Neutralize the slide-up background panels (which are animated via ::before) by disabling their transition */
+.btn-hero::before, 
+.eng-add::before, 
+.btn-cart-cta::before {
+  display: none !important; /* Hide the animatable back-layers entirely */
+}
+
+/* Standardize immediate simple hovers if background transitions were reliant on pseudo-elements */
+.btn-hero:hover {
+  background: var(--accent) !important;
+  color: var(--bg) !important;
+}
+[data-theme="light"] .btn-hero:hover {
+  background: var(--text) !important;
+  color: var(--bg) !important;
+}
+.btn-cart-cta:hover {
+  background: var(--accent) !important;
+  color: var(--bg) !important;
+}
+[data-theme="light"] .btn-cart-cta:hover {
+  background: var(--text) !important;
+  color: var(--bg) !important;
+}
+.eng-add:hover {
+  background: rgba(7, 6, 10, 1) !important;
+  color: var(--bg) !important;
+}
+[data-theme="light"] .eng-add:hover {
+  background: rgba(26, 24, 20, 0.92) !important;
+  color: #f3ecdc !important;
+}
+
+/* ── USER REQUEST: REMOVE ALL BUTTONS FROM HOME PAGE ── */
+button, 
+.btn-hero, 
+.nav-cta, 
+.nav-cart, 
+.eng-add, 
+.btn-cart-cta, 
+.btn-cart-ghost, 
+.btn-cta-tile, 
+.connect-menu,
+.theme-toggle,
+.mobile-nav-cta,
+.nav-burger {
+  display: none !important;
+}
+

@@ -198,18 +198,8 @@
   }
 
   // ── Magnetic buttons ──────────────────────────────────────────────────────
-  document.querySelectorAll('[data-magnetic]').forEach((btn) => {
-    const strength = parseFloat(btn.dataset.magnetic) || 0.35;
-    btn.addEventListener('mousemove', (e) => {
-      const r = btn.getBoundingClientRect();
-      const x = e.clientX - (r.left + r.width / 2);
-      const y = e.clientY - (r.top + r.height / 2);
-      gsap.to(btn, { x: x * strength, y: y * strength, duration: 0.6, ease: 'power3.out' });
-    });
-    btn.addEventListener('mouseleave', () => {
-      gsap.to(btn, { x: 0, y: 0, duration: 0.8, ease: 'elastic.out(1, 0.4)' });
-    });
-  });
+  // Removed per user request to disable all button animations.
+
 
   // ── Section dividers: drawing line ────────────────────────────────────────
   gsap.utils.toArray('.divider-line').forEach((el) => {
