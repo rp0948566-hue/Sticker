@@ -152,14 +152,15 @@ function updateCartUI() {
   
   if (topbarSubtotal) topbarSubtotal.textContent = `Rs. ${totalPrice.toFixed(2)}`;
   
+  const cartFooter = document.querySelector('.cart-footer');
   if (cart.length === 0) {
     if (cartEmptyState) cartEmptyState.style.display = 'block';
     if (cartItemsContainer) cartItemsContainer.style.display = 'none';
-    if (drawerSubtotalRow) drawerSubtotalRow.style.display = 'none';
-    if (checkoutBtn) checkoutBtn.style.display = 'none';
+    if (cartFooter) cartFooter.style.display = 'none';
   } else {
     if (cartEmptyState) cartEmptyState.style.display = 'none';
     if (cartItemsContainer) cartItemsContainer.style.display = 'block';
+    if (cartFooter) cartFooter.style.display = 'block';
     if (drawerSubtotalRow) {
       drawerSubtotalRow.style.display = 'flex';
       drawerSubtotalAmount.textContent = `Rs. ${totalPrice.toFixed(2)}`;
@@ -643,146 +644,7 @@ if (bestSellersCarousel && bestSellersPrevBtn && bestSellersNextBtn) {
   });
 }
 
-// PROMPT SPACE AI Generator Simulation
 document.addEventListener('DOMContentLoaded', () => {
-  const promptInput = document.querySelector('.prompt-input');
-  const promptBtn = document.querySelector('.prompt-btn');
-  const promptWrapper = document.querySelector('.prompt-input-wrapper');
-  const productsGrid = document.getElementById('products-carousel');
-
-  if (!promptInput || !promptBtn || !promptWrapper) return;
-
-  function triggerAIStickerGeneration() {
-    const promptText = promptInput.value.trim();
-    if (!promptText) {
-      // Trigger a sleek error shake animation
-      promptWrapper.classList.add('shake-error');
-      setTimeout(() => promptWrapper.classList.remove('shake-error'), 400);
-      return;
-    }
-
-    // Enter loading state
-    promptBtn.classList.add('is-loading');
-    const btnSpan = promptBtn.querySelector('span');
-    const originalBtnText = btnSpan.textContent;
-    btnSpan.textContent = 'CREATING...';
-
-    // Simulate AI Generation
-    setTimeout(() => {
-      // Exit loading state
-      promptBtn.classList.remove('is-loading');
-      btnSpan.textContent = originalBtnText;
-      promptInput.value = ''; // Clear input
-
-      // Create a premium custom toast notification
-      showPremiumToast(`✨ Custom sticker created: "${promptText}"!`);
-
-      // Add custom card to TOP PICKS carousel!
-      if (productsGrid) {
-        // Find a template card to clone
-        const templateCard = productsGrid.querySelector('.product-card');
-        if (templateCard) {
-          const newCard = templateCard.cloneNode(true);
-          newCard.style.display = 'block'; // Make sure it's visible
-          
-          // Customize details
-          const titleEl = newCard.querySelector('.product-title');
-          if (titleEl) titleEl.textContent = promptText.length > 25 ? promptText.substring(0, 25) + '...' : promptText;
-          
-          const saveBadge = newCard.querySelector('.save-badge');
-          if (saveBadge) {
-            saveBadge.textContent = 'AI Custom';
-            saveBadge.style.display = 'block';
-          }
-          
-          // Randomize rating & pricing
-          const reviewsEl = newCard.querySelector('.reviews-count');
-          if (reviewsEl) reviewsEl.textContent = '(1)';
-          
-          const currentPriceEl = newCard.querySelector('.price-current');
-          if (currentPriceEl) currentPriceEl.textContent = 'Rs. 49.00';
-          
-          const oldPriceEl = newCard.querySelector('.price-old');
-          if (oldPriceEl) oldPriceEl.textContent = 'Rs. 99.00';
-
-          const priceBadge = newCard.querySelector('.price-badge');
-          if (priceBadge) {
-            priceBadge.textContent = '-50%';
-            priceBadge.style.display = 'inline-block';
-          }
-
-          // Give placeholder image a custom vibrant gradient
-          const placeholderImg = newCard.querySelector('.placeholder-image');
-          if (placeholderImg) {
-            placeholderImg.style.background = 'linear-gradient(135deg, #ff3366 0%, #ff8a00 100%)';
-            placeholderImg.style.boxShadow = 'inset 0 0 20px rgba(0,0,0,0.15)';
-          }
-
-          // Prepend card and smooth scroll to it
-          productsGrid.prepend(newCard);
-          productsGrid.scrollTo({ left: 0, behavior: 'smooth' });
-
-          // Re-wire Add to Cart button for this new card
-          const newAddBtn = newCard.querySelector('.add-to-cart-btn');
-          if (newAddBtn && typeof cart !== 'undefined') {
-            newAddBtn.addEventListener('click', (e) => {
-              e.stopPropagation();
-              const product = {
-                id: 'ai-custom-' + Date.now(),
-                title: titleEl.textContent,
-                price: 49.00,
-                originalPrice: 99.00,
-                rating: 5,
-                reviews: 1,
-                image: ''
-              };
-              cart.push({ ...product, quantity: 1 });
-              if (typeof updateCartUI === 'function') {
-                updateCartUI();
-                if (typeof toggleCart === 'function') toggleCart();
-              }
-            });
-          }
-        }
-      }
-    }, 2500);
-  }
-
-  promptBtn.addEventListener('click', triggerAIStickerGeneration);
-  promptInput.addEventListener('keypress', (e) => {
-    if (e.key === 'Enter') {
-      triggerAIStickerGeneration();
-    }
-  });
-
-  // Helper to show modern toast
-  function showPremiumToast(message) {
-    let toastContainer = document.querySelector('.toast-container');
-    if (!toastContainer) {
-      toastContainer = document.createElement('div');
-      toastContainer.className = 'toast-container';
-      document.body.appendChild(toastContainer);
-    }
-
-    const toast = document.createElement('div');
-    toast.className = 'premium-toast';
-    toast.innerHTML = `
-      <div class="toast-content">
-        <span class="toast-message">${message}</span>
-      </div>
-    `;
-
-    toastContainer.appendChild(toast);
-    
-    // Trigger slide in
-    setTimeout(() => toast.classList.add('visible'), 50);
-
-    // Auto dismiss
-    setTimeout(() => {
-      toast.classList.remove('visible');
-      setTimeout(() => toast.remove(), 400);
-    }, 4500);
-  }
 
   // Customer Reviews Testimonials Slider Logic
   const reviewSlides = document.querySelectorAll('.review-slide');
