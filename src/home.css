@@ -2991,7 +2991,7 @@ main {
 .review-quote {
   position: absolute;
   bottom: -45px; /* Overlaps bottom border vertically */
-  right: 55px;
+  right: 20px;
   font-size: 130px;
   color: #000000; /* Solid black quotes */
   font-family: Georgia, serif;
