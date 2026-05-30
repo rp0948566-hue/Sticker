@@ -1546,12 +1546,74 @@ main {
 }
 
 .quick-view svg {
-  width: 20px;
-  height: 20px;
+  width: 22px;
+  height: 22px;
   stroke: #000000;
-  stroke-width: 2.2;
-  fill: none;
+  stroke-width: 1.5;
+  fill: #ffffff;
   transition: stroke 0.25s ease;
+  transform-origin: center;
+}
+
+.eye-pupil {
+  fill: #000000;
+  stroke: none;
+}
+
+.eye-highlight {
+  fill: #ffffff;
+  stroke: none;
+  opacity: 0.8;
+}
+
+.eye-pupil-group {
+  will-change: transform;
+  transition: transform 0.1s ease-out;
+}
+
+/* Eye Blinking Animation */
+@keyframes eye-blink {
+  0%, 90%, 100% { transform: scaleY(1); }
+  95% { transform: scaleY(0.05); }
+}
+
+.product-card:hover .quick-view svg {
+  animation: eye-blink 3.5s infinite;
+}
+
+/* Loading dots animation */
+.loading-dots {
+  display: none;
+  align-items: center;
+  gap: 2px;
+}
+
+.loading-dots span {
+  width: 4px;
+  height: 4px;
+  background-color: #000;
+  border-radius: 50%;
+  animation: dot-pulse 1s infinite alternate;
+}
+
+.quick-view:hover .loading-dots span {
+  background-color: #facc15;
+}
+
+.loading-dots span:nth-child(2) { animation-delay: 0.3s; }
+.loading-dots span:nth-child(3) { animation-delay: 0.6s; }
+
+@keyframes dot-pulse {
+  from { opacity: 0.3; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1.2); }
+}
+
+.quick-view.is-loading svg {
+  display: none;
+}
+
+.quick-view.is-loading .loading-dots {
+  display: flex;
 }
 
 .product-info {
@@ -2850,24 +2912,52 @@ main {
 }
 
 .reviews-arrow {
-  width: 44px;
-  height: 44px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  background-color: #ffffff;
-  border-radius: 10px;
+  width: 48px;
+  height: 48px;
+  border: 2px solid rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, #ffffff 0%, #f8f8f8 100%);
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.03);
-  transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08),
+              0 2px 4px rgba(0, 0, 0, 0.04),
+              inset 0 1px 2px rgba(255, 255, 255, 0.6);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  position: relative;
+  overflow: hidden;
+}
+
+.reviews-arrow::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+  transition: left 0.5s ease;
+}
+
+.reviews-arrow:hover::before {
+  left: 100%;
 }
 
 .reviews-arrow:hover {
-  background-color: #fcfcfc;
-  border-color: rgba(0, 0, 0, 0.15);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
-  transform: translateY(-2px);
+  background: linear-gradient(135deg, #f0f0f0 0%, #ffffff 100%);
+  border-color: rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12),
+              0 4px 8px rgba(0, 0, 0, 0.08),
+              inset 0 1px 2px rgba(255, 255, 255, 0.7);
+  transform: translateY(-3px);
+}
+
+.reviews-arrow:active {
+  transform: translateY(-1px);
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.08),
+              0 1px 2px rgba(0, 0, 0, 0.04),
+              inset 0 1px 2px rgba(255, 255, 255, 0.5);
 }
 
 .reviews-arrow svg {

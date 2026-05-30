@@ -241,31 +241,42 @@ document.addEventListener('click', (e) => {
   const quickViewBtn = e.target.closest('.quick-view');
   if (quickViewBtn) {
     e.preventDefault();
+    if (quickViewBtn.classList.contains('is-loading')) return;
+
     const card = quickViewBtn.closest('.product-card');
     if (!card) return;
-    
-    const title = card.querySelector('.product-title').textContent;
-    const currentPriceText = card.querySelector('.price-current').textContent;
-    const currentPrice = parseFloat(currentPriceText.replace('Rs. ', '').trim());
-    const oldPriceElement = card.querySelector('.price-old');
-    const oldPrice = oldPriceElement ? oldPriceElement.textContent : '';
-    
-    if (qvTitle) qvTitle.textContent = title;
-    if (qvPriceOld) qvPriceOld.textContent = oldPrice;
-    if (qvQtyInput) qvQtyInput.value = 1;
-    
-    const qvModalEl = document.getElementById('quick-view-modal');
-    if (qvModalEl) {
-      qvModalEl.dataset.unitPrice = currentPrice;
-      qvModalEl.dataset.unitOldPrice = oldPrice ? parseFloat(oldPrice.replace('Rs. ', '').trim()) : '';
-    }
-    
-    updateQuickViewPrice();
-    
-    if (qvModal) qvModal.classList.add('active');
-    if (qvOverlay) qvOverlay.classList.add('active');
-    document.body.classList.add('modal-open');
-    document.documentElement.classList.add('modal-open');
+
+    // Show loading state
+    quickViewBtn.classList.add('is-loading');
+
+    // Total 2 second delay (1.5s animation + extra)
+    setTimeout(() => {
+      const title = card.querySelector('.product-title').textContent;
+      const currentPriceText = card.querySelector('.price-current').textContent;
+      const currentPrice = parseFloat(currentPriceText.replace('Rs. ', '').trim());
+      const oldPriceElement = card.querySelector('.price-old');
+      const oldPrice = oldPriceElement ? oldPriceElement.textContent : '';
+      
+      if (qvTitle) qvTitle.textContent = title;
+      if (qvPriceOld) qvPriceOld.textContent = oldPrice;
+      if (qvQtyInput) qvQtyInput.value = 1;
+      
+      const qvModalEl = document.getElementById('quick-view-modal');
+      if (qvModalEl) {
+        qvModalEl.dataset.unitPrice = currentPrice;
+        qvModalEl.dataset.unitOldPrice = oldPrice ? parseFloat(oldPrice.replace('Rs. ', '').trim()) : '';
+      }
+      
+      updateQuickViewPrice();
+      
+      if (qvModal) qvModal.classList.add('active');
+      if (qvOverlay) qvOverlay.classList.add('active');
+      document.body.classList.add('modal-open');
+      document.documentElement.classList.add('modal-open');
+
+      quickViewBtn.classList.remove('is-loading');
+    }, 2000);
+    return;
   }
 
   const addToCartBtn = e.target.closest('.add-to-cart-btn');
@@ -824,7 +835,62 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   // Initial Rotation start
+// Initial Rotation start
   if (reviewSlides.length > 0) {
     startReviewAutoplay();
   }
 });
+
+// Optimized Eye-tracking logic
+let activeEyeGroup = null;
+let activeCardRect = null;
+let targetX = 0;
+let targetY = 0;
+let currentX = 0;
+let currentY = 0;
+
+document.addEventListener('mouseover', (e) => {
+  const card = e.target.closest('.product-card');
+  if (card) {
+    activeEyeGroup = card.querySelector('.eye-pupil-group');
+    if (activeEyeGroup) {
+      activeCardRect = card.getBoundingClientRect();
+    }
+  }
+});
+
+document.addEventListener('mouseout', (e) => {
+  if (!e.relatedTarget || !e.relatedTarget.closest('.product-card')) {
+    if (activeEyeGroup) {
+      activeEyeGroup.style.transform = 'translate(0, 0)';
+    }
+    activeEyeGroup = null;
+    activeCardRect = null;
+    targetX = 0;
+    targetY = 0;
+  }
+});
+
+document.addEventListener('mousemove', (e) => {
+  if (window.innerWidth <= 1024 || !activeEyeGroup || !activeCardRect) return;
+  
+  const rect = activeCardRect;
+  const cardCenterX = rect.left + rect.width / 2;
+  const cardCenterY = rect.top + rect.height / 2;
+  
+  const angle = Math.atan2(e.clientY - cardCenterY, e.clientX - cardCenterX);
+  const distance = Math.min(2.5, Math.hypot(e.clientX - cardCenterX, e.clientY - cardCenterY) / 60);
+  
+  targetX = Math.cos(angle) * distance;
+  targetY = Math.sin(angle) * distance;
+});
+
+function animateEye() {
+  if (activeEyeGroup) {
+    currentX += (targetX - currentX) * 0.15;
+    currentY += (targetY - currentY) * 0.15;
+    activeEyeGroup.style.transform = `translate(${currentX.toFixed(2)}px, ${currentY.toFixed(2)}px)`;
+  }
+  requestAnimationFrame(animateEye);
+}
+requestAnimationFrame(animateEye);
