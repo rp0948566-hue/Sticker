@@ -4,6 +4,35 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cream Website</title>
+    <style>
+      /* Products grid - proper 4-column layout */
+      .all-products-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 24px;
+        padding: 40px;
+        background-color: #FFFDD0;
+      }
+      @media (max-width: 1100px) {
+        .all-products-grid { grid-template-columns: repeat(3, 1fr); }
+      }
+      @media (max-width: 768px) {
+        .all-products-grid { grid-template-columns: repeat(2, 1fr); padding: 20px; gap: 16px; }
+      }
+      @media (max-width: 480px) {
+        .all-products-grid { grid-template-columns: repeat(2, 1fr); padding: 12px; gap: 12px; }
+      }
+      /* Image box: transparent by default, cream only on hover */
+      .all-products-grid .product-image-container {
+        background-color: transparent;
+        border-color: transparent;
+        transition: background-color 0.4s ease, border-color 0.4s ease;
+      }
+      .all-products-grid .product-card:hover .product-image-container {
+        background-color: #f8f8f2;
+        border-color: rgba(0, 0, 0, 0.03);
+      }
+    </style>
   </head>
   <body>
     <!-- Announcement Bar -->
@@ -51,7 +80,7 @@
           <a href="/home">COMBO</a>
           <a href="#" class="has-submenu">MOBILE SKINS <svg class="icon-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></a>
           <a href="#">MYSTERY BOX</a>
-          <a href="#" class="underlined">NEW ARRIVALS</a>
+          <a href="/index.html" class="underlined">NEW ARRIVALS</a>
           <a href="#">CARD SKINS</a>
           <a href="#">MACBOOK SKINS</a>
           <a href="#">ACCESSORIES</a>
@@ -90,7 +119,7 @@
         <a href="/home">COMBO</a>
         <a href="#" class="has-submenu">MOBILE SKINS <div class="submenu-icon-wrapper"><svg class="icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></div></a>
         <a href="#">MYSTERY BOX</a>
-        <a href="#" class="active-link">NEW ARRIVALS</a>
+        <a href="/index.html" class="active-link">NEW ARRIVALS</a>
         <a href="#">CARD SKINS</a>
         <a href="#">MACBOOK SKINS</a>
         <a href="#">ACCESSORIES</a>
@@ -305,9 +334,10 @@
         </div>
       </div>
  
-      <div class="carousel-container"><section class="products-carousel products-grid" id="products-carousel">
+      <!-- All Products Grid -->
+      <div class="all-products-grid" id="all-products-grid">
 
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -338,7 +368,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -369,7 +399,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -400,7 +430,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -431,7 +461,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -462,7 +492,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -493,7 +523,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -524,7 +554,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -555,7 +585,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -586,7 +616,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -617,7 +647,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -648,7 +678,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -679,7 +709,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -710,7 +740,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -741,7 +771,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -772,7 +802,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -803,7 +833,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -834,7 +864,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -865,7 +895,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -896,7 +926,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -927,7 +957,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -958,7 +988,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -989,7 +1019,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1020,7 +1050,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1051,7 +1081,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1082,7 +1112,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1113,7 +1143,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1144,7 +1174,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1175,7 +1205,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1206,7 +1236,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1237,7 +1267,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1268,7 +1298,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1299,7 +1329,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1330,7 +1360,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1361,7 +1391,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1392,7 +1422,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1423,7 +1453,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1454,7 +1484,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1485,7 +1515,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1516,7 +1546,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1547,7 +1577,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1578,7 +1608,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1609,7 +1639,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1640,7 +1670,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1671,7 +1701,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1702,7 +1732,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1733,7 +1763,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1764,7 +1794,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1795,7 +1825,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1826,7 +1856,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1857,7 +1887,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1888,7 +1918,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1919,7 +1949,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1950,7 +1980,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -1981,7 +2011,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2012,7 +2042,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2043,7 +2073,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2074,7 +2104,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2105,7 +2135,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2136,7 +2166,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2167,7 +2197,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2198,7 +2228,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2229,7 +2259,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2260,7 +2290,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2291,7 +2321,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2322,7 +2352,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2353,7 +2383,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2384,7 +2414,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2415,7 +2445,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2446,7 +2476,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2477,7 +2507,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2508,7 +2538,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2539,7 +2569,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2570,7 +2600,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2601,7 +2631,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2632,7 +2662,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2663,7 +2693,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2694,7 +2724,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2725,7 +2755,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2756,7 +2786,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2787,7 +2817,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2818,7 +2848,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2849,7 +2879,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2880,7 +2910,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2911,7 +2941,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2942,7 +2972,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -2973,7 +3003,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3004,7 +3034,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3035,7 +3065,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3066,7 +3096,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3097,7 +3127,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3128,7 +3158,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3159,7 +3189,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3190,7 +3220,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3221,7 +3251,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3252,7 +3282,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3283,7 +3313,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3314,7 +3344,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3345,7 +3375,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3376,7 +3406,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3407,7 +3437,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3438,7 +3468,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3469,7 +3499,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3500,7 +3530,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3531,7 +3561,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3562,7 +3592,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3593,7 +3623,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3624,7 +3654,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3655,7 +3685,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3686,7 +3716,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3717,7 +3747,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3748,7 +3778,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3779,7 +3809,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3810,7 +3840,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3841,7 +3871,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3872,7 +3902,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3903,7 +3933,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3934,7 +3964,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3965,7 +3995,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -3996,7 +4026,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4027,7 +4057,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4058,7 +4088,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4089,7 +4119,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4120,7 +4150,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4151,7 +4181,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4182,7 +4212,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4213,7 +4243,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4244,7 +4274,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4275,7 +4305,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4306,7 +4336,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4337,7 +4367,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4368,7 +4398,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4399,7 +4429,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4430,7 +4460,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4461,7 +4491,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4492,7 +4522,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4523,7 +4553,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4554,7 +4584,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4585,7 +4615,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4616,7 +4646,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4647,7 +4677,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4678,7 +4708,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4709,7 +4739,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4740,7 +4770,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4771,7 +4801,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4802,7 +4832,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4833,7 +4863,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4864,7 +4894,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4895,7 +4925,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4926,7 +4956,7 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        <div class="product-card" style="display: none;">
+        <div class="product-card">
           <div class="product-image-container">
             <div class="save-badge">Save Rs. 40.00</div>
             <div class="placeholder-image"></div>
@@ -4957,72 +4987,8 @@
             <button class="add-to-cart-btn">Add to cart</button>
           </div>
         </div>
-        </section>
-        
-        <div class="carousel-controls">
-          <button class="view-all-btn">View all</button>
-          <div class="arrow-buttons">
-            <button class="carousel-arrow prev-btn is-dash" id="carousel-prev">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <line class="svg-dash" x1="8" y1="12" x2="16" y2="12"></line>
-                <polyline class="svg-chevron" points="15 18 9 12 15 6"></polyline>
-              </svg>
-            </button>
-            <button class="carousel-arrow next-btn" id="carousel-next">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
-                <line class="svg-dash" x1="8" y1="12" x2="16" y2="12"></line>
-                <polyline class="svg-chevron" points="9 18 15 12 9 6"></polyline>
-              </svg>
-            </button>
-          </div>
-        </div>
       </div>
 
-      <!-- Combined Autoplay Section (Gold Yellow Background) -->
-      <section class="empty-section empty-sec-combined" style="padding: 40px 0; overflow: hidden; display: flex; flex-direction: column; gap: 30px;">
-        <!-- Track 1: Scroll Right -->
-        <div class="marquee-row">
-          <div class="marquee-row-track track-right">
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-          </div>
-        </div>
-        <!-- Track 2: Scroll Left -->
-        <div class="marquee-row">
-          <div class="marquee-row-track track-left">
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-            <div class="empty-product-frame"></div>
-          </div>
-        </div>
-      </section>
 
       <!-- BEST SELLERS Carousel Section -->
       <section class="bestsellers-section">
@@ -5509,11 +5475,11 @@
       </div>
 
       <div class="cart-footer">
-        <div class="cart-subtotal-row" id="drawer-subtotal-row" style="display: none;">
+        <div class="cart-subtotal-row" id="drawer-subtotal-row">
           <span class="subtotal-label">Subtotal</span>
           <span class="subtotal-amount" id="drawer-subtotal">Rs. 0.00</span>
         </div>
-        <button class="checkout-btn" id="checkout-btn" style="display: none;">Checkout</button>
+        <button class="checkout-btn" id="checkout-btn">Checkout</button>
         <div class="cart-footer-text">
           Free shipping on orders above Rs. 499 <br>
           <a href="#">Shipping</a> & <a href="#">taxes</a> calculated at checkout
