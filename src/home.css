@@ -2990,8 +2990,8 @@ main {
 /* Floating Huge Quote Symbol */
 .review-quote {
   position: absolute;
-  bottom: -45px; /* Overlaps bottom border vertically */
-  right: 20px;
+  bottom: -55px; /* Overlaps bottom border vertically */
+  right: 5px;
   font-size: 130px;
   color: #000000; /* Solid black quotes */
   font-family: Georgia, serif;
