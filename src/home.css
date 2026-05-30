@@ -67,230 +67,238 @@ body.modal-open {
   100% { transform: translateX(-50%); }
 }
 
-/* Topbar */
-.topbar {
+/* ==========================================
+   PREMIUM BLACK NAVBAR STYLES
+   ========================================== */
+.navbar {
   background-color: #000000;
   color: #ffffff;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  gap: 0;
-  padding: 10px 30px;
+  width: 100%;
   height: 90px;
-  box-sizing: border-box;
   position: sticky;
   top: 0;
   z-index: 1100;
-}
-
-/* Left - Logo (empty on desktop now) */
-.topbar-left {
+  box-sizing: border-box;
   display: flex;
   align-items: center;
-  height: 100%;
-  flex: 0 0 auto;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 
-/* Brand Logo - stacked italic STICK / IT UP with black outline */
-.brand-logo {
-  display: inline-flex;
-  flex-direction: column;
-  align-items: flex-start;
-  justify-content: center;
-  text-decoration: none;
+.nav-container {
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 30px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  box-sizing: border-box;
+}
+
+/* Mobile Hamburger Menu */
+.nav-mobile-menu {
+  display: none;
+  font-size: 24px;
+  color: #ffffff;
+  cursor: pointer;
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.nav-mobile-menu:hover {
+  color: #facc15;
+}
+
+/* Logo Styling */
+.nav-left {
+  display: flex;
+  align-items: center;
+}
+
+.nav-left .logo {
   font-family: 'Outfit', sans-serif;
   font-weight: 900;
-  font-style: italic;
-  line-height: 0.95;
-  letter-spacing: 1px;
-  user-select: none;
+  font-size: 26px;
   color: #facc15;
-  -webkit-text-stroke: 1.5px #000000;
-  text-shadow:
-    -2px 0 0 #000,
-    2px 0 0 #000,
-    0 -2px 0 #000,
-    0 2px 0 #000,
-    -2px -2px 0 #000,
-    2px -2px 0 #000,
-    -2px 2px 0 #000,
-    2px 2px 0 #000;
-}
-.brand-logo .brand-line {
-  display: block;
-}
-.brand-logo .brand-stick {
-  font-size: 30px;
-}
-.brand-logo .brand-itup {
-  font-size: 30px;
+  text-decoration: none;
+  letter-spacing: 1px;
+  transition: transform 0.2s ease, opacity 0.2s ease;
+  user-select: none;
+  display: inline-block;
+  line-height: 1;
 }
 
-/* Center - Nav */
-.topbar-center {
+.nav-left .logo:hover {
+  transform: scale(1.02);
+  opacity: 0.95;
+}
+
+/* Navigation Links Center Block */
+.nav-center {
   display: flex;
-  justify-content: center;
   align-items: center;
 }
 
-.desktop-nav-links {
-  display: grid;
-  grid-template-columns: auto auto auto auto;
-  column-gap: 30px;
-  row-gap: 4px;
+.nav-links {
+  list-style: none;
+  display: flex;
+  gap: 25px;
+  margin: 0;
+  padding: 0;
   align-items: center;
-  justify-content: start;
 }
-.desktop-nav-links a:nth-child(1) { grid-column: 1; grid-row: 1; }
-.desktop-nav-links a:nth-child(2) { grid-column: 2; grid-row: 1; }
-.desktop-nav-links a:nth-child(3) { grid-column: 3; grid-row: 1; }
-.desktop-nav-links a:nth-child(4) { grid-column: 4; grid-row: 1; }
-.desktop-nav-links a:nth-child(5) { grid-column: 1; grid-row: 2; }
-.desktop-nav-links a:nth-child(6) { grid-column: 2; grid-row: 2; }
-.desktop-nav-links a:nth-child(7) { grid-column: 3; grid-row: 2; }
 
-.topbar-center a {
+.nav-links li {
+  position: relative;
+}
+
+.nav-links a {
   color: #ffffff;
   text-decoration: none;
   font-size: 14px;
-  font-weight: 800;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  transition: color 0.2s ease;
   display: flex;
   align-items: center;
-  gap: 5px;
-  white-space: nowrap;
+  gap: 4px;
+  padding: 8px 0;
 }
 
-.topbar-center a:hover {
-  color: #f5f5f5;
-  text-decoration: underline;
-  text-decoration-color: #e0e0e0; /* Off-white underline */
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1.5px;
+.nav-links a:hover {
+  color: #facc15;
 }
 
-.topbar-center a.underlined {
-  text-decoration: underline;
-  text-underline-offset: 4px;
-  text-decoration-thickness: 1.5px;
+/* Active Nav Underline effect */
+.nav-links a.active-link,
+.nav-links a.underlined {
+  border-bottom: 2px solid #facc15;
+  color: #facc15;
 }
 
-.icon-down {
-  width: 14px;
-  height: 14px;
-}
-
-.dropdown-chevron,
-.mobile-dropdown-chevron,
-.wanted-chevron {
-  width: 14px;
-  height: 14px;
-  margin-left: 4px;
-  transition: transform 0.2s;
-}
-
-/* Right - Actions */
-.topbar-right {
+/* Right Section Actions */
+.nav-right {
   display: flex;
   align-items: center;
   gap: 25px;
-  margin-left: auto;
 }
 
-.customer-support {
-  background-color: #1a1a1a;
-  border-radius: 8px;
+/* Support Box */
+.support-box {
+  background-color: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 12px;
   padding: 8px 16px;
   display: flex;
   align-items: center;
   gap: 12px;
+  transition: background-color 0.2s ease;
 }
 
-.icon-headset {
-  width: 20px;
-  height: 20px;
+.support-box:hover {
+  background-color: rgba(255, 255, 255, 0.08);
+}
+
+.support-box i {
+  font-size: 18px;
   color: #aaaaaa;
 }
 
-.support-text {
+.support-info {
   display: flex;
   flex-direction: column;
 }
 
-.support-label {
-  font-size: 11px;
-  color: #aaaaaa;
+.support-info .label {
+  font-size: 10px;
+  color: #888888;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.support-email {
+.support-info .email {
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 700;
   color: #ffffff;
 }
 
-.icon-btn {
-  background: none;
-  border: none;
+/* Icon Groups */
+.nav-icons-group {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+}
+
+.nav-icons-group i {
+  font-size: 20px;
   color: #ffffff;
   cursor: pointer;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.icon-btn svg {
-  width: 22px;
-  height: 22px;
+.nav-icons-group i:hover {
+  color: #facc15;
+  transform: scale(1.08);
 }
 
-.cart-section {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  cursor: pointer;
-}
-
-.cart-icon-wrapper {
+/* Cart Wrapper & Badge */
+.cart-wrapper {
   position: relative;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 }
 
-.cart-icon-wrapper svg {
-  width: 24px;
-  height: 24px;
+.cart-wrapper i {
+  font-size: 22px;
+  transition: color 0.2s ease, transform 0.2s ease;
 }
 
-.cart-badge {
+.cart-wrapper:hover i {
+  color: #facc15;
+  transform: scale(1.08);
+}
+
+.cart-wrapper .cart-badge {
   position: absolute;
-  top: -6px;
+  top: -5px;
   right: -8px;
   background-color: #facc15;
   color: #000000;
   font-size: 10px;
   font-weight: 800;
-  width: 16px;
-  height: 16px;
+  width: 17px;
+  height: 17px;
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
+  box-shadow: 0 0 0 2px #000000;
 }
 
-.cart-text {
+/* Cart Subtotal Text next to icon */
+.cart-info-text {
   display: flex;
   flex-direction: column;
+  cursor: pointer;
+  transition: opacity 0.2s ease;
 }
 
-.cart-label {
-  font-size: 11px;
-  color: #aaaaaa;
+.cart-info-text:hover {
+  opacity: 0.9;
+}
+
+.cart-info-text .subtotal-label {
+  font-size: 10px;
+  color: #888888;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
-.cart-amount {
+.cart-info-text .amount {
   font-size: 14px;
   font-weight: 800;
   color: #ffffff;
@@ -1725,6 +1733,12 @@ main {
 /* Responsive Styles for Mobile */
 @media (max-width: 768px) {
   /* Topbar Mobile Layout */
+  .navbar {
+    height: 60px !important;
+  }
+  .nav-container {
+    padding: 0 15px !important;
+  }
   .topbar {
     padding: 12px 16px;
   }
@@ -1753,6 +1767,9 @@ main {
     background: transparent;
     border: none;
     padding: 0;
+  }
+  .nav-mobile-menu {
+    display: block !important;
   }
   .mobile-menu-btn svg, .mobile-user-btn svg, .mobile-bag-icon {
     width: 24px;
@@ -1792,8 +1809,22 @@ main {
   }
   
   /* Hide Desktop Elements */
-  .desktop-only, .desktop-nav-links, .desktop-logo-placeholder {
+  .desktop-only, .desktop-nav-links, .desktop-logo-placeholder,
+  .nav-center, .support-box, .cart-info-text {
     display: none !important;
+  }
+  
+  /* Fit Cart Drawer and Overlay on Mobile */
+  .cart-overlay {
+    top: 60px !important;
+    height: calc(100vh - 60px) !important;
+  }
+  .cart-drawer {
+    top: 75px !important;
+    height: calc(100vh - 95px) !important;
+    right: 15px !important;
+    width: calc(100% - 30px) !important;
+    border-radius: 16px !important;
   }
   
   /* Update Mobile Cart Icon Badge */

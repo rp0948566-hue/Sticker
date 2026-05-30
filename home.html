@@ -4,6 +4,8 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cream Website</title>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
   <body>
     <!-- Announcement Bar -->
@@ -35,65 +37,70 @@
       </div>
     </div>
     
-    <header class="topbar">
-      <div class="topbar-left">
-        <button class="icon-btn mobile-menu-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </button>
-        <button class="icon-btn mobile-user-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </button>
-        <div class="desktop-logo-placeholder"></div>
-      </div>
-      <div class="topbar-center">
-        <div class="mobile-logo-placeholder"></div>
-        <div class="desktop-nav-links">
-          <a href="/home">COMBO</a>
-          <a href="#" class="has-submenu">MOBILE SKINS <svg class="icon-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></a>
-          <a href="#">MYSTERY BOX</a>
-          <a href="/index.html" class="underlined">NEW ARRIVALS</a>
-          <a href="#">CARD SKINS</a>
-          <a href="#">MACBOOK SKINS</a>
-          <a href="#">ACCESSORIES</a>
+    <!-- BLACK NAVBAR COMPONENT -->
+    <nav class="navbar">
+      <div class="nav-container">
+        <!-- MOBILE ONLY: Hamburger -->
+        <div class="nav-mobile-menu mobile-menu-btn">
+          <i class="fas fa-bars"></i>
         </div>
-      </div>
-      <div class="topbar-right">
-        <div class="customer-support desktop-only">
-          <svg class="icon-headset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
-          <div class="support-text">
-            <span class="support-label">Customer support</span>
-            <span class="support-email">wecare@stickitup.xyz</span>
+
+        <!-- Logo section -->
+        <div class="nav-left">
+          <a href="/home.html" class="logo">STICK IT UP</a>
+        </div>
+
+        <!-- Navigation links section -->
+        <div class="nav-center">
+          <ul class="nav-links">
+            <li><a href="#">Clothing</a></li>
+            <li><a href="#" class="has-submenu">Stickers & Skins <i class="fas fa-chevron-down" style="font-size: 0.5rem; vertical-align: middle; margin-left: 2px;"></i></a></li>
+            <li><a href="#">Mystery Box</a></li>
+            <li><a href="/index.html">New Arrivals</a></li>
+            <li><a href="#">Custom Stickers</a></li>
+            <li><a href="#">Our Story</a></li>
+            <li><a href="#">Reviews</a></li>
+          </ul>
+        </div>
+
+        <!-- Action icons section (including Customer support and Cart) -->
+        <div class="nav-right">
+          <!-- Customer support section -->
+          <div class="support-box">
+            <i class="fas fa-headset"></i>
+            <div class="support-info">
+              <span class="label">Customer support</span>
+              <span class="email">wecare@stickitup.xyz</span>
+            </div>
+          </div>
+
+          <div class="nav-icons-group">
+            <i class="fas fa-search" id="nav-search"></i>
+            <i class="fas fa-user" id="nav-user"></i>
+            <div class="cart-wrapper" id="cart-btn">
+              <i class="fas fa-shopping-bag"></i>
+              <span class="cart-badge" id="cart-badge">0</span>
+            </div>
+          </div>
+
+          <div class="cart-info-text" id="cart-info-btn">
+            <span class="subtotal-label">Subtotal</span>
+            <span class="amount" id="topbar-subtotal">Rs. 0.00</span>
           </div>
         </div>
-        <button class="icon-btn search-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </button>
-        <button class="icon-btn user-btn desktop-only">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </button>
-        <div class="cart-section" id="cart-btn">
-          <div class="cart-icon-wrapper">
-            <svg class="icon-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2" ry="2"></rect><path d="M8 8V6a4 4 0 0 1 8 0v2"></path></svg>
-            <span class="cart-badge" id="cart-badge">0</span>
-          </div>
-          <div class="cart-text desktop-only">
-            <span class="cart-label">Subtotal</span>
-            <span class="cart-amount" id="topbar-subtotal">Rs. 0.00</span>
-          </div>
-        </div>
       </div>
-    </header>
+    </nav>
 
     <!-- Mobile Menu Drawer -->
     <div class="mobile-menu-drawer" id="mobile-menu">
       <div class="mobile-menu-links">
-        <a href="/home">COMBO</a>
-        <a href="#" class="has-submenu">MOBILE SKINS <div class="submenu-icon-wrapper"><svg class="icon-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg></div></a>
-        <a href="#">MYSTERY BOX</a>
-        <a href="/index.html" class="active-link">NEW ARRIVALS</a>
-        <a href="#">CARD SKINS</a>
-        <a href="#">MACBOOK SKINS</a>
-        <a href="#">ACCESSORIES</a>
+        <a href="#">Clothing</a>
+        <a href="#" class="has-submenu">Stickers & Skins <div class="submenu-icon-wrapper"><i class="fas fa-chevron-right" style="font-size: 0.8rem;"></i></div></a>
+        <a href="#">Mystery Box</a>
+        <a href="/index.html" class="active-link">New Arrivals</a>
+        <a href="#">Custom Stickers</a>
+        <a href="#">Our Story</a>
+        <a href="#">Reviews</a>
       </div>
 
       <div class="customer-support mobile-support">
