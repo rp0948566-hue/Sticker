@@ -2676,6 +2676,7 @@ main {
     padding: 50px 20px 40px 20px; /* Extra top padding to clear avatar */
     text-align: center;
     width: 100%;
+    margin-bottom: 20px; /* Spacing below card for mobile quote overlap */
   }
   .review-stars {
     justify-content: center;
@@ -2967,6 +2968,7 @@ main {
   border: 1px solid rgba(0, 0, 0, 0.02);
   min-height: 200px;
   box-sizing: border-box;
+  margin-bottom: 25px; /* Spacing below card for quote overlap */
 }
 
 .review-stars {
