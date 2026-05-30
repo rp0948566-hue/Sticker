@@ -2682,7 +2682,7 @@ main {
   }
   .review-quote {
     position: absolute;
-    bottom: 10px;
+    bottom: -35px; /* Overlaps bottom border horizontally centered */
     right: 50%;
     transform: translateX(50%);
     font-size: 90px;
@@ -2988,9 +2988,9 @@ main {
 /* Floating Huge Quote Symbol */
 .review-quote {
   position: absolute;
-  bottom: 15px;
-  right: 35px;
-  font-size: 120px;
+  bottom: -45px; /* Overlaps bottom border vertically */
+  right: 55px;
+  font-size: 130px;
   color: #000000; /* Solid black quotes */
   font-family: Georgia, serif;
   font-weight: bold;
@@ -3001,4 +3001,5 @@ main {
   height: 60px;
   display: flex;
   align-items: flex-end;
+  z-index: 4; /* sit on top of the card border */
 }
