@@ -1,11 +1,12 @@
 import { getLoadingHTML } from './Loading animion/Loading.js';
 
+const INITIAL_BATCH = 30;
 const CHUNK_SIZE = 30;
 let currentIndex = 0;
 let isLoading = false;
 
 export function initLazyLoad() {
-  const grid = document.getElementById('all-products-grid');
+  const grid = document.querySelector('.products-grid');
   if (!grid) return; // Only runs on the New Arrivals page
 
   // Get all product cards
@@ -31,8 +32,8 @@ export function initLazyLoad() {
   const animationNode = loadingEl.firstElementChild;
   grid.parentNode.insertBefore(animationNode, grid.nextSibling);
 
-  // Show first 30 cards immediately (no loading delay for initial batch)
-  showNextChunk(allCards, animationNode);
+  // Show the first 39 cards immediately, then load 30 more at a time.
+  showNextChunk(allCards, animationNode, INITIAL_BATCH);
 
   // Sentinel div at bottom triggers next load
   const sentinel = document.createElement('div');
@@ -56,9 +57,9 @@ export function initLazyLoad() {
   observer.observe(sentinel);
 }
 
-function showNextChunk(allCards, animationNode) {
+function showNextChunk(allCards, animationNode, batchSize = CHUNK_SIZE) {
   const total = allCards.length;
-  const end = Math.min(currentIndex + CHUNK_SIZE, total);
+  const end = Math.min(currentIndex + batchSize, total);
 
   for (let i = currentIndex; i < end; i++) {
     allCards[i].style.display = '';
@@ -71,9 +72,8 @@ function showNextChunk(allCards, animationNode) {
 
   currentIndex = end;
 
-  // Hide loading spinner when done loading
   if (animationNode) {
-    animationNode.style.display = 'none';
+    animationNode.style.display = currentIndex < total ? 'flex' : 'none';
   }
 }
 
@@ -88,7 +88,7 @@ function triggerLoad(allCards, animationNode) {
   const loadTime = 3000;
 
   setTimeout(() => {
-    showNextChunk(allCards, animationNode);
+    showNextChunk(allCards, animationNode, CHUNK_SIZE);
     isLoading = false;
   }, loadTime);
 }

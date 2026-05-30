@@ -1,5 +1,5 @@
 import './home.css';
-import { getLoadingHTML } from './Loading animion/Loading.js';
+import { initLazyLoad } from './lazy-load.js';
 
 const cartBtn = document.getElementById('cart-btn');
 const cartDrawer = document.getElementById('cart-drawer');
@@ -876,3 +876,5 @@ function animateEye() {
   requestAnimationFrame(animateEye);
 }
 requestAnimationFrame(animateEye);
+
+initLazyLoad();
