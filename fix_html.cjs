@@ -375,6 +375,22 @@ const bottomHtml = `
         </button>
       </div>
 
+      <!-- FIXED DISCOUNT PROGRESS BANNER -->
+      <div class="cart-discount-banner" id="cart-discount-banner" style="display: none;">
+        <div class="discount-text">
+          <span class="lightning">⚡</span> Add <strong id="discount-delta">4</strong> more stickers — Get 25 for just <strong style="color: #facc15;">₹300 (₹12 each)</strong>!
+        </div>
+        <div class="discount-progress-wrapper">
+          <div class="discount-progress-track">
+            <div class="discount-progress-bar" id="discount-progress-bar"></div>
+            <div class="discount-progress-badge" id="discount-progress-badge">
+              <svg viewBox="0 0 24 24" fill="currentColor" style="width: 10px; height: 10px; color: #000;"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 c-0.11,0.2-0.06,0.47,0.12,0.61l2.03,1.58C4.84,11.36,4.8,11.68,4.8,12c0,0.32,0.03,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.11-0.2,0.06-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"></path></svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCROLLABLE CART CONTENT -->
       <div class="cart-content" id="cart-content">
         <div class="cart-empty" id="cart-empty">
           <div class="cart-empty-main">
@@ -402,16 +418,41 @@ const bottomHtml = `
         <div id="cart-items-container" class="cart-items-container"></div>
       </div>
 
-      <div class="cart-footer">
-        <div class="cart-subtotal-row" id="drawer-subtotal-row" style="display: none;">
-          <span class="subtotal-label">Subtotal</span>
+      <!-- FIXED BOTTOM RECOMMENDATION WIDGET -->
+      <div class="cart-recommendation-section" id="cart-recommendation-section" style="display: none;">
+        <div class="recom-header">
+          <span class="recom-title">Lowest AF Deals 😈</span>
+          <div class="recom-arrows">
+            <button class="recom-arrow prev" id="recom-prev">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
+            </button>
+            <button class="recom-arrow next" id="recom-next">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
+            </button>
+          </div>
+        </div>
+        <div class="recom-card" id="recom-card"></div>
+      </div>
+
+      <!-- FIXED FOOTER -->
+      <div class="cart-footer" style="display: none;">
+        <div class="cart-subtotal-row">
+          <span class="subtotal-label">SUBTOTAL</span>
           <span class="subtotal-amount" id="drawer-subtotal">Rs. 0.00</span>
         </div>
-        <button class="checkout-btn" id="checkout-btn" style="display: none;">Checkout</button>
-        <div class="cart-footer-text">
-          Free shipping on orders above Rs. 499 <br>
-          <a href="#">Shipping</a> & <a href="#">taxes</a> calculated at checkout
+        <div class="cart-shipping-note">
+          Taxes and <a href="#" style="text-decoration: underline; color: #000; text-underline-offset: 3px;">shipping</a> calculated at checkout
         </div>
+        <div class="free-shipping-badge">
+          FREE SHIPPING ON ALL ORDERS
+        </div>
+        <button class="buy-now-btn" id="checkout-btn">
+          <span>BUY NOW</span>
+          <div class="payment-icons">
+            <svg viewBox="0 0 40 16" width="30" height="12" style="display:block;"><path fill="#4285F4" d="M5.4,8.2V4.5H2.6v3.7c0,1.2,0.9,2.1,2.1,2.1h0.7V8.2C5.4,8.2,5.4,8.2,5.4,8.2z"/><path fill="#34A853" d="M10.8,4.5H8v3.7c0,1.2,0.9,2.1,2.1,2.1h0.7V8.2L10.8,4.5z"/><path fill="#FBBC05" d="M8,12v1.5H5.4v-2c0-1.2,0.9-2.1,2.1-2.1h0.7V10.9L8,12z"/><path fill="#EA4335" d="M2.6,12v1.5H5.4v-2c0-1.2-0.9-2.1-2.1-2.1H2.6V12z"/></svg>
+            <span style="font-size: 8px; font-weight: 800; color: #00baf2; font-family: sans-serif;">paytm</span>
+          </div>
+        </button>
       </div>
     </div>
     

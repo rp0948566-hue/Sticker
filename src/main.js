@@ -121,24 +121,38 @@ const cartBadge = document.getElementById('cart-badge');
 const topbarSubtotal = document.getElementById('topbar-subtotal');
 const cartEmptyState = document.getElementById('cart-empty');
 const cartItemsContainer = document.getElementById('cart-items-container');
-const drawerSubtotalRow = document.getElementById('drawer-subtotal-row');
 const drawerSubtotalAmount = document.getElementById('drawer-subtotal');
-const checkoutBtn = document.getElementById('checkout-btn');
 const continueShoppingBtn = document.getElementById('continue-shopping');
 
 if (continueShoppingBtn) {
   continueShoppingBtn.addEventListener('click', closeCart);
 }
 
+// Lowest AF Deals Catalog for endless recommendations
+const stickerCatalog = [
+  { id: 'recom-1', title: 'Stop thinking start doing Sticker', price: 15.00, originalPrice: 79.00, image: '/IMAGE/1.png' },
+  { id: 'recom-2', title: 'HORSE GUY Sticker', price: 15.00, originalPrice: 79.00, image: '/IMAGE/1.png' },
+  { id: 'recom-3', title: 'HULK HOGAN Sticker', price: 15.00, originalPrice: 79.00, image: '/IMAGE/1.png' },
+  { id: 'recom-4', title: 'HULKAMANIA Sticker', price: 15.00, originalPrice: 79.00, image: '/IMAGE/1.png' },
+  { id: 'recom-5', title: 'Keep Distance Sticker', price: 15.00, originalPrice: 79.00, image: '/IMAGE/1.png' },
+  { id: 'recom-6', title: 'Combat Sticker', price: 15.00, originalPrice: 79.00, image: '/IMAGE/1.png' }
+];
+let currentRecomIndex = 0;
+
 function updateCartUI() {
   let totalItems = 0;
-  let totalPrice = 0;
-  
   cart.forEach(item => {
     totalItems += item.quantity;
+  });
+
+  // Dynamic Discount Logic: 25+ items drops each item's price to ₹12.00!
+  const isDiscountApplied = totalItems >= 25;
+  let totalPrice = 0;
+  cart.forEach(item => {
+    item.price = isDiscountApplied ? 12.00 : 15.00;
     totalPrice += item.price * item.quantity;
   });
-  
+
   if (cartBadge) {
     cartBadge.textContent = totalItems;
     if (totalItems > 0) {
@@ -149,56 +163,88 @@ function updateCartUI() {
       cartBadge.style.color = 'inherit';
     }
   }
-  
+
   if (topbarSubtotal) topbarSubtotal.textContent = `Rs. ${totalPrice.toFixed(2)}`;
-  
+  if (drawerSubtotalAmount) drawerSubtotalAmount.textContent = `Rs. ${totalPrice.toFixed(2)}`;
+
+  // Toggle sections based on cart state
   const cartFooter = document.querySelector('.cart-footer');
+  const discountBanner = document.getElementById('cart-discount-banner');
+  const recomSection = document.getElementById('cart-recommendation-section');
+
   if (cart.length === 0) {
     if (cartEmptyState) cartEmptyState.style.display = 'block';
     if (cartItemsContainer) cartItemsContainer.style.display = 'none';
     if (cartFooter) cartFooter.style.display = 'none';
+    if (discountBanner) discountBanner.style.display = 'none';
+    if (recomSection) recomSection.style.display = 'none';
   } else {
     if (cartEmptyState) cartEmptyState.style.display = 'none';
     if (cartItemsContainer) cartItemsContainer.style.display = 'block';
-    if (cartFooter) cartFooter.style.display = 'block';
-    if (drawerSubtotalRow) {
-      drawerSubtotalRow.style.display = 'flex';
-      drawerSubtotalAmount.textContent = `Rs. ${totalPrice.toFixed(2)}`;
-    }
-    if (checkoutBtn) checkoutBtn.style.display = 'block';
+    if (cartFooter) cartFooter.style.display = 'flex';
     
+    // Update lightning discount progress bar banner
+    if (discountBanner) {
+      discountBanner.style.display = 'block';
+      const targetCount = 25;
+      const progressPercent = Math.min((totalItems / targetCount) * 100, 100);
+      
+      const discountProgressBar = document.getElementById('discount-progress-bar');
+      const discountProgressBadge = document.getElementById('discount-progress-badge');
+      if (discountProgressBar) discountProgressBar.style.width = `${progressPercent}%`;
+      if (discountProgressBadge) discountProgressBadge.style.left = `${progressPercent}%`;
+      
+      const discountDelta = document.getElementById('discount-delta');
+      const delta = targetCount - totalItems;
+      if (discountDelta) {
+        if (delta > 0) {
+          discountDelta.parentElement.innerHTML = `<span class="lightning">⚡</span> Add <strong id="discount-delta">${delta}</strong> more stickers — Get 25 for just <strong style="color: #facc15;">₹300 (₹12 each)</strong>!`;
+        } else {
+          discountDelta.parentElement.innerHTML = `🎉 <strong>Offer Unlocked!</strong> You got the bulk deal at <strong style="color: #facc15;">₹12 each</strong>!`;
+        }
+      }
+    }
+
     renderCartItems();
+    renderRecommendation();
   }
 }
 
 function renderCartItems() {
   if (!cartItemsContainer) return;
   cartItemsContainer.innerHTML = '';
-  
+
   cart.forEach((item, index) => {
     const itemEl = document.createElement('div');
     itemEl.className = 'cart-item';
     itemEl.innerHTML = `
-      <div class="cart-item-image placeholder"></div>
+      <img src="${item.image || '/IMAGE/1.png'}" class="cart-item-image" alt="${item.title}" onerror="this.src='/IMAGE/1.png'">
       <div class="cart-item-details">
         <div class="cart-item-title">${item.title}</div>
         <div class="cart-item-price">Rs. ${item.price.toFixed(2)}</div>
-        <div class="cart-item-actions">
-          <div class="quantity-controls">
-            <button class="qty-btn minus" data-index="${index}">-</button>
-            <span class="qty-amount">${item.quantity}</span>
-            <button class="qty-btn plus" data-index="${index}">+</button>
+      </div>
+      <div class="cart-item-right">
+        <div class="quantity-controls-new">
+          <span class="qty-amount-new">${item.quantity}</span>
+          <div class="qty-arrows-new">
+            <button class="qty-arrow-btn plus" data-index="${index}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="18 15 12 9 6 15"></polyline></svg>
+            </button>
+            <button class="qty-arrow-btn minus" data-index="${index}">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="6 9 12 15 18 9"></polyline></svg>
+            </button>
           </div>
-          <button class="remove-btn" data-index="${index}">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
-          </button>
         </div>
+        <button class="remove-btn" data-index="${index}">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path></svg>
+        </button>
       </div>
     `;
     cartItemsContainer.appendChild(itemEl);
   });
-  
-  document.querySelectorAll('.qty-btn.minus').forEach(btn => {
+
+  // Re-bind click event listeners
+  document.querySelectorAll('.qty-arrow-btn.minus').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const idx = e.currentTarget.dataset.index;
       if (cart[idx].quantity > 1) {
@@ -207,21 +253,90 @@ function renderCartItems() {
       }
     });
   });
-  
-  document.querySelectorAll('.qty-btn.plus').forEach(btn => {
+
+  document.querySelectorAll('.qty-arrow-btn.plus').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const idx = e.currentTarget.dataset.index;
       cart[idx].quantity += 1;
       updateCartUI();
     });
   });
-  
+
   document.querySelectorAll('.remove-btn').forEach(btn => {
     btn.addEventListener('click', (e) => {
       const idx = e.currentTarget.dataset.index;
       cart.splice(idx, 1);
       updateCartUI();
     });
+  });
+}
+
+function renderRecommendation() {
+  const recomCard = document.getElementById('recom-card');
+  const recomSection = document.getElementById('cart-recommendation-section');
+  
+  if (!recomCard) return;
+  
+  if (cart.length === 0) {
+    if (recomSection) recomSection.style.display = 'none';
+    return;
+  }
+  
+  if (recomSection) recomSection.style.display = 'block';
+  
+  const recomItem = stickerCatalog[currentRecomIndex];
+  recomCard.innerHTML = `
+    <div class="recom-img">
+      <img src="${recomItem.image}" alt="${recomItem.title}" onerror="this.src='/IMAGE/1.png'">
+    </div>
+    <div class="recom-details">
+      <div class="recom-name">${recomItem.title}</div>
+      <div class="recom-price-box">
+        <span class="recom-price-old">Rs. ${recomItem.originalPrice.toFixed(2)}</span>
+        <span class="recom-price-current" style="color: #ff4444; font-weight: bold;">Rs. ${recomItem.price.toFixed(2)}</span>
+      </div>
+    </div>
+    <button class="recom-add-btn" id="recom-add-btn">Add to cart</button>
+  `;
+  
+  const addBtn = document.getElementById('recom-add-btn');
+  if (addBtn) {
+    addBtn.addEventListener('click', () => {
+      const existing = cart.find(item => item.title === recomItem.title);
+      if (existing) {
+        existing.quantity += 1;
+      } else {
+        cart.push({
+          id: recomItem.id + '-' + Date.now(),
+          title: recomItem.title,
+          price: recomItem.price,
+          originalPrice: recomItem.originalPrice,
+          image: recomItem.image,
+          quantity: 1
+        });
+      }
+      
+      // Endless recommendation loop: load NEXT sticker when this one is added!
+      currentRecomIndex = (currentRecomIndex + 1) % stickerCatalog.length;
+      updateCartUI();
+    });
+  }
+}
+
+// Arrow bindings for recommendation slider
+const recomPrevBtn = document.getElementById('recom-prev');
+const recomNextBtn = document.getElementById('recom-next');
+if (recomPrevBtn && recomNextBtn) {
+  recomPrevBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    currentRecomIndex = (currentRecomIndex - 1 + stickerCatalog.length) % stickerCatalog.length;
+    renderRecommendation();
+  });
+  
+  recomNextBtn.addEventListener('click', (e) => {
+    e.stopPropagation();
+    currentRecomIndex = (currentRecomIndex + 1) % stickerCatalog.length;
+    renderRecommendation();
   });
 }
 
