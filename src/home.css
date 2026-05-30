@@ -384,13 +384,27 @@ body.modal-open {
   height: 20px;
 }
 
-.cart-body {
+.cart-content {
   flex: 1;
-  padding: 40px 20px;
+  padding: 20px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   overflow-y: auto;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+
+.cart-content::-webkit-scrollbar {
+  width: 6px;
+}
+
+.cart-content::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.cart-content::-webkit-scrollbar-thumb {
+  background-color: rgba(0, 0, 0, 0.15);
+  border-radius: 10px;
 }
 
 .cart-empty {
@@ -625,7 +639,7 @@ body.modal-open {
   background: transparent;
   border: none;
   cursor: pointer;
-  color: #999;
+  color: #ff4444; /* Premium red delete/recycle bin color by default */
   padding: 6px;
   display: flex;
   align-items: center;
@@ -635,8 +649,8 @@ body.modal-open {
 }
 
 .remove-btn:hover {
-  color: #ff4444;
-  background-color: #fff0f0;
+  color: #b30000; /* Darker red on hover */
+  background-color: rgba(255, 68, 68, 0.08); /* Soft red background highlight */
 }
 
 .remove-btn svg {
