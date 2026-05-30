@@ -1,0 +1,2 @@
+customElements.get("custom-tabs-handler")||customElements.define("custom-tabs-handler",class extends HTMLElement{constructor(){super()}connectedCallback(){this.onChangeHandler=this.onChange.bind(this),this.addEventListener("change",this.onChangeHandler)}disconnectedCallback(){this.removeEventListener("change",this.onChangeHandler)}onChange(e){window.dispatchEvent(new Event("scroll"))}});
+//# sourceMappingURL=/cdn/shop/t/316/assets/component-tabs.js.map?v=3626689503033378891775757501
