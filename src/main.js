@@ -1,4 +1,4 @@
-import './style.css';
+import './home.css';
 import { getLoadingHTML } from './Loading animion/Loading.js';
 
 const cartBtn = document.getElementById('cart-btn');
@@ -394,40 +394,89 @@ if (qvAddBtn) {
   });
 }
 
-// Lazy Loading & Sorting Logic
+// Lazy Loading, Sorting & Carousel Logic
 const sortRadios = document.querySelectorAll('input[name="sort"]');
 const productsGrid = document.querySelector('.products-grid');
 let allProductCards = [];
-let loadedCount = 30;
+let loadedCount = 150; // Show all 150 products in the horizontal carousel
 let isLoading = false;
 
 if (productsGrid) {
   allProductCards = Array.from(productsGrid.querySelectorAll('.product-card'));
   productsGrid.innerHTML = '';
   
-  const mainTag = document.querySelector('main');
-  if (mainTag) mainTag.insertAdjacentHTML('beforeend', getLoadingHTML());
-  const loadingAnim = document.getElementById('loading-animation');
-  
   renderCards();
   
-  window.addEventListener('scroll', () => {
-    if (isLoading || loadedCount >= allProductCards.length) return;
-    
-    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight - 200) {
-      isLoading = true;
-      if (loadingAnim) loadingAnim.style.display = 'flex';
-      
-      const delay = Math.floor(Math.random() * 1500) + 2000;
-      
-      setTimeout(() => {
-        loadedCount += 20;
-        renderCards();
-        if (loadingAnim) loadingAnim.style.display = 'none';
-        isLoading = false;
-      }, delay);
+  // Carousel Scroll Navigation
+  const prevBtn = document.getElementById('carousel-prev');
+  const nextBtn = document.getElementById('carousel-next');
+  if (prevBtn && nextBtn) {
+    let isAnimating = false;
+
+    function smoothScrollTo(element, target, duration, direction) {
+      if (isAnimating) return;
+      isAnimating = true;
+
+      const start = element.scrollLeft;
+      const change = target - start;
+      const startTime = performance.now();
+
+      // Add momentum physical deformation class
+      element.classList.add(direction === 'next' ? 'sliding-next' : 'sliding-prev');
+
+      function animateScroll(currentTime) {
+        const elapsed = currentTime - startTime;
+        const progress = Math.min(elapsed / duration, 1);
+
+        // Premium ease-out-quint curve for buttery fluid motion
+        const ease = 1 - Math.pow(1 - progress, 5);
+
+        element.scrollLeft = start + change * ease;
+
+        if (progress < 1) {
+          requestAnimationFrame(animateScroll);
+        } else {
+          // Finished animating, let cards settle back smoothly
+          setTimeout(() => {
+            element.classList.remove('sliding-next', 'sliding-prev');
+            isAnimating = false;
+          }, 150);
+        }
+      }
+
+      requestAnimationFrame(animateScroll);
     }
-  });
+
+    prevBtn.addEventListener('click', () => {
+      if (isAnimating) return;
+      const isMobile = window.innerWidth <= 768;
+      const gap = isMobile ? 12 : 30; // responsive flex gap
+      const cardWidth = isMobile ? (productsGrid.clientWidth - 12) / 2 : 340; // dynamic card width to fit exactly 2 cards on mobile
+      const cardScale = cardWidth + gap;
+      
+      // Calculate how many complete cards fit in the viewport
+      const visibleCards = Math.max(1, Math.floor(productsGrid.clientWidth / cardScale));
+      const scrollAmount = visibleCards * cardScale;
+      const targetScroll = Math.max(0, productsGrid.scrollLeft - scrollAmount);
+      
+      smoothScrollTo(productsGrid, targetScroll, 750, 'prev');
+    });
+
+    nextBtn.addEventListener('click', () => {
+      if (isAnimating) return;
+      const isMobile = window.innerWidth <= 768;
+      const gap = isMobile ? 12 : 30;
+      const cardWidth = isMobile ? (productsGrid.clientWidth - 12) / 2 : 340;
+      const cardScale = cardWidth + gap;
+      
+      const visibleCards = Math.max(1, Math.floor(productsGrid.clientWidth / cardScale));
+      const scrollAmount = visibleCards * cardScale;
+      const maxScroll = productsGrid.scrollWidth - productsGrid.clientWidth;
+      const targetScroll = Math.min(maxScroll, productsGrid.scrollLeft + scrollAmount);
+      
+      smoothScrollTo(productsGrid, targetScroll, 750, 'next');
+    });
+  }
 
   if (sortRadios.length > 0) {
     sortRadios.forEach(radio => {
@@ -463,3 +512,319 @@ function renderCards() {
     productsGrid.appendChild(card);
   });
 }
+
+// BEST SELLERS Carousel Scroll Navigation
+const bestSellersCarousel = document.getElementById('bestsellers-carousel');
+const bestSellersPrevBtn = document.getElementById('bestsellers-prev');
+const bestSellersNextBtn = document.getElementById('bestsellers-next');
+
+if (bestSellersCarousel && bestSellersPrevBtn && bestSellersNextBtn) {
+  let isBSAnimating = false;
+
+  function bsSmoothScrollTo(element, target, duration, direction) {
+    if (isBSAnimating) return;
+    isBSAnimating = true;
+
+    const start = element.scrollLeft;
+    const change = target - start;
+    const startTime = performance.now();
+
+    // Add momentum physical deformation class
+    element.classList.add(direction === 'next' ? 'sliding-next' : 'sliding-prev');
+
+    function animateScroll(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+
+      // Premium ease-out-quint curve for buttery fluid motion
+      const ease = 1 - Math.pow(1 - progress, 5);
+
+      element.scrollLeft = start + change * ease;
+
+      if (progress < 1) {
+        requestAnimationFrame(animateScroll);
+      } else {
+        // Finished animating, let cards settle back smoothly
+        setTimeout(() => {
+          element.classList.remove('sliding-next', 'sliding-prev');
+          isBSAnimating = false;
+        }, 150);
+      }
+    }
+
+    requestAnimationFrame(animateScroll);
+  }
+
+  bestSellersPrevBtn.addEventListener('click', () => {
+    if (isBSAnimating) return;
+    const isMobile = window.innerWidth <= 768;
+    const gap = isMobile ? 12 : 30; // responsive flex gap
+    const cardWidth = isMobile ? (bestSellersCarousel.clientWidth - 12) / 2 : 340; // dynamic card width to fit exactly 2 cards on mobile
+    const cardScale = cardWidth + gap;
+    
+    // Calculate how many complete cards fit in the viewport
+    const visibleCards = Math.max(1, Math.floor(bestSellersCarousel.clientWidth / cardScale));
+    const scrollAmount = visibleCards * cardScale;
+    const targetScroll = Math.max(0, bestSellersCarousel.scrollLeft - scrollAmount);
+    
+    bsSmoothScrollTo(bestSellersCarousel, targetScroll, 750, 'prev');
+  });
+
+  bestSellersNextBtn.addEventListener('click', () => {
+    if (isBSAnimating) return;
+    const isMobile = window.innerWidth <= 768;
+    const gap = isMobile ? 12 : 30;
+    const cardWidth = isMobile ? (bestSellersCarousel.clientWidth - 12) / 2 : 340;
+    const cardScale = cardWidth + gap;
+    
+    const visibleCards = Math.max(1, Math.floor(bestSellersCarousel.clientWidth / cardScale));
+    const scrollAmount = visibleCards * cardScale;
+    const maxScroll = bestSellersCarousel.scrollWidth - bestSellersCarousel.clientWidth;
+    const targetScroll = Math.min(maxScroll, bestSellersCarousel.scrollLeft + scrollAmount);
+    
+    bsSmoothScrollTo(bestSellersCarousel, targetScroll, 750, 'next');
+  });
+}
+
+// Dynamic active/disabled arrow morphing on scroll
+const topPrevBtn = document.getElementById('carousel-prev');
+const topNextBtn = document.getElementById('carousel-next');
+if (productsGrid && topPrevBtn && topNextBtn) {
+  productsGrid.addEventListener('scroll', () => {
+    // Left button dash toggling
+    if (productsGrid.scrollLeft <= 5) {
+      topPrevBtn.classList.add('is-dash');
+    } else {
+      topPrevBtn.classList.remove('is-dash');
+    }
+    
+    // Right button dash toggling
+    const maxScroll = productsGrid.scrollWidth - productsGrid.clientWidth;
+    if (productsGrid.scrollLeft >= maxScroll - 5) {
+      topNextBtn.classList.add('is-dash');
+    } else {
+      topNextBtn.classList.remove('is-dash');
+    }
+  });
+}
+
+if (bestSellersCarousel && bestSellersPrevBtn && bestSellersNextBtn) {
+  bestSellersCarousel.addEventListener('scroll', () => {
+    // Left button dash toggling
+    if (bestSellersCarousel.scrollLeft <= 5) {
+      bestSellersPrevBtn.classList.add('is-dash');
+    } else {
+      bestSellersPrevBtn.classList.remove('is-dash');
+    }
+    
+    // Right button dash toggling
+    const maxScroll = bestSellersCarousel.scrollWidth - bestSellersCarousel.clientWidth;
+    if (bestSellersCarousel.scrollLeft >= maxScroll - 5) {
+      bestSellersNextBtn.classList.add('is-dash');
+    } else {
+      bestSellersNextBtn.classList.remove('is-dash');
+    }
+  });
+}
+
+// PROMPT SPACE AI Generator Simulation
+document.addEventListener('DOMContentLoaded', () => {
+  const promptInput = document.querySelector('.prompt-input');
+  const promptBtn = document.querySelector('.prompt-btn');
+  const promptWrapper = document.querySelector('.prompt-input-wrapper');
+  const productsGrid = document.getElementById('products-carousel');
+
+  if (!promptInput || !promptBtn || !promptWrapper) return;
+
+  function triggerAIStickerGeneration() {
+    const promptText = promptInput.value.trim();
+    if (!promptText) {
+      // Trigger a sleek error shake animation
+      promptWrapper.classList.add('shake-error');
+      setTimeout(() => promptWrapper.classList.remove('shake-error'), 400);
+      return;
+    }
+
+    // Enter loading state
+    promptBtn.classList.add('is-loading');
+    const btnSpan = promptBtn.querySelector('span');
+    const originalBtnText = btnSpan.textContent;
+    btnSpan.textContent = 'CREATING...';
+
+    // Simulate AI Generation
+    setTimeout(() => {
+      // Exit loading state
+      promptBtn.classList.remove('is-loading');
+      btnSpan.textContent = originalBtnText;
+      promptInput.value = ''; // Clear input
+
+      // Create a premium custom toast notification
+      showPremiumToast(`✨ Custom sticker created: "${promptText}"!`);
+
+      // Add custom card to TOP PICKS carousel!
+      if (productsGrid) {
+        // Find a template card to clone
+        const templateCard = productsGrid.querySelector('.product-card');
+        if (templateCard) {
+          const newCard = templateCard.cloneNode(true);
+          newCard.style.display = 'block'; // Make sure it's visible
+          
+          // Customize details
+          const titleEl = newCard.querySelector('.product-title');
+          if (titleEl) titleEl.textContent = promptText.length > 25 ? promptText.substring(0, 25) + '...' : promptText;
+          
+          const saveBadge = newCard.querySelector('.save-badge');
+          if (saveBadge) {
+            saveBadge.textContent = 'AI Custom';
+            saveBadge.style.display = 'block';
+          }
+          
+          // Randomize rating & pricing
+          const reviewsEl = newCard.querySelector('.reviews-count');
+          if (reviewsEl) reviewsEl.textContent = '(1)';
+          
+          const currentPriceEl = newCard.querySelector('.price-current');
+          if (currentPriceEl) currentPriceEl.textContent = 'Rs. 49.00';
+          
+          const oldPriceEl = newCard.querySelector('.price-old');
+          if (oldPriceEl) oldPriceEl.textContent = 'Rs. 99.00';
+
+          const priceBadge = newCard.querySelector('.price-badge');
+          if (priceBadge) {
+            priceBadge.textContent = '-50%';
+            priceBadge.style.display = 'inline-block';
+          }
+
+          // Give placeholder image a custom vibrant gradient
+          const placeholderImg = newCard.querySelector('.placeholder-image');
+          if (placeholderImg) {
+            placeholderImg.style.background = 'linear-gradient(135deg, #ff3366 0%, #ff8a00 100%)';
+            placeholderImg.style.boxShadow = 'inset 0 0 20px rgba(0,0,0,0.15)';
+          }
+
+          // Prepend card and smooth scroll to it
+          productsGrid.prepend(newCard);
+          productsGrid.scrollTo({ left: 0, behavior: 'smooth' });
+
+          // Re-wire Add to Cart button for this new card
+          const newAddBtn = newCard.querySelector('.add-to-cart-btn');
+          if (newAddBtn && typeof cart !== 'undefined') {
+            newAddBtn.addEventListener('click', (e) => {
+              e.stopPropagation();
+              const product = {
+                id: 'ai-custom-' + Date.now(),
+                title: titleEl.textContent,
+                price: 49.00,
+                originalPrice: 99.00,
+                rating: 5,
+                reviews: 1,
+                image: ''
+              };
+              cart.push({ ...product, quantity: 1 });
+              if (typeof updateCartUI === 'function') {
+                updateCartUI();
+                if (typeof toggleCart === 'function') toggleCart();
+              }
+            });
+          }
+        }
+      }
+    }, 2500);
+  }
+
+  promptBtn.addEventListener('click', triggerAIStickerGeneration);
+  promptInput.addEventListener('keypress', (e) => {
+    if (e.key === 'Enter') {
+      triggerAIStickerGeneration();
+    }
+  });
+
+  // Helper to show modern toast
+  function showPremiumToast(message) {
+    let toastContainer = document.querySelector('.toast-container');
+    if (!toastContainer) {
+      toastContainer = document.createElement('div');
+      toastContainer.className = 'toast-container';
+      document.body.appendChild(toastContainer);
+    }
+
+    const toast = document.createElement('div');
+    toast.className = 'premium-toast';
+    toast.innerHTML = `
+      <div class="toast-content">
+        <span class="toast-message">${message}</span>
+      </div>
+    `;
+
+    toastContainer.appendChild(toast);
+    
+    // Trigger slide in
+    setTimeout(() => toast.classList.add('visible'), 50);
+
+    // Auto dismiss
+    setTimeout(() => {
+      toast.classList.remove('visible');
+      setTimeout(() => toast.remove(), 400);
+    }, 4500);
+  }
+
+  // Customer Reviews Testimonials Slider Logic
+  const reviewSlides = document.querySelectorAll('.review-slide');
+  const reviewPrevBtn = document.getElementById('reviews-prev');
+  const reviewNextBtn = document.getElementById('reviews-next');
+  const reviewsSection = document.querySelector('.reviews-section');
+  let currentReviewIndex = 0;
+  let reviewInterval = null;
+
+  function showReview(index) {
+    if (reviewSlides.length === 0) return;
+    reviewSlides.forEach(slide => slide.classList.remove('active'));
+    currentReviewIndex = (index + reviewSlides.length) % reviewSlides.length;
+    reviewSlides[currentReviewIndex].classList.add('active');
+  }
+
+  function nextReview() {
+    showReview(currentReviewIndex + 1);
+  }
+
+  function prevReview() {
+    showReview(currentReviewIndex - 1);
+  }
+
+  function startReviewAutoplay() {
+    stopReviewAutoplay();
+    reviewInterval = setInterval(nextReview, 6000); // 6s rotation
+  }
+
+  function stopReviewAutoplay() {
+    if (reviewInterval) {
+      clearInterval(reviewInterval);
+      reviewInterval = null;
+    }
+  }
+
+  if (reviewPrevBtn && reviewNextBtn) {
+    reviewPrevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      prevReview();
+      startReviewAutoplay(); // Reset rotation timer
+    });
+
+    reviewNextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nextReview();
+      startReviewAutoplay(); // Reset rotation timer
+    });
+  }
+
+  // Hover Pause & Resume state
+  if (reviewsSection) {
+    reviewsSection.addEventListener('mouseenter', stopReviewAutoplay);
+    reviewsSection.addEventListener('mouseleave', startReviewAutoplay);
+  }
+
+  // Initial Rotation start
+  if (reviewSlides.length > 0) {
+    startReviewAutoplay();
+  }
+});

@@ -767,4 +767,64 @@ document.addEventListener('DOMContentLoaded', () => {
       setTimeout(() => toast.remove(), 400);
     }, 4500);
   }
+
+  // Customer Reviews Testimonials Slider Logic
+  const reviewSlides = document.querySelectorAll('.review-slide');
+  const reviewPrevBtn = document.getElementById('reviews-prev');
+  const reviewNextBtn = document.getElementById('reviews-next');
+  const reviewsSection = document.querySelector('.reviews-section');
+  let currentReviewIndex = 0;
+  let reviewInterval = null;
+
+  function showReview(index) {
+    if (reviewSlides.length === 0) return;
+    reviewSlides.forEach(slide => slide.classList.remove('active'));
+    currentReviewIndex = (index + reviewSlides.length) % reviewSlides.length;
+    reviewSlides[currentReviewIndex].classList.add('active');
+  }
+
+  function nextReview() {
+    showReview(currentReviewIndex + 1);
+  }
+
+  function prevReview() {
+    showReview(currentReviewIndex - 1);
+  }
+
+  function startReviewAutoplay() {
+    stopReviewAutoplay();
+    reviewInterval = setInterval(nextReview, 6000); // 6s rotation
+  }
+
+  function stopReviewAutoplay() {
+    if (reviewInterval) {
+      clearInterval(reviewInterval);
+      reviewInterval = null;
+    }
+  }
+
+  if (reviewPrevBtn && reviewNextBtn) {
+    reviewPrevBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      prevReview();
+      startReviewAutoplay(); // Reset rotation timer
+    });
+
+    reviewNextBtn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      nextReview();
+      startReviewAutoplay(); // Reset rotation timer
+    });
+  }
+
+  // Hover Pause & Resume state
+  if (reviewsSection) {
+    reviewsSection.addEventListener('mouseenter', stopReviewAutoplay);
+    reviewsSection.addEventListener('mouseleave', startReviewAutoplay);
+  }
+
+  // Initial Rotation start
+  if (reviewSlides.length > 0) {
+    startReviewAutoplay();
+  }
 });
