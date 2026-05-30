@@ -9,63 +9,98 @@ const topHtml = `<!DOCTYPE html>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cream Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
   <body>
     <!-- Announcement Bar -->
     <div class="announcement-bar">
       <div class="marquee">
-        <span>MADE IN INDIA &nbsp; &bull; &nbsp; 10 LAKH+ CUSTOMERS &nbsp; &bull; &nbsp; EXPRESS YOURSELF &nbsp; &bull; &nbsp; MADE IN INDIA &nbsp; &bull; &nbsp; 10 LAKH+ CUSTOMERS</span>
+        <div class="marquee-track">
+          <span class="marquee-item">MADE IN INDIA</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">10 LAKH+ CUSTOMERS</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">EXPRESS YOURSELF</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">MADE IN INDIA</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">10 LAKH+ CUSTOMERS</span>
+          <span class="marquee-dot">&bull;</span>
+          
+          <!-- Duplicated for perfect loop scrolling -->
+          <span class="marquee-item">MADE IN INDIA</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">10 LAKH+ CUSTOMERS</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">EXPRESS YOURSELF</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">MADE IN INDIA</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">10 LAKH+ CUSTOMERS</span>
+          <span class="marquee-dot">&bull;</span>
+        </div>
       </div>
     </div>
     
-    <header class="topbar">
-      <div class="topbar-left">
-        <button class="icon-btn mobile-menu-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </button>
-        <button class="icon-btn mobile-user-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </button>
-        <div class="desktop-logo-placeholder"></div>
-      </div>
-      <div class="topbar-center">
-        <div class="mobile-logo-placeholder"></div>
-        <div class="desktop-nav-links">
-          <a href="home.html">COMBO</a>
-          <a href="#" class="has-submenu">MOBILE SKINS <svg class="icon-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></a>
-          <a href="#">MYSTERY BOX</a>
-          <a href="#" class="underlined">NEW ARRIVALS</a>
-          <a href="#">CARD SKINS</a>
-          <a href="#">MACBOOK SKINS</a>
-          <a href="#">ACCESSORIES</a>
+    <nav class="navbar">
+      <div class="nav-container">
+        <!-- MOBILE ONLY: Hamburger -->
+        <div class="nav-mobile-menu mobile-menu-btn">
+          <i class="fas fa-bars"></i>
         </div>
-      </div>
-      <div class="topbar-right">
-        <div class="customer-support desktop-only">
-          <svg class="icon-headset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
-          <div class="support-text">
-            <span class="support-label">Customer support</span>
-            <span class="support-email">wecare@stickitup.xyz</span>
+
+        <!-- Logo section -->
+        <div class="nav-left">
+          <a href="#" class="logo">STICK IT UP</a>
+        </div>
+
+        <!-- Navigation links section -->
+        <div class="nav-center desktop-only">
+          <ul class="nav-links">
+            <li><a href="/home" class="active-link">COMBO</a></li>
+            <li><a href="#">MOBILE SKINS <i class="fas fa-chevron-down" style="font-size: 0.5rem; vertical-align: middle; margin-left: 2px;"></i></a></li>
+            <li><a href="#">MYSTERY BOX</a></li>
+            <li><a href="#" class="underlined">NEW ARRIVALS</a></li>
+            <li><a href="#">CARD SKINS</a></li>
+            <li><a href="#">MACBOOK SKINS</a></li>
+            <li><a href="#">ACCESSORIES</a></li>
+          </ul>
+        </div>
+
+        <!-- Right actions section -->
+        <div class="nav-right">
+          <!-- Support Box (Desktop Only) -->
+          <div class="support-box desktop-only">
+            <i class="fas fa-headset"></i>
+            <div class="support-info">
+              <span class="label">Customer support</span>
+              <span class="email">wecare@stickitup.xyz</span>
+            </div>
+          </div>
+
+          <!-- Icons Group -->
+          <div class="nav-icons-group">
+            <!-- Search Icon -->
+            <i class="fas fa-search search-btn"></i>
+            
+            <!-- User Icon (Desktop Only) -->
+            <i class="fas fa-user user-btn desktop-only"></i>
+            
+            <!-- Cart Section -->
+            <div class="cart-wrapper" id="cart-btn">
+              <i class="fas fa-shopping-bag"></i>
+              <span class="cart-badge" id="cart-badge">0</span>
+            </div>
+            
+            <!-- Cart Subtotal Info (Desktop Only) -->
+            <div class="cart-info-text desktop-only" id="cart-info-btn">
+              <span class="subtotal-label">Subtotal</span>
+              <span class="subtotal-amount amount" id="topbar-subtotal">Rs. 0.00</span>
+            </div>
           </div>
         </div>
-        <button class="icon-btn search-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </button>
-        <button class="icon-btn user-btn desktop-only">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </button>
-        <div class="cart-section" id="cart-btn">
-          <div class="cart-icon-wrapper">
-            <svg class="icon-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2" ry="2"></rect><path d="M8 8V6a4 4 0 0 1 8 0v2"></path></svg>
-            <span class="cart-badge" id="cart-badge">0</span>
-          </div>
-          <div class="cart-text desktop-only">
-            <span class="cart-label">Subtotal</span>
-            <span class="cart-amount" id="topbar-subtotal">Rs. 0.00</span>
-          </div>
-        </div>
       </div>
-    </header>
+    </nav>
 
     <!-- Mobile Menu Drawer -->
     <div class="mobile-menu-drawer" id="mobile-menu">
@@ -384,7 +419,12 @@ const bottomHtml = `
           <div class="discount-progress-track">
             <div class="discount-progress-bar" id="discount-progress-bar"></div>
             <div class="discount-progress-badge" id="discount-progress-badge">
-              <svg viewBox="0 0 24 24" fill="currentColor" style="width: 10px; height: 10px; color: #000;"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 c-0.11,0.2-0.06,0.47,0.12,0.61l2.03,1.58C4.84,11.36,4.8,11.68,4.8,12c0,0.32,0.03,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.11-0.2,0.06-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"></path></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 11px; height: 11px; color: #000;">
+                <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path>
+                <line x1="15" x2="9" y1="9" y2="15"></line>
+                <path d="M9 9h.01"></path>
+                <path d="M15 15h.01"></path>
+              </svg>
             </div>
           </div>
         </div>

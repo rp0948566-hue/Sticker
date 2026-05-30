@@ -414,7 +414,7 @@ document.addEventListener('click', (e) => {
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      cart.push({ title, price, quantity: 1 });
+      cart.push({ title, price, image: '/IMAGE/1.png', quantity: 1 });
     }
     
     updateCartUI();
@@ -518,7 +518,7 @@ if (qvAddBtn) {
     if (existingItem) {
       existingItem.quantity += qty;
     } else {
-      cart.push({ title, price, quantity: qty });
+      cart.push({ title, price, image: '/IMAGE/1.png', quantity: qty });
     }
     
     updateCartUI();

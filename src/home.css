@@ -1,5 +1,12 @@
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
 
+:root {
+  --black-nav: #000000;
+  --white: #ffffff;
+  --red-sale: #ef4444;
+  --transition: all 0.25s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
 *, *::before, *::after {
   box-sizing: border-box;
 }
@@ -67,244 +74,243 @@ body.modal-open {
   100% { transform: translateX(-50%); }
 }
 
-/* ==========================================
-   PREMIUM BLACK NAVBAR STYLES
-   ========================================== */
+/* Navbar Specific Styles */
+
 .navbar {
-  background-color: #000000;
-  color: #ffffff;
-  width: 100%;
-  height: 90px;
-  position: sticky;
-  top: 0;
-  z-index: 1100;
-  box-sizing: border-box;
-  display: flex;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+    background-color: var(--black-nav);
+    padding: 30px 0; /* Significantly increased height */
+    position: sticky;
+    top: 0;
+    z-index: 1000;
 }
 
 .nav-container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 30px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  box-sizing: border-box;
+    width: 95%;
+    margin: 0 auto;
+    display: flex;
+    align-items: center; /* Vertically centers logo and right side */
 }
 
-/* Mobile Hamburger Menu */
-.nav-mobile-menu {
-  display: none;
-  font-size: 24px;
-  color: #ffffff;
-  cursor: pointer;
-  transition: transform 0.2s ease, color 0.2s ease;
-}
-
-.nav-mobile-menu:hover {
-  color: #facc15;
-}
-
-/* Logo Styling */
 .nav-left {
-  display: flex;
-  align-items: center;
+    min-width: 220px;
 }
 
 .nav-left .logo {
-  text-decoration: none;
-  display: inline-block;
-  line-height: 1;
-  transition: transform 0.2s ease, opacity 0.2s ease;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #f7df1e;
+    text-decoration: none;
+    font-style: italic;
+    letter-spacing: -1.5px;
+    font-family: 'Outfit', sans-serif;
+    display: inline-block;
 }
 
-.nav-left .logo img {
-  height: 52px;
-  width: auto;
-  display: block;
-  transition: height 0.2s ease;
-}
-
-.nav-left .logo:hover {
-  transform: scale(1.02);
-  opacity: 0.95;
-}
-
-/* Navigation Links Center Block */
 .nav-center {
-  display: flex;
-  align-items: center;
+    flex-grow: 1;
 }
 
 .nav-links {
-  list-style: none;
-  display: grid;
-  grid-template-columns: repeat(4, auto);
-  column-gap: 25px;
-  row-gap: 4px;
-  margin: 0;
-  padding: 0;
-  align-items: center;
-}
-
-.nav-links li {
-  position: relative;
+    display: flex;
+    flex-wrap: wrap; /* Allows two rows */
+    gap: 1.2rem 2.5rem; /* Row gap and column gap */
+    list-style: none;
+    align-items: center;
+    padding-left: 10px;
+    max-width: 700px; /* Forces the wrap like reference */
+    margin: 0;
 }
 
 .nav-links a {
-  color: #ffffff;
-  text-decoration: none;
-  font-size: 14px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
-  transition: color 0.2s ease;
-  display: flex;
-  align-items: center;
-  gap: 4px;
-  padding: 8px 0;
+    color: var(--white);
+    text-decoration: none;
+    font-weight: 900; /* Bolder */
+    font-size: 0.95rem; /* Larger font */
+    text-transform: uppercase;
+    transition: var(--transition);
+    white-space: nowrap;
 }
 
 .nav-links a:hover {
-  color: #facc15;
+    color: var(--red-sale);
 }
 
-/* Active Nav Underline effect */
-.nav-links a.active-link,
-.nav-links a.underlined {
-  border-bottom: 2px solid #facc15;
-  color: #facc15;
-}
-
-/* Right Section Actions */
 .nav-right {
-  display: flex;
-  align-items: center;
-  gap: 25px;
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
 }
 
-/* Support Box */
 .support-box {
-  background-color: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 12px;
-  padding: 8px 16px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: background-color 0.2s ease;
+    background-color: #1a1a1a;
+    padding: 12px 20px;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    border: 1px solid #222;
 }
 
-.support-box:hover {
-  background-color: rgba(255, 255, 255, 0.08);
-}
-
-.support-box i {
-  font-size: 18px;
-  color: #aaaaaa;
+.support-box i,
+.support-box svg {
+    font-size: 1.5rem;
+    width: 1.5rem;
+    height: 1.5rem;
+    color: var(--white);
+    opacity: 0.9;
 }
 
 .support-info {
-  display: flex;
-  flex-direction: column;
+    display: flex;
+    flex-direction: column;
 }
 
 .support-info .label {
-  font-size: 10px;
-  color: #888888;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+    font-size: 0.65rem;
+    color: #888;
+    font-weight: 600;
+    margin-bottom: 2px;
 }
 
 .support-info .email {
-  font-size: 13px;
-  font-weight: 700;
-  color: #ffffff;
+    font-size: 0.95rem;
+    font-weight: 800;
+    color: var(--white);
 }
 
-/* Icon Groups */
 .nav-icons-group {
-  display: flex;
-  align-items: center;
-  gap: 20px;
+    display: flex;
+    gap: 1.2rem;
+    font-size: 1.3rem;
+    align-items: center;
 }
 
-.nav-icons-group i {
-  font-size: 20px;
-  color: #ffffff;
-  cursor: pointer;
-  transition: color 0.2s ease, transform 0.2s ease;
+.nav-icons-group i,
+.nav-icons-group svg {
+    cursor: pointer;
+    font-size: 1.3rem;
+    width: 1.3rem;
+    height: 1.3rem;
+    color: var(--white);
+    transition: var(--transition);
 }
 
-.nav-icons-group i:hover {
-  color: #facc15;
-  transform: scale(1.08);
+.nav-icons-group i:hover,
+.nav-icons-group svg:hover {
+    color: var(--red-sale);
 }
 
-/* Cart Wrapper & Badge */
 .cart-wrapper {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  cursor: pointer;
+    position: relative;
+    display: flex;
+    align-items: center;
 }
 
-.cart-wrapper i {
-  font-size: 22px;
-  transition: color 0.2s ease, transform 0.2s ease;
+.cart-wrapper i,
+.cart-wrapper svg {
+    font-size: 1.3rem;
+    width: 1.3rem;
+    height: 1.3rem;
+    color: var(--white);
+    transition: var(--transition);
 }
 
-.cart-wrapper:hover i {
-  color: #facc15;
-  transform: scale(1.08);
+.cart-badge {
+    position: absolute;
+    top: -6px;
+    right: -10px;
+    background-color: #f7df1e;
+    color: var(--black-nav);
+    font-size: 0.65rem;
+    font-weight: 900;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    box-shadow: 0 0 0 2px var(--black-nav);
 }
 
-.cart-wrapper .cart-badge {
-  position: absolute;
-  top: -5px;
-  right: -8px;
-  background-color: #facc15;
-  color: #000000;
-  font-size: 10px;
-  font-weight: 800;
-  width: 17px;
-  height: 17px;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  box-shadow: 0 0 0 2px #000000;
-}
-
-/* Cart Subtotal Text next to icon */
 .cart-info-text {
-  display: flex;
-  flex-direction: column;
-  cursor: pointer;
-  transition: opacity 0.2s ease;
-}
-
-.cart-info-text:hover {
-  opacity: 0.9;
+    display: flex;
+    flex-direction: column;
+    line-height: 1.2;
+    margin-left: -5px;
+    cursor: pointer;
 }
 
 .cart-info-text .subtotal-label {
-  font-size: 10px;
-  color: #888888;
-  font-weight: 600;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
+    font-size: 0.6rem;
+    color: #888;
+    font-weight: 500;
 }
 
 .cart-info-text .amount {
-  font-size: 14px;
-  font-weight: 800;
-  color: #ffffff;
+    font-size: 0.9rem;
+    font-weight: 800;
+    color: var(--white);
+}
+
+.nav-mobile-menu {
+    display: none;
+}
+
+/* Navbar Responsive Breakpoints */
+
+@media (max-width: 1024px) {
+    .nav-container {
+        width: 96%;
+    }
+    .nav-links {
+        max-width: 550px;
+        gap: 1rem 1.5rem;
+    }
+    .nav-links a {
+        font-size: 0.85rem;
+    }
+}
+
+@media (max-width: 768px) {
+    .navbar {
+        padding: 15px 0;
+    }
+    .nav-container {
+        justify-content: space-between;
+    }
+    .nav-mobile-menu {
+        display: block;
+        font-size: 1.4rem;
+        cursor: pointer;
+        flex: 1;
+        color: var(--white);
+    }
+    .nav-left {
+        flex: 2;
+        display: flex;
+        justify-content: center;
+        min-width: auto;
+    }
+    .nav-left .logo {
+        font-size: 1.6rem;
+    }
+    .nav-center {
+        display: none;
+    }
+    .nav-right {
+        flex: 1;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+    .support-box, .cart-info-text, #nav-user {
+        display: none;
+    }
+}
+
+@media (max-width: 480px) {
+    .nav-left .logo {
+        font-size: 1.3rem;
+    }
 }
 
 /* Cart Drawer */
@@ -538,14 +544,17 @@ body.modal-open {
 .cart-discount-banner {
   background-color: #1a1a1a;
   color: #ffffff;
-  padding: 16px 20px;
-  border-bottom: 1px solid rgba(255,255,255,0.05);
+  padding: 14px 18px;
+  margin: 12px 16px 8px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   font-family: 'Outfit', sans-serif;
   text-align: center;
   box-sizing: border-box;
 }
 
 .discount-text {
+  color: #ffe600; /* Vibrant neon yellow text */
   font-size: 13px;
   font-weight: 700;
   margin-bottom: 12px;
@@ -570,7 +579,7 @@ body.modal-open {
 
 .discount-progress-track {
   height: 8px;
-  background-color: rgba(255, 255, 255, 0.2);
+  background-color: #ffffff; /* Solid white track */
   border-radius: 4px;
   position: relative;
 }
@@ -1833,7 +1842,7 @@ main {
 }
 
 .product-card:hover {
-  background-color: #ffffff;
+  background-color: #f3f4f6; /* Elegant premium off-white background */
   box-shadow: 
     0 20px 25px -5px rgba(0, 0, 0, 0.1),
     0 10px 10px -5px rgba(0, 0, 0, 0.04),
@@ -2040,9 +2049,9 @@ main {
 
 .add-to-cart-btn {
   margin-top: 15px;
-  background-color: #1a1a1a;
-  color: #facc15;
-  border: none;
+  background-color: #f3f4f6; /* Premium off-white background */
+  color: #000000; /* Bold black text */
+  border: 1px solid rgba(0, 0, 0, 0.05);
   border-radius: 8px;
   padding: 14px;
   font-size: 14px;
@@ -2050,12 +2059,21 @@ main {
   cursor: pointer;
   opacity: 0;
   pointer-events: none;
-  transition: opacity 0.3s;
+  transform: translateY(10px); /* Smooth slide up starting offset */
+  transition: all 0.35s cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
 }
 
 .product-card:hover .add-to-cart-btn {
   opacity: 1;
   pointer-events: auto;
+  transform: translateY(0); /* Complete slide up alignment */
+}
+
+.add-to-cart-btn:hover {
+  background-color: #000000; /* Inverts to black on direct hover */
+  color: #ffffff; /* Turns text to white on direct hover */
+  border-color: #000000;
 }
 
 /* Base Topbar Styles - desktop defaults */

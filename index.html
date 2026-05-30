@@ -4,63 +4,98 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Cream Website</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   </head>
   <body>
     <!-- Announcement Bar -->
     <div class="announcement-bar">
       <div class="marquee">
-        <span>MADE IN INDIA &nbsp; &bull; &nbsp; 10 LAKH+ CUSTOMERS &nbsp; &bull; &nbsp; EXPRESS YOURSELF &nbsp; &bull; &nbsp; MADE IN INDIA &nbsp; &bull; &nbsp; 10 LAKH+ CUSTOMERS</span>
+        <div class="marquee-track">
+          <span class="marquee-item">MADE IN INDIA</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">10 LAKH+ CUSTOMERS</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">EXPRESS YOURSELF</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">MADE IN INDIA</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">10 LAKH+ CUSTOMERS</span>
+          <span class="marquee-dot">&bull;</span>
+          
+          <!-- Duplicated for perfect loop scrolling -->
+          <span class="marquee-item">MADE IN INDIA</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">10 LAKH+ CUSTOMERS</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">EXPRESS YOURSELF</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">MADE IN INDIA</span>
+          <span class="marquee-dot">&bull;</span>
+          <span class="marquee-item">10 LAKH+ CUSTOMERS</span>
+          <span class="marquee-dot">&bull;</span>
+        </div>
       </div>
     </div>
     
-    <header class="topbar">
-      <div class="topbar-left">
-        <button class="icon-btn mobile-menu-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="3" y1="12" x2="21" y2="12"></line><line x1="3" y1="6" x2="21" y2="6"></line><line x1="3" y1="18" x2="21" y2="18"></line></svg>
-        </button>
-        <button class="icon-btn mobile-user-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </button>
-        <div class="desktop-logo-placeholder"></div>
-      </div>
-      <div class="topbar-center">
-        <div class="mobile-logo-placeholder"></div>
-        <div class="desktop-nav-links">
-          <a href="/home">COMBO</a>
-          <a href="#" class="has-submenu">MOBILE SKINS <svg class="icon-down" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg></a>
-          <a href="#">MYSTERY BOX</a>
-          <a href="#" class="underlined">NEW ARRIVALS</a>
-          <a href="#">CARD SKINS</a>
-          <a href="#">MACBOOK SKINS</a>
-          <a href="#">ACCESSORIES</a>
+    <nav class="navbar">
+      <div class="nav-container">
+        <!-- MOBILE ONLY: Hamburger -->
+        <div class="nav-mobile-menu mobile-menu-btn">
+          <i class="fas fa-bars"></i>
         </div>
-      </div>
-      <div class="topbar-right">
-        <div class="customer-support desktop-only">
-          <svg class="icon-headset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
-          <div class="support-text">
-            <span class="support-label">Customer support</span>
-            <span class="support-email">wecare@stickitup.xyz</span>
+
+        <!-- Logo section -->
+        <div class="nav-left">
+          <a href="#" class="logo">STICK IT UP</a>
+        </div>
+
+        <!-- Navigation links section -->
+        <div class="nav-center desktop-only">
+          <ul class="nav-links">
+            <li><a href="/home" class="active-link">COMBO</a></li>
+            <li><a href="#">MOBILE SKINS <i class="fas fa-chevron-down" style="font-size: 0.5rem; vertical-align: middle; margin-left: 2px;"></i></a></li>
+            <li><a href="#">MYSTERY BOX</a></li>
+            <li><a href="#" class="underlined">NEW ARRIVALS</a></li>
+            <li><a href="#">CARD SKINS</a></li>
+            <li><a href="#">MACBOOK SKINS</a></li>
+            <li><a href="#">ACCESSORIES</a></li>
+          </ul>
+        </div>
+
+        <!-- Right actions section -->
+        <div class="nav-right">
+          <!-- Support Box (Desktop Only) -->
+          <div class="support-box desktop-only">
+            <i class="fas fa-headset"></i>
+            <div class="support-info">
+              <span class="label">Customer support</span>
+              <span class="email">wecare@stickitup.xyz</span>
+            </div>
+          </div>
+
+          <!-- Icons Group -->
+          <div class="nav-icons-group">
+            <!-- Search Icon -->
+            <i class="fas fa-search search-btn"></i>
+            
+            <!-- User Icon (Desktop Only) -->
+            <i class="fas fa-user user-btn desktop-only"></i>
+            
+            <!-- Cart Section -->
+            <div class="cart-wrapper" id="cart-btn">
+              <i class="fas fa-shopping-bag"></i>
+              <span class="cart-badge" id="cart-badge">0</span>
+            </div>
+            
+            <!-- Cart Subtotal Info (Desktop Only) -->
+            <div class="cart-info-text desktop-only" id="cart-info-btn">
+              <span class="subtotal-label">Subtotal</span>
+              <span class="subtotal-amount amount" id="topbar-subtotal">Rs. 0.00</span>
+            </div>
           </div>
         </div>
-        <button class="icon-btn search-btn">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>
-        </button>
-        <button class="icon-btn user-btn desktop-only">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
-        </button>
-        <div class="cart-section" id="cart-btn">
-          <div class="cart-icon-wrapper">
-            <svg class="icon-bag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="8" width="18" height="13" rx="2" ry="2"></rect><path d="M8 8V6a4 4 0 0 1 8 0v2"></path></svg>
-            <span class="cart-badge" id="cart-badge">0</span>
-          </div>
-          <div class="cart-text desktop-only">
-            <span class="cart-label">Subtotal</span>
-            <span class="cart-amount" id="topbar-subtotal">Rs. 0.00</span>
-          </div>
-        </div>
       </div>
-    </header>
+    </nav>
 
     <!-- Mobile Menu Drawer -->
     <div class="mobile-menu-drawer" id="mobile-menu">
@@ -256,7 +291,7 @@
             <h3 class="product-title">Glitter Sticker 1</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(99)</span>
+              <span class="reviews-count">(39)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -278,7 +313,7 @@
             <h3 class="product-title">Glitter Sticker 2</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(79)</span>
+              <span class="reviews-count">(68)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -300,7 +335,7 @@
             <h3 class="product-title">Glitter Sticker 3</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(96)</span>
+              <span class="reviews-count">(32)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -322,7 +357,7 @@
             <h3 class="product-title">Glitter Sticker 4</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(94)</span>
+              <span class="reviews-count">(28)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -344,7 +379,7 @@
             <h3 class="product-title">Glitter Sticker 5</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(97)</span>
+              <span class="reviews-count">(60)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -366,7 +401,7 @@
             <h3 class="product-title">Glitter Sticker 6</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(1)</span>
+              <span class="reviews-count">(12)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -388,7 +423,7 @@
             <h3 class="product-title">Glitter Sticker 7</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(92)</span>
+              <span class="reviews-count">(100)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -410,7 +445,7 @@
             <h3 class="product-title">Glitter Sticker 8</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(44)</span>
+              <span class="reviews-count">(6)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -432,7 +467,7 @@
             <h3 class="product-title">Glitter Sticker 9</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(1)</span>
+              <span class="reviews-count">(5)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -454,7 +489,7 @@
             <h3 class="product-title">Glitter Sticker 10</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(32)</span>
+              <span class="reviews-count">(94)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -476,7 +511,7 @@
             <h3 class="product-title">Glitter Sticker 11</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(13)</span>
+              <span class="reviews-count">(17)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -498,7 +533,7 @@
             <h3 class="product-title">Glitter Sticker 12</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(87)</span>
+              <span class="reviews-count">(99)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -520,7 +555,7 @@
             <h3 class="product-title">Glitter Sticker 13</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(28)</span>
+              <span class="reviews-count">(97)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -542,7 +577,7 @@
             <h3 class="product-title">Glitter Sticker 14</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(57)</span>
+              <span class="reviews-count">(44)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -564,7 +599,7 @@
             <h3 class="product-title">Glitter Sticker 15</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(85)</span>
+              <span class="reviews-count">(4)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -586,7 +621,7 @@
             <h3 class="product-title">Glitter Sticker 16</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(51)</span>
+              <span class="reviews-count">(19)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -608,7 +643,7 @@
             <h3 class="product-title">Glitter Sticker 17</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(84)</span>
+              <span class="reviews-count">(21)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -630,7 +665,7 @@
             <h3 class="product-title">Glitter Sticker 18</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(25)</span>
+              <span class="reviews-count">(68)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -652,7 +687,7 @@
             <h3 class="product-title">Glitter Sticker 19</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(31)</span>
+              <span class="reviews-count">(78)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -674,7 +709,7 @@
             <h3 class="product-title">Glitter Sticker 20</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(10)</span>
+              <span class="reviews-count">(50)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -696,7 +731,7 @@
             <h3 class="product-title">Glitter Sticker 21</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(42)</span>
+              <span class="reviews-count">(29)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -718,7 +753,7 @@
             <h3 class="product-title">Glitter Sticker 22</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(52)</span>
+              <span class="reviews-count">(33)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -740,7 +775,7 @@
             <h3 class="product-title">Glitter Sticker 23</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(89)</span>
+              <span class="reviews-count">(5)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -762,7 +797,7 @@
             <h3 class="product-title">Glitter Sticker 24</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(37)</span>
+              <span class="reviews-count">(7)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -784,7 +819,7 @@
             <h3 class="product-title">Glitter Sticker 25</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(65)</span>
+              <span class="reviews-count">(28)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -806,7 +841,7 @@
             <h3 class="product-title">Glitter Sticker 26</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(95)</span>
+              <span class="reviews-count">(61)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -828,7 +863,7 @@
             <h3 class="product-title">Glitter Sticker 27</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(25)</span>
+              <span class="reviews-count">(66)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -850,7 +885,7 @@
             <h3 class="product-title">Glitter Sticker 28</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(15)</span>
+              <span class="reviews-count">(21)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -872,7 +907,7 @@
             <h3 class="product-title">Glitter Sticker 29</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(13)</span>
+              <span class="reviews-count">(83)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -894,7 +929,7 @@
             <h3 class="product-title">Glitter Sticker 30</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(30)</span>
+              <span class="reviews-count">(58)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -916,7 +951,7 @@
             <h3 class="product-title">Glitter Sticker 31</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(100)</span>
+              <span class="reviews-count">(16)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -938,7 +973,7 @@
             <h3 class="product-title">Glitter Sticker 32</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(37)</span>
+              <span class="reviews-count">(67)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -960,7 +995,7 @@
             <h3 class="product-title">Glitter Sticker 33</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(25)</span>
+              <span class="reviews-count">(98)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -982,7 +1017,7 @@
             <h3 class="product-title">Glitter Sticker 34</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(97)</span>
+              <span class="reviews-count">(15)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1004,7 +1039,7 @@
             <h3 class="product-title">Glitter Sticker 35</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(17)</span>
+              <span class="reviews-count">(83)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1026,7 +1061,7 @@
             <h3 class="product-title">Glitter Sticker 36</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(1)</span>
+              <span class="reviews-count">(89)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1048,7 +1083,7 @@
             <h3 class="product-title">Glitter Sticker 37</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(76)</span>
+              <span class="reviews-count">(77)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1070,7 +1105,7 @@
             <h3 class="product-title">Glitter Sticker 38</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(93)</span>
+              <span class="reviews-count">(42)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1092,7 +1127,7 @@
             <h3 class="product-title">Glitter Sticker 39</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(2)</span>
+              <span class="reviews-count">(99)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1114,7 +1149,7 @@
             <h3 class="product-title">Glitter Sticker 40</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(34)</span>
+              <span class="reviews-count">(79)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1136,7 +1171,7 @@
             <h3 class="product-title">Glitter Sticker 41</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(96)</span>
+              <span class="reviews-count">(44)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1158,7 +1193,7 @@
             <h3 class="product-title">Glitter Sticker 42</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(53)</span>
+              <span class="reviews-count">(58)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1180,7 +1215,7 @@
             <h3 class="product-title">Glitter Sticker 43</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(48)</span>
+              <span class="reviews-count">(82)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1202,7 +1237,7 @@
             <h3 class="product-title">Glitter Sticker 44</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(27)</span>
+              <span class="reviews-count">(89)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1224,7 +1259,7 @@
             <h3 class="product-title">Glitter Sticker 45</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(56)</span>
+              <span class="reviews-count">(14)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1246,7 +1281,7 @@
             <h3 class="product-title">Glitter Sticker 46</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(37)</span>
+              <span class="reviews-count">(7)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1268,7 +1303,7 @@
             <h3 class="product-title">Glitter Sticker 47</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(83)</span>
+              <span class="reviews-count">(59)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1290,7 +1325,7 @@
             <h3 class="product-title">Glitter Sticker 48</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(73)</span>
+              <span class="reviews-count">(71)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1312,7 +1347,7 @@
             <h3 class="product-title">Glitter Sticker 49</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(33)</span>
+              <span class="reviews-count">(55)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1334,7 +1369,7 @@
             <h3 class="product-title">Glitter Sticker 50</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(45)</span>
+              <span class="reviews-count">(49)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1356,7 +1391,7 @@
             <h3 class="product-title">Glitter Sticker 51</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(84)</span>
+              <span class="reviews-count">(56)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1378,7 +1413,7 @@
             <h3 class="product-title">Glitter Sticker 52</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(51)</span>
+              <span class="reviews-count">(20)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1400,7 +1435,7 @@
             <h3 class="product-title">Glitter Sticker 53</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(4)</span>
+              <span class="reviews-count">(89)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1422,7 +1457,7 @@
             <h3 class="product-title">Glitter Sticker 54</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(97)</span>
+              <span class="reviews-count">(7)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1444,7 +1479,7 @@
             <h3 class="product-title">Glitter Sticker 55</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(55)</span>
+              <span class="reviews-count">(5)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1466,7 +1501,7 @@
             <h3 class="product-title">Glitter Sticker 56</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(90)</span>
+              <span class="reviews-count">(69)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1488,7 +1523,7 @@
             <h3 class="product-title">Glitter Sticker 57</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(43)</span>
+              <span class="reviews-count">(100)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1510,7 +1545,7 @@
             <h3 class="product-title">Glitter Sticker 58</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(82)</span>
+              <span class="reviews-count">(2)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1532,7 +1567,7 @@
             <h3 class="product-title">Glitter Sticker 59</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(46)</span>
+              <span class="reviews-count">(72)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1554,7 +1589,7 @@
             <h3 class="product-title">Glitter Sticker 60</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(76)</span>
+              <span class="reviews-count">(21)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1576,7 +1611,7 @@
             <h3 class="product-title">Glitter Sticker 61</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(38)</span>
+              <span class="reviews-count">(26)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1598,7 +1633,7 @@
             <h3 class="product-title">Glitter Sticker 62</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(44)</span>
+              <span class="reviews-count">(62)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1620,7 +1655,7 @@
             <h3 class="product-title">Glitter Sticker 63</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(99)</span>
+              <span class="reviews-count">(76)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1642,7 +1677,7 @@
             <h3 class="product-title">Glitter Sticker 64</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(9)</span>
+              <span class="reviews-count">(47)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1664,7 +1699,7 @@
             <h3 class="product-title">Glitter Sticker 65</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(13)</span>
+              <span class="reviews-count">(36)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1686,7 +1721,7 @@
             <h3 class="product-title">Glitter Sticker 66</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(1)</span>
+              <span class="reviews-count">(57)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1708,7 +1743,7 @@
             <h3 class="product-title">Glitter Sticker 67</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(61)</span>
+              <span class="reviews-count">(89)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1730,7 +1765,7 @@
             <h3 class="product-title">Glitter Sticker 68</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(63)</span>
+              <span class="reviews-count">(44)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1752,7 +1787,7 @@
             <h3 class="product-title">Glitter Sticker 69</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(76)</span>
+              <span class="reviews-count">(100)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1774,7 +1809,7 @@
             <h3 class="product-title">Glitter Sticker 70</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(32)</span>
+              <span class="reviews-count">(83)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1796,7 +1831,7 @@
             <h3 class="product-title">Glitter Sticker 71</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(46)</span>
+              <span class="reviews-count">(7)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1818,7 +1853,7 @@
             <h3 class="product-title">Glitter Sticker 72</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(46)</span>
+              <span class="reviews-count">(95)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1840,7 +1875,7 @@
             <h3 class="product-title">Glitter Sticker 73</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(14)</span>
+              <span class="reviews-count">(20)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1862,7 +1897,7 @@
             <h3 class="product-title">Glitter Sticker 74</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(52)</span>
+              <span class="reviews-count">(6)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1884,7 +1919,7 @@
             <h3 class="product-title">Glitter Sticker 75</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(96)</span>
+              <span class="reviews-count">(55)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1906,7 +1941,7 @@
             <h3 class="product-title">Glitter Sticker 76</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(88)</span>
+              <span class="reviews-count">(44)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1928,7 +1963,7 @@
             <h3 class="product-title">Glitter Sticker 77</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(86)</span>
+              <span class="reviews-count">(42)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1950,7 +1985,7 @@
             <h3 class="product-title">Glitter Sticker 78</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(91)</span>
+              <span class="reviews-count">(2)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1972,7 +2007,7 @@
             <h3 class="product-title">Glitter Sticker 79</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(64)</span>
+              <span class="reviews-count">(20)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -1994,7 +2029,7 @@
             <h3 class="product-title">Glitter Sticker 80</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(91)</span>
+              <span class="reviews-count">(1)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2016,7 +2051,7 @@
             <h3 class="product-title">Glitter Sticker 81</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(78)</span>
+              <span class="reviews-count">(51)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2038,7 +2073,7 @@
             <h3 class="product-title">Glitter Sticker 82</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(31)</span>
+              <span class="reviews-count">(91)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2060,7 +2095,7 @@
             <h3 class="product-title">Glitter Sticker 83</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(100)</span>
+              <span class="reviews-count">(47)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2082,7 +2117,7 @@
             <h3 class="product-title">Glitter Sticker 84</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(33)</span>
+              <span class="reviews-count">(59)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2104,7 +2139,7 @@
             <h3 class="product-title">Glitter Sticker 85</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(35)</span>
+              <span class="reviews-count">(64)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2126,7 +2161,7 @@
             <h3 class="product-title">Glitter Sticker 86</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(89)</span>
+              <span class="reviews-count">(51)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2148,7 +2183,7 @@
             <h3 class="product-title">Glitter Sticker 87</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(1)</span>
+              <span class="reviews-count">(100)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2170,7 +2205,7 @@
             <h3 class="product-title">Glitter Sticker 88</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(38)</span>
+              <span class="reviews-count">(39)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2192,7 +2227,7 @@
             <h3 class="product-title">Glitter Sticker 89</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(45)</span>
+              <span class="reviews-count">(20)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2214,7 +2249,7 @@
             <h3 class="product-title">Glitter Sticker 90</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(30)</span>
+              <span class="reviews-count">(15)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2236,7 +2271,7 @@
             <h3 class="product-title">Glitter Sticker 91</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(97)</span>
+              <span class="reviews-count">(18)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2258,7 +2293,7 @@
             <h3 class="product-title">Glitter Sticker 92</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(23)</span>
+              <span class="reviews-count">(28)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2280,7 +2315,7 @@
             <h3 class="product-title">Glitter Sticker 93</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(82)</span>
+              <span class="reviews-count">(75)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2302,7 +2337,7 @@
             <h3 class="product-title">Glitter Sticker 94</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(89)</span>
+              <span class="reviews-count">(77)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2324,7 +2359,7 @@
             <h3 class="product-title">Glitter Sticker 95</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(91)</span>
+              <span class="reviews-count">(25)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2346,7 +2381,7 @@
             <h3 class="product-title">Glitter Sticker 96</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(25)</span>
+              <span class="reviews-count">(5)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2368,7 +2403,7 @@
             <h3 class="product-title">Glitter Sticker 97</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(44)</span>
+              <span class="reviews-count">(94)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2390,7 +2425,7 @@
             <h3 class="product-title">Glitter Sticker 98</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(10)</span>
+              <span class="reviews-count">(60)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2412,7 +2447,7 @@
             <h3 class="product-title">Glitter Sticker 99</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(64)</span>
+              <span class="reviews-count">(5)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2434,7 +2469,7 @@
             <h3 class="product-title">Glitter Sticker 100</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(77)</span>
+              <span class="reviews-count">(34)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2456,7 +2491,7 @@
             <h3 class="product-title">Glitter Sticker 101</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(85)</span>
+              <span class="reviews-count">(4)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2478,7 +2513,7 @@
             <h3 class="product-title">Glitter Sticker 102</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(65)</span>
+              <span class="reviews-count">(46)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2500,7 +2535,7 @@
             <h3 class="product-title">Glitter Sticker 103</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(84)</span>
+              <span class="reviews-count">(41)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2522,7 +2557,7 @@
             <h3 class="product-title">Glitter Sticker 104</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(35)</span>
+              <span class="reviews-count">(10)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2544,7 +2579,7 @@
             <h3 class="product-title">Glitter Sticker 105</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(63)</span>
+              <span class="reviews-count">(95)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2566,7 +2601,7 @@
             <h3 class="product-title">Glitter Sticker 106</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(47)</span>
+              <span class="reviews-count">(67)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2588,7 +2623,7 @@
             <h3 class="product-title">Glitter Sticker 107</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(33)</span>
+              <span class="reviews-count">(55)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2610,7 +2645,7 @@
             <h3 class="product-title">Glitter Sticker 108</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(79)</span>
+              <span class="reviews-count">(22)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2632,7 +2667,7 @@
             <h3 class="product-title">Glitter Sticker 109</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(92)</span>
+              <span class="reviews-count">(94)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2654,7 +2689,7 @@
             <h3 class="product-title">Glitter Sticker 110</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(43)</span>
+              <span class="reviews-count">(47)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2676,7 +2711,7 @@
             <h3 class="product-title">Glitter Sticker 111</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(9)</span>
+              <span class="reviews-count">(6)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2698,7 +2733,7 @@
             <h3 class="product-title">Glitter Sticker 112</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(59)</span>
+              <span class="reviews-count">(36)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2720,7 +2755,7 @@
             <h3 class="product-title">Glitter Sticker 113</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(96)</span>
+              <span class="reviews-count">(39)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2742,7 +2777,7 @@
             <h3 class="product-title">Glitter Sticker 114</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(76)</span>
+              <span class="reviews-count">(81)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2764,7 +2799,7 @@
             <h3 class="product-title">Glitter Sticker 115</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(94)</span>
+              <span class="reviews-count">(10)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2786,7 +2821,7 @@
             <h3 class="product-title">Glitter Sticker 116</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(17)</span>
+              <span class="reviews-count">(71)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2808,7 +2843,7 @@
             <h3 class="product-title">Glitter Sticker 117</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(42)</span>
+              <span class="reviews-count">(79)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2830,7 +2865,7 @@
             <h3 class="product-title">Glitter Sticker 118</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(71)</span>
+              <span class="reviews-count">(10)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2852,7 +2887,7 @@
             <h3 class="product-title">Glitter Sticker 119</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(66)</span>
+              <span class="reviews-count">(77)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2874,7 +2909,7 @@
             <h3 class="product-title">Glitter Sticker 120</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(74)</span>
+              <span class="reviews-count">(75)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2896,7 +2931,7 @@
             <h3 class="product-title">Glitter Sticker 121</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(62)</span>
+              <span class="reviews-count">(85)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2918,7 +2953,7 @@
             <h3 class="product-title">Glitter Sticker 122</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(90)</span>
+              <span class="reviews-count">(50)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2940,7 +2975,7 @@
             <h3 class="product-title">Glitter Sticker 123</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(37)</span>
+              <span class="reviews-count">(1)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2962,7 +2997,7 @@
             <h3 class="product-title">Glitter Sticker 124</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(99)</span>
+              <span class="reviews-count">(31)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -2984,7 +3019,7 @@
             <h3 class="product-title">Glitter Sticker 125</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(28)</span>
+              <span class="reviews-count">(14)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3006,7 +3041,7 @@
             <h3 class="product-title">Glitter Sticker 126</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(8)</span>
+              <span class="reviews-count">(38)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3028,7 +3063,7 @@
             <h3 class="product-title">Glitter Sticker 127</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(44)</span>
+              <span class="reviews-count">(99)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3050,7 +3085,7 @@
             <h3 class="product-title">Glitter Sticker 128</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(67)</span>
+              <span class="reviews-count">(91)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3072,7 +3107,7 @@
             <h3 class="product-title">Glitter Sticker 129</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(75)</span>
+              <span class="reviews-count">(73)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3094,7 +3129,7 @@
             <h3 class="product-title">Glitter Sticker 130</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(18)</span>
+              <span class="reviews-count">(92)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3116,7 +3151,7 @@
             <h3 class="product-title">Glitter Sticker 131</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(46)</span>
+              <span class="reviews-count">(57)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3138,7 +3173,7 @@
             <h3 class="product-title">Glitter Sticker 132</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(82)</span>
+              <span class="reviews-count">(35)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3160,7 +3195,7 @@
             <h3 class="product-title">Glitter Sticker 133</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(74)</span>
+              <span class="reviews-count">(97)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3182,7 +3217,7 @@
             <h3 class="product-title">Glitter Sticker 134</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(10)</span>
+              <span class="reviews-count">(24)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3204,7 +3239,7 @@
             <h3 class="product-title">Glitter Sticker 135</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(28)</span>
+              <span class="reviews-count">(74)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3226,7 +3261,7 @@
             <h3 class="product-title">Glitter Sticker 136</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(45)</span>
+              <span class="reviews-count">(96)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3248,7 +3283,7 @@
             <h3 class="product-title">Glitter Sticker 137</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(3)</span>
+              <span class="reviews-count">(16)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3270,7 +3305,7 @@
             <h3 class="product-title">Glitter Sticker 138</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(83)</span>
+              <span class="reviews-count">(58)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3292,7 +3327,7 @@
             <h3 class="product-title">Glitter Sticker 139</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(78)</span>
+              <span class="reviews-count">(84)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3314,7 +3349,7 @@
             <h3 class="product-title">Glitter Sticker 140</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(68)</span>
+              <span class="reviews-count">(92)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3336,7 +3371,7 @@
             <h3 class="product-title">Glitter Sticker 141</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(14)</span>
+              <span class="reviews-count">(98)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3358,7 +3393,7 @@
             <h3 class="product-title">Glitter Sticker 142</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(17)</span>
+              <span class="reviews-count">(74)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3380,7 +3415,7 @@
             <h3 class="product-title">Glitter Sticker 143</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(27)</span>
+              <span class="reviews-count">(51)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3402,7 +3437,7 @@
             <h3 class="product-title">Glitter Sticker 144</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(19)</span>
+              <span class="reviews-count">(69)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3424,7 +3459,7 @@
             <h3 class="product-title">Glitter Sticker 145</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(92)</span>
+              <span class="reviews-count">(7)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3446,7 +3481,7 @@
             <h3 class="product-title">Glitter Sticker 146</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(70)</span>
+              <span class="reviews-count">(93)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3468,7 +3503,7 @@
             <h3 class="product-title">Glitter Sticker 147</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(77)</span>
+              <span class="reviews-count">(75)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3490,7 +3525,7 @@
             <h3 class="product-title">Glitter Sticker 148</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(7)</span>
+              <span class="reviews-count">(27)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3512,7 +3547,7 @@
             <h3 class="product-title">Glitter Sticker 149</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(65)</span>
+              <span class="reviews-count">(62)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3534,7 +3569,7 @@
             <h3 class="product-title">Glitter Sticker 150</h3>
             <div class="product-rating">
               <span class="stars">★★★★★</span>
-              <span class="reviews-count">(1)</span>
+              <span class="reviews-count">(23)</span>
             </div>
             <div class="product-pricing">
               <span class="price-old">Rs. 99.00</span>
@@ -3648,7 +3683,12 @@
           <div class="discount-progress-track">
             <div class="discount-progress-bar" id="discount-progress-bar"></div>
             <div class="discount-progress-badge" id="discount-progress-badge">
-              <svg viewBox="0 0 24 24" fill="currentColor" style="width: 10px; height: 10px; color: #000;"><path d="M19.14,12.94c0.04-0.3,0.06-0.61,0.06-0.94c0-0.32-0.02-0.64-0.07-0.94l2.03-1.58c0.18-0.14,0.23-0.41,0.12-0.61 l-1.92-3.32c-0.12-0.22-0.37-0.29-0.59-0.22l-2.39,0.96c-0.5-0.38-1.03-0.7-1.62-0.94L14.4,2.81c-0.04-0.24-0.24-0.41-0.48-0.41 h-3.84c-0.24,0-0.43,0.17-0.47,0.41L9.25,5.35C8.66,5.59,8.12,5.92,7.63,6.29L5.24,5.33c-0.22-0.08-0.47,0-0.59,0.22L2.73,8.87 c-0.11,0.2-0.06,0.47,0.12,0.61l2.03,1.58C4.84,11.36,4.8,11.68,4.8,12c0,0.32,0.03,0.64,0.07,0.94l-2.03,1.58 c-0.18,0.14-0.23,0.41-0.12,0.61l1.92,3.32c0.12,0.22,0.37,0.29,0.59,0.22l2.39-0.96c0.5,0.38,1.03,0.7,1.62,0.94l0.36,2.54 c0.05,0.24,0.24,0.41,0.48,0.41h3.84c0.24,0,0.44-0.17,0.47-0.41l0.36-2.54c0.59-0.24,1.13-0.56,1.62-0.94l2.39,0.96 c0.22,0.08,0.47,0,0.59-0.22l1.92-3.32c0.11-0.2,0.06-0.47-0.12-0.61L19.14,12.94z M12,15.6c-1.98,0-3.6-1.62-3.6-3.6 s1.62-3.6,3.6-3.6s3.6,1.62,3.6,3.6S13.98,15.6,12,15.6z"></path></svg>
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 11px; height: 11px; color: #000;">
+                <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path>
+                <line x1="15" x2="9" y1="9" y2="15"></line>
+                <path d="M9 9h.01"></path>
+                <path d="M15 15h.01"></path>
+              </svg>
             </div>
           </div>
         </div>
