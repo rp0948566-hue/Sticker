@@ -5065,11 +5065,12 @@
 
     <!-- Quick View Modal Wrapper -->
     <div class="quick-view-modal" id="quick-view-modal">
-      <button class="quick-view-close" id="quick-view-close">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
-      </button>
-      
-      <div class="quick-view-inner">
+      <div class="quick-view-container" style="position: relative; width: 100%; max-width: 1000px; display: flex; flex-direction: column; margin: auto;">
+        <button class="quick-view-close" id="quick-view-close">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
+        </button>
+        
+        <div class="quick-view-inner">
         <div class="quick-view-content">
         <!-- Left: Image Gallery -->
         <div class="qv-gallery">
@@ -5137,6 +5138,7 @@
             <p class="qv-disclaimer">* This is a demonstration store — no orders shall be fulfilled.</p>
           </div>
         </div>
+      </div>
       </div>
       </div>
     </div>
