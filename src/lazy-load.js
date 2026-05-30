@@ -1,74 +1,8 @@
-// Loading animation CSS is injected inline to avoid path issues with spaces in folder name
-const ANIM_CSS = `
-.tetrominos-wrapper {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 60px 0;
-  width: 100%;
-  transform: translateX(-15px);
-}
-.tetrominos {
-  position: relative;
-  width: 96px;
-  height: 112px;
-}
-.tetromino {
-  width: 96px;
-  height: 112px;
-  position: absolute;
-  transition: all ease .3s;
-  background: url('data:image/svg+xml;utf-8,%3Csvg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 612 684"%3E%3Cpath fill="%23010101" d="M305.7 0L0 170.9v342.3L305.7 684 612 513.2V170.9L305.7 0z"/%3E%3Cpath fill="%23fff" d="M305.7 80.1l-233.6 131 233.6 131 234.2-131-234.2-131"/%3E%3C/svg%3E') no-repeat top center;
-}
-.box1 { animation: tetromino1 1.5s ease-out infinite; }
-.box2 { animation: tetromino2 1.5s ease-out infinite; }
-.box3 { animation: tetromino3 1.5s ease-out infinite; z-index: 2; }
-.box4 { animation: tetromino4 1.5s ease-out infinite; }
-@keyframes tetromino1 {
-  0%, 40% { transform: translate(0,0); }
-  50% { transform: translate(48px, -27px); }
-  60%, 100% { transform: translate(96px, 0); }
-}
-@keyframes tetromino2 {
-  0%, 20% { transform: translate(96px, 0px); }
-  40%, 100% { transform: translate(144px, 27px); }
-}
-@keyframes tetromino3 {
-  0% { transform: translate(144px, 27px); }
-  20%, 60% { transform: translate(96px, 54px); }
-  90%, 100% { transform: translate(48px, 27px); }
-}
-@keyframes tetromino4 {
-  0%, 60% { transform: translate(48px, 27px); }
-  90%, 100% { transform: translate(0, 0); }
-}
-`;
-
-// Inject CSS once
-(function injectAnimCSS() {
-  if (document.getElementById('lazy-anim-css')) return;
-  const style = document.createElement('style');
-  style.id = 'lazy-anim-css';
-  style.textContent = ANIM_CSS;
-  document.head.appendChild(style);
-})();
+import { getLoadingHTML } from './Loading animion/Loading.js';
 
 const CHUNK_SIZE = 30;
 let currentIndex = 0;
 let isLoading = false;
-
-function getLoadingHTML() {
-  return `
-    <div class="tetrominos-wrapper" id="lazy-loading-animation" style="display:none;">
-      <div class='tetrominos'>
-        <div class='tetromino box1'></div>
-        <div class='tetromino box2'></div>
-        <div class='tetromino box3'></div>
-        <div class='tetromino box4'></div>
-      </div>
-    </div>
-  `;
-}
 
 export function initLazyLoad() {
   const grid = document.getElementById('all-products-grid');
@@ -150,8 +84,8 @@ function triggerLoad(allCards, animationNode) {
   // Show loading animation
   animationNode.style.display = 'flex';
 
-  // Random delay 0.5s–3s (max 3s as requested)
-  const loadTime = Math.random() * 2500 + 500;
+  // Exactly 3 seconds (3000ms) delay to show the gorgeous animation as requested
+  const loadTime = 3000;
 
   setTimeout(() => {
     showNextChunk(allCards, animationNode);
