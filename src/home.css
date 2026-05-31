@@ -2267,7 +2267,7 @@ main {
   .product-image-container {
     margin-bottom: 10px !important;
     border-radius: 8px !important;
-    background-color: #FFFDD0 !important; /* Cream background by default */
+    background-color: #ffffff !important; /* White background matching card default */
     border: 1px solid rgba(0,0,0,0.03) !important;
     box-sizing: border-box !important;
     position: relative !important;
