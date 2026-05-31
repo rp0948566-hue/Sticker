@@ -1870,9 +1870,10 @@ main {
 .placeholder-image {
   width: 100%;
   height: 100%;
-  background-color: #FFFDD0; /* Same cream as page background */
+  background-color: transparent !important;
   border-radius: 10px;
   transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  mix-blend-mode: multiply;
 }
 
 /* When card is hovered — image area switches to snow white */
@@ -1881,7 +1882,7 @@ main {
 }
 
 .product-card:hover .placeholder-image {
-  background-color: #FFFFFF;
+  background-color: transparent !important;
 }
 
 .save-badge {
@@ -2250,7 +2251,7 @@ main {
   .product-card {
     padding: 10px !important;
     border-radius: 14px !important;
-    background-color: #FFFDD0 !important; /* Cream default on mobile */
+    background-color: #FFFDD0 !important; /* Cream default on mobile (do not change color) */
     border: 1px solid rgba(0, 0, 0, 0.06) !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01) !important;
   }
@@ -2259,14 +2260,41 @@ main {
     background-color: #FFFFFF !important; /* Snow white on mobile hover */
   }
 
+  .product-card:hover .product-image-container {
+    background-color: #FFFFFF !important; /* Switch container to white on hover */
+  }
+
   .product-image-container {
     margin-bottom: 10px !important;
     border-radius: 8px !important;
+    background-color: #FFFDD0 !important; /* Cream background by default */
+    border: 1px solid rgba(0,0,0,0.03) !important;
+    box-sizing: border-box !important;
+    position: relative !important;
+    aspect-ratio: 1 / 1 !important;
+    overflow: visible !important; /* Do not clip floating badges at the top */
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    padding: 12px !important;
+    transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+
+  /* Make the sticker image background transparent so it floats cleanly on the white container */
+  .product-image-container img.placeholder-image {
+    background-color: transparent !important;
+    background: transparent !important;
+    border: none !important;
+    box-shadow: none !important;
+    mix-blend-mode: multiply !important;
   }
 
   .product-title {
-    font-size: 13px !important;
+    font-size: 14px !important;
+    font-weight: 800 !important;
+    color: #000000 !important;
     line-height: 1.3 !important;
+    margin-bottom: 2px !important;
   }
 
   .product-rating {
@@ -2280,54 +2308,136 @@ main {
 
   .price-old {
     font-size: 11px !important;
+    color: #999999 !important;
+    text-decoration: line-through !important;
+    font-weight: 700 !important;
   }
 
   .price-badge {
     font-size: 9px !important;
     padding: 2px 4px !important;
+    background-color: #f3f4f6 !important;
+    color: #000000 !important;
+    font-weight: 800 !important;
+    border-radius: 4px !important;
   }
 
   .price-current {
     font-size: 14px !important;
+    color: #ff5252 !important; /* Red current price */
+    font-weight: 800 !important;
   }
 
   .save-badge {
-    font-size: 9px !important;
-    padding: 2px 6px !important;
-    top: 6px !important;
-    right: 6px !important;
+    position: absolute !important;
+    top: -10px !important; /* Float exactly half-way over the top border */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    background-color: #ffebee !important; /* Light red/pink bubble like image */
+    color: #ef4444 !important;
+    border: 1px solid rgba(239, 68, 68, 0.15) !important;
+    padding: 3px 12px !important;
+    border-radius: 9999px !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    margin-bottom: 0 !important;
+    display: inline-block !important;
+    box-shadow: none !important;
+    white-space: nowrap !important;
+    z-index: 5 !important;
+  }
+
+  .new-label-text {
+    position: absolute !important;
+    top: 14px !important; /* Positioned cleanly right under the top border */
+    left: 50% !important;
+    transform: translateX(-50%) !important;
+    font-size: 12px !important;
+    font-weight: 900 !important;
+    color: #ef4444 !important; /* Red NEW text */
+    text-transform: uppercase !important;
+    letter-spacing: 0.5px !important;
+    z-index: 5 !important;
+    white-space: nowrap !important;
   }
   
-  /* Mobile Add To Cart always visible */
+  /* Mobile Add To Cart always visible, black bg, yellow text matching user screenshot */
   .add-to-cart-btn {
     opacity: 1 !important;
     pointer-events: auto !important;
-    padding: 8px !important;
-    font-size: 11px !important;
-    margin-top: 8px !important;
-    border-radius: 6px !important;
+    padding: 10px !important;
+    font-size: 12px !important;
+    margin-top: 10px !important;
+    border-radius: 8px !important;
+    background-color: #121212 !important; /* Black background */
+    color: #facc15 !important; /* Yellow bold text */
+    font-weight: 800 !important;
+    border: none !important;
+    text-transform: none !important;
   }
 
-  /* Permanently visible Eye Button on Mobile (bottom right corner) */
+  /* Hide quick view eye button entirely on mobile as shown in the screenshot */
   .quick-view {
-    opacity: 1 !important;
-    left: auto !important;
-    right: 8px !important;
-    bottom: 8px !important;
-    transform: none !important;
-    width: 36px !important;
-    height: 36px !important;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12) !important;
-    background-color: rgba(255, 255, 255, 0.95) !important;
-    border: 1px solid rgba(0,0,0,0.08) !important;
-    display: flex !important;
+    display: none !important;
   }
 
-  .quick-view svg {
-    width: 18px !important;
-    height: 18px !important;
+  /* Carousel controls at the top on mobile matching user's screenshot */
+  .carousel-controls {
+    display: flex !important;
+    justify-content: space-between !important;
+    align-items: center !important;
+    width: 100% !important;
+    padding: 0 15px 15px 15px !important;
+    margin-top: 0 !important;
+    background-color: #FFFDD0 !important;
+    box-sizing: border-box !important;
+  }
+
+  .view-all-btn {
+    display: inline-flex !important;
+    align-items: center !important;
+    gap: 8px !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
+    border: 1px solid rgba(0, 0, 0, 0.15) !important;
+    border-radius: 8px !important;
+    padding: 8px 16px !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+    text-transform: none !important;
+    box-shadow: 0 1px 2px rgba(0,0,0,0.03) !important;
+  }
+
+  .view-all-btn svg.grid-icon {
+    width: 15px !important;
+    height: 15px !important;
+    fill: none !important;
     stroke: #000000 !important;
-    stroke-width: 2.2 !important;
+    stroke-width: 2.5 !important;
+    display: block !important;
+  }
+
+  .arrow-buttons {
+    display: flex !important;
+    gap: 8px !important;
+  }
+
+  .carousel-arrow {
+    width: 38px !important;
+    height: 38px !important;
+    background-color: #ffffff !important;
+    border: 1px solid rgba(0, 0, 0, 0.12) !important;
+    border-radius: 8px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    color: #000000 !important;
+  }
+
+  .carousel-arrow svg {
+    width: 16px !important;
+    height: 16px !important;
+    color: #000000 !important;
   }
 
   /* Hide filters section on mobile */
@@ -2546,6 +2656,10 @@ main {
   font-family: 'Outfit', sans-serif;
   transition: transform 0.2s, background-color 0.2s;
   text-transform: uppercase;
+}
+
+.view-all-btn svg.grid-icon {
+  display: none;
 }
 
 .view-all-btn:hover {
@@ -3394,10 +3508,43 @@ main {
   font-weight: 800;
   letter-spacing: 1.5px;
   padding: 0 45px;
-  color: #ffffff !important; /* Pure white text */
+  color: #ffffff; /* Default base text color */
   flex-shrink: 0;
   display: inline-block;
   text-transform: uppercase;
+}
+
+.bottom-marquee-item .text-red {
+  color: #ff5a5a !important;
+}
+
+.bottom-marquee-item .text-purple {
+  color: #a78bfa !important;
+}
+
+.bottom-marquee-item .text-blue {
+  color: #60a5fa !important;
+}
+
+.bottom-marquee-item .gradient-text-1 {
+  background: linear-gradient(90deg, #ff5a5a 0%, #a78bfa 50%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.bottom-marquee-item .gradient-text-2 {
+  background: linear-gradient(90deg, #ff5a5a 0%, #a78bfa 50%, #60a5fa 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
+}
+
+.bottom-marquee-item .gradient-text-3 {
+  background: linear-gradient(90deg, #60a5fa 0%, #a78bfa 50%, #ff5a5a 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  display: inline-block;
 }
 
 @keyframes bottom-marquee-scroll {
@@ -3785,15 +3932,36 @@ main {
 
 @media (max-width: 768px) {
   .top-picks-bar {
-    padding: 20px 15px 14px 15px;
-    gap: 12px;
+    padding: 20px 15px 10px 15px !important;
+    gap: 12px !important;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
   }
   .top-picks-title {
-    font-size: 18px;
+    font-size: 18px !important;
+    font-weight: 900 !important;
+    text-transform: uppercase !important;
   }
-  .top-picks-tab {
-    padding: 7px 12px;
-    font-size: 11px;
+  .top-picks-line {
+    flex-grow: 1 !important;
+    height: 6px !important;
+    border-radius: 99px !important;
+    background: linear-gradient(
+      90deg,
+      #ff6b6b 0%,
+      #f59e0b 20%,
+      #a855f7 40%,
+      #3b82f6 60%,
+      #10b981 80%,
+      #ff6b6b 100%
+    ) !important;
+    background-size: 200% 100% !important;
+    animation: top-picks-shimmer 3s linear infinite !important;
+    box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
+  }
+  .top-picks-tabs {
+    display: none !important; /* Hide tabs in mobile screenshot layout */
   }
 }
 
