@@ -2251,7 +2251,7 @@ main {
   .product-card {
     padding: 10px !important;
     border-radius: 14px !important;
-    background-color: #ffffff !important; /* White background matching user screenshot */
+    background-color: #FFFDD0 !important; /* Cream background matching website theme default */
     border: 1px solid rgba(0, 0, 0, 0.06) !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01) !important;
   }
@@ -2267,7 +2267,7 @@ main {
   .product-image-container {
     margin-bottom: 10px !important;
     border-radius: 8px !important;
-    background-color: #ffffff !important; /* White background matching card default */
+    background-color: #FFFDD0 !important; /* Cream background matching website theme default */
     border: 1px solid rgba(0,0,0,0.03) !important;
     box-sizing: border-box !important;
     position: relative !important;
@@ -3957,6 +3957,16 @@ main {
   }
   .top-picks-tabs {
     display: flex !important;
+  }
+
+  /* Show exactly 2 product cards per row properly in carousels on mobile */
+  .products-carousel {
+    gap: 12px !important;
+    padding: 12px !important;
+  }
+  
+  .products-carousel .product-card {
+    flex: 0 0 calc(50% - 6px) !important; /* using 12px gap to show exactly 2 cards side-by-side */
   }
 }
 
