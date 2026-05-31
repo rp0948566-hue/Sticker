@@ -367,6 +367,14 @@ document.addEventListener('click', (e) => {
     const card = quickViewBtn.closest('.product-card');
     if (!card) return;
 
+    // Dynamically insert loading-dots if not present
+    if (!quickViewBtn.querySelector('.loading-dots')) {
+      const dots = document.createElement('div');
+      dots.className = 'loading-dots';
+      dots.innerHTML = '<span></span><span></span><span></span>';
+      quickViewBtn.appendChild(dots);
+    }
+
     // Show loading state
     quickViewBtn.classList.add('is-loading');
 
