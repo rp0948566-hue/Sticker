@@ -2614,7 +2614,7 @@ main {
 
 .empty-sec-combined {
   background-color: #EADEC9 !important; /* Premium Slight Dark Cream color */
-  min-height: 600px !important;
+  min-height: 680px !important;
   display: flex !important;
   border: none !important;
   outline: none !important;
@@ -2628,9 +2628,15 @@ main {
   padding: 25px 0; /* Expanded padding to fully render large soft shadows and prevent clipping */
 }
 
+/* Base custom variables for scrolling tracks */
+:root {
+  --track-gap: 30px;
+  --track-offset: calc(-50% - (var(--track-gap) / 2));
+}
+
 .marquee-row-track {
   display: flex;
-  gap: 30px;
+  gap: var(--track-gap);
   width: max-content;
   will-change: transform;
 }
@@ -2646,13 +2652,13 @@ main {
 }
 
 @keyframes scroll-right {
-  0% { transform: translateX(calc(-50% - 15px)); }
+  0% { transform: translateX(var(--track-offset)); }
   100% { transform: translateX(0); }
 }
 
 @keyframes scroll-left {
   0% { transform: translateX(0); }
-  100% { transform: translateX(calc(-50% - 15px)); }
+  100% { transform: translateX(var(--track-offset)); }
 }
 
 /* Off-white Empty Product Frames */
@@ -2682,6 +2688,74 @@ main {
     0 20px 40px -10px rgba(0, 0, 0, 0.18), 
     0 30px 60px -15px rgba(0, 0, 0, 0.14) !important;
 }
+
+/* Responsive Table / Tablet Overrides (769px to 1024px) */
+@media (min-width: 769px) and (max-width: 1024px) {
+  :root {
+    --track-gap: 24px;
+  }
+  .empty-product-frame {
+    width: 320px !important;
+    height: 200px !important;
+    border-radius: 20px !important;
+  }
+  .empty-sec-combined {
+    min-height: 520px !important;
+  }
+}
+
+/* Responsive Mobile Phone Overrides (481px to 768px) */
+@media (min-width: 481px) and (max-width: 768px) {
+  :root {
+    --track-gap: 16px;
+  }
+  .empty-product-frame {
+    width: 220px !important;
+    height: 140px !important;
+    border-radius: 14px !important;
+    box-shadow: 
+      0 2px 4px rgba(0, 0, 0, 0.04), 
+      0 6px 15px rgba(0, 0, 0, 0.08) !important;
+  }
+  .empty-product-frame:hover {
+    transform: translateY(-4px) scale(1.02) !important;
+  }
+  .marquee-row {
+    padding: 10px 0 !important;
+  }
+  .empty-sec-combined {
+    min-height: 380px !important;
+    padding: 20px 0 0 0 !important;
+    gap: 14px !important;
+  }
+}
+
+/* Responsive Small Phone Overrides (up to 480px) */
+@media (max-width: 480px) {
+  :root {
+    --track-gap: 12px;
+  }
+  .empty-product-frame {
+    width: 180px !important;
+    height: 115px !important;
+    border-radius: 12px !important;
+    box-shadow: 
+      0 2px 4px rgba(0, 0, 0, 0.04), 
+      0 4px 10px rgba(0, 0, 0, 0.06) !important;
+  }
+  .empty-product-frame:hover {
+    transform: translateY(-3px) scale(1.02) !important;
+  }
+  .marquee-row {
+    padding: 6px 0 !important;
+  }
+  .empty-sec-combined {
+    min-height: 320px !important;
+    padding: 15px 0 0 0 !important;
+    gap: 10px !important;
+  }
+}
+
 
 .sticker-vibe-card {
   width: 100%;
