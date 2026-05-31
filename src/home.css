@@ -3288,47 +3288,29 @@ main {
   color: #000000;
 }
 
-/* Bottom Infinite Marquee Bar (Deep Maroon-Red, Dual Rows) */
+/* Bottom Infinite Marquee Bar (Black, Single Row) */
 .bottom-marquee-bar {
-  background-color: #800000; /* Deep premium maroon red */
+  background-color: #000000; /* Pure black background */
   overflow: hidden;
   white-space: nowrap;
   width: 100%;
   display: flex;
-  flex-direction: column;
-  gap: 14px; /* Separation gap between the two opposite scrolling rows */
   position: relative;
   z-index: 2;
   margin-top: 0;
-  padding: 20px 0;
+  padding: 16px 0;
   cursor: pointer;
   box-sizing: border-box;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.bottom-marquee-row {
-  display: flex;
-  overflow: hidden;
-  width: 100%;
+.bottom-marquee-bar:hover .bottom-marquee-track {
+  animation-play-state: paused; /* Stop moving when hovered */
 }
 
-.bottom-marquee-bar:hover .bottom-marquee-track-left,
-.bottom-marquee-bar:hover .bottom-marquee-track-right {
-  animation-play-state: paused; /* Stop both tracks when hovered */
-}
-
-.bottom-marquee-track-left {
+.bottom-marquee-track {
   display: inline-flex;
   white-space: nowrap;
   animation: bottom-marquee-scroll 24s linear infinite; /* Smooth right to left scroll */
-  will-change: transform;
-}
-
-.bottom-marquee-track-right {
-  display: inline-flex;
-  white-space: nowrap;
-  animation: bottom-marquee-scroll-right 24s linear infinite; /* Smooth left to right scroll */
   will-change: transform;
 }
 
@@ -3347,11 +3329,6 @@ main {
 @keyframes bottom-marquee-scroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
-}
-
-@keyframes bottom-marquee-scroll-right {
-  0% { transform: translateX(-50%); }
-  100% { transform: translateX(0); }
 }
 
 /* Reviews Section Styles */
