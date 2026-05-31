@@ -2251,7 +2251,7 @@ main {
   .product-card {
     padding: 10px !important;
     border-radius: 14px !important;
-    background-color: #FFFDD0 !important; /* Cream default on mobile (do not change color) */
+    background-color: #ffffff !important; /* White background matching user screenshot */
     border: 1px solid rgba(0, 0, 0, 0.06) !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01) !important;
   }
@@ -3898,18 +3898,17 @@ main {
 
 .top-picks-tabs {
   display: flex;
-  gap: 0;
-  border: 1px solid rgba(0, 0, 0, 0.15);
-  border-radius: 6px;
-  overflow: hidden;
+  gap: 12px;
+  border: none;
+  background: transparent;
   flex-shrink: 0;
 }
 
 .top-picks-tab {
-  background-color: #FFFDD0;
+  background-color: #ffffff;
   color: #000000;
-  border: none;
-  border-right: 1px solid rgba(0, 0, 0, 0.15);
+  border: 2px solid #000000;
+  border-radius: 8px;
   padding: 8px 18px;
   font-size: 12px;
   font-weight: 800;
@@ -3917,17 +3916,13 @@ main {
   cursor: pointer;
   font-family: 'Outfit', sans-serif;
   text-transform: uppercase;
-  transition: background-color 0.2s ease, color 0.2s ease;
-}
-
-.top-picks-tab:last-child {
-  border-right: none;
+  transition: all 0.2s ease;
 }
 
 .top-picks-tab.active,
 .top-picks-tab:hover {
   background-color: #000000;
-  color: #FFFDD0;
+  color: #ffffff;
 }
 
 @media (max-width: 768px) {
@@ -3961,7 +3956,7 @@ main {
     box-shadow: 0 1px 4px rgba(0, 0, 0, 0.08) !important;
   }
   .top-picks-tabs {
-    display: none !important; /* Hide tabs in mobile screenshot layout */
+    display: flex !important;
   }
 }
 
