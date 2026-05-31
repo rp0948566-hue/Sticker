@@ -1830,10 +1830,10 @@ main {
 }
 
 .product-card {
-  background-color: #fffef3;
+  background-color: #FFFDD0; /* Cream default */
   border-radius: 20px;
   padding: 20px;
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.06);
   transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
@@ -1843,7 +1843,7 @@ main {
 }
 
 .product-card:hover {
-  background-color: #f5f1e8;
+  background-color: #FFFFFF; /* Snow white on hover */
   box-shadow: 
     0 18px 24px -6px rgba(0, 0, 0, 0.12),
     0 8px 10px -6px rgba(0, 0, 0, 0.08),
@@ -1856,14 +1856,32 @@ main {
   position: relative;
   width: 100%;
   aspect-ratio: 1 / 1;
-  background-color: #f8f8f2;
+  background-color: #FFFDD0; /* Same cream as page background */
   border-radius: 12px;
   margin-bottom: 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.03);
+  border: 1px solid rgba(0, 0, 0, 0.04);
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.placeholder-image {
+  width: 100%;
+  height: 100%;
+  background-color: #FFFDD0; /* Same cream as page background */
+  border-radius: 10px;
+  transition: background-color 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+/* When card is hovered — image area switches to snow white */
+.product-card:hover .product-image-container {
+  background-color: #FFFFFF;
+}
+
+.product-card:hover .placeholder-image {
+  background-color: #FFFFFF;
 }
 
 .save-badge {
@@ -2232,9 +2250,13 @@ main {
   .product-card {
     padding: 10px !important;
     border-radius: 14px !important;
-    background-color: #FFFDD0 !important; /* Cream color */
-    border: 1px solid rgba(0, 0, 0, 0.05) !important; /* Very light, elegant separation line */
+    background-color: #FFFDD0 !important; /* Cream default on mobile */
+    border: 1px solid rgba(0, 0, 0, 0.06) !important;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.01) !important;
+  }
+
+  .product-card:hover {
+    background-color: #FFFFFF !important; /* Snow white on mobile hover */
   }
 
   .product-image-container {
@@ -2648,6 +2670,8 @@ main {
   transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1), box-shadow 0.4s cubic-bezier(0.16, 1, 0.3, 1);
   border: 1px solid rgba(255, 255, 255, 0.85);
   box-sizing: border-box;
+  overflow: hidden; /* Added to clip child cards perfectly */
+  display: flex;
 }
 
 .empty-product-frame:hover {
@@ -2658,6 +2682,205 @@ main {
     0 20px 40px -10px rgba(0, 0, 0, 0.18), 
     0 30px 60px -15px rgba(0, 0, 0, 0.14) !important;
 }
+
+.sticker-vibe-card {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  box-sizing: border-box;
+  padding: 24px;
+  color: #ffffff;
+  font-family: 'Outfit', sans-serif;
+  text-align: center;
+}
+
+/* Vibe 1: Cyberpunk/Alien UFO */
+.vibe-1 {
+  background: linear-gradient(135deg, #0f172a 0%, #1e1b4b 100%);
+}
+.vibe-1 .vibe-icon {
+  font-size: 80px;
+  filter: drop-shadow(0 0 15px rgba(34, 197, 94, 0.6));
+  animation: float 3s ease-in-out infinite;
+}
+.vibe-1 .vibe-text {
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 4px;
+  color: #22c55e;
+  text-shadow: 0 0 10px rgba(34, 197, 94, 0.8), 0 0 20px rgba(34, 197, 94, 0.4);
+  margin-top: 15px;
+  text-transform: uppercase;
+}
+
+/* Vibe 2: Monospace Coffee */
+.vibe-2 {
+  background: linear-gradient(135deg, #3b2314 0%, #5c3821 100%);
+}
+.vibe-2 .vibe-icon {
+  font-size: 80px;
+  filter: drop-shadow(0 0 12px rgba(254, 215, 170, 0.4));
+  animation: pulse-slow 4s ease-in-out infinite;
+}
+.vibe-2 .vibe-text {
+  font-family: 'Courier New', Courier, monospace;
+  font-size: 22px;
+  font-weight: bold;
+  letter-spacing: 2px;
+  color: #fed7aa;
+  margin-top: 20px;
+  text-transform: uppercase;
+  border-bottom: 2px solid #fed7aa;
+  padding-bottom: 4px;
+}
+
+/* Vibe 3: Anime Otaku Gamer */
+.vibe-3 {
+  background: linear-gradient(135deg, #db2777 0%, #4c1d95 100%);
+}
+.vibe-3 .vibe-icon {
+  font-size: 85px;
+  filter: drop-shadow(0 0 15px rgba(244, 63, 94, 0.7));
+  animation: wiggle 2.5s ease-in-out infinite;
+}
+.vibe-3 .vibe-text {
+  font-size: 28px;
+  font-weight: 900;
+  letter-spacing: 3px;
+  color: #ffffff;
+  text-shadow: 0 4px 0px #db2777, 0 8px 0px #4c1d95, 0 12px 20px rgba(0,0,0,0.5);
+  margin-top: 15px;
+  text-transform: uppercase;
+}
+
+/* Vibe 4: Retro Sun Chill */
+.vibe-4 {
+  background: linear-gradient(135deg, #ea580c 0%, #be123c 100%);
+}
+.vibe-4 .vibe-icon {
+  font-size: 80px;
+  filter: drop-shadow(0 0 15px rgba(253, 224, 71, 0.5));
+  animation: spin-slow 12s linear infinite;
+}
+.vibe-4 .vibe-text {
+  font-size: 28px;
+  font-weight: 800;
+  letter-spacing: 5px;
+  color: #fde047;
+  text-shadow: 2px 2px 0px #000000;
+  margin-top: 15px;
+  text-transform: uppercase;
+}
+
+/* Vibe 5: Electric Dope Bolt */
+.vibe-5 {
+  background: linear-gradient(135deg, #facc15 0%, #ca8a04 100%);
+  color: #000000 !important;
+}
+.vibe-5 .vibe-icon {
+  font-size: 80px;
+  filter: drop-shadow(0 0 15px rgba(0, 0, 0, 0.3));
+  animation: float 2.5s ease-in-out infinite alternate;
+}
+.vibe-5 .vibe-text {
+  font-size: 30px;
+  font-weight: 900;
+  letter-spacing: 2px;
+  color: #000000;
+  margin-top: 15px;
+  text-transform: uppercase;
+  background-color: #ffffff;
+  padding: 6px 16px;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.15);
+}
+
+/* Vibe 6: Space Lost Saturn */
+.vibe-6 {
+  background: linear-gradient(135deg, #1d4ed8 0%, #312e81 100%);
+}
+.vibe-6 .vibe-icon {
+  font-size: 80px;
+  filter: drop-shadow(0 0 18px rgba(96, 165, 250, 0.6));
+  animation: float-space 4s ease-in-out infinite;
+}
+.vibe-6 .vibe-text {
+  font-size: 24px;
+  font-weight: 700;
+  letter-spacing: 4px;
+  color: #60a5fa;
+  margin-top: 20px;
+  text-transform: uppercase;
+}
+
+/* Vibe 7: Forest Outdoor Wild */
+.vibe-7 {
+  background: linear-gradient(135deg, #065f46 0%, #064e3b 100%);
+}
+.vibe-7 .vibe-icon {
+  font-size: 80px;
+  filter: drop-shadow(0 0 12px rgba(167, 243, 208, 0.4));
+  animation: pulse-slow 3s ease-in-out infinite;
+}
+.vibe-7 .vibe-text {
+  font-size: 26px;
+  font-weight: 800;
+  letter-spacing: 3px;
+  color: #a7f3d0;
+  margin-top: 20px;
+  text-transform: uppercase;
+}
+
+/* Vibe 8: Synthwave Retro Cassette */
+.vibe-8 {
+  background: linear-gradient(135deg, #701a75 0%, #f472b6 100%);
+}
+.vibe-8 .vibe-icon {
+  font-size: 85px;
+  filter: drop-shadow(0 0 15px rgba(244, 114, 182, 0.6));
+  animation: wiggle 3s ease-in-out infinite alternate;
+}
+.vibe-8 .vibe-text {
+  font-size: 28px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 2px;
+  color: #ffffff;
+  text-shadow: -2px 2px 0px #d946ef, -4px 4px 0px #4a044e;
+  margin-top: 15px;
+  text-transform: uppercase;
+}
+
+/* Animations for Vibe Cards */
+@keyframes float {
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+  100% { transform: translateY(0px); }
+}
+@keyframes float-space {
+  0% { transform: translateY(0px) rotate(0deg); }
+  50% { transform: translateY(-8px) rotate(3deg); }
+  100% { transform: translateY(0px) rotate(0deg); }
+}
+@keyframes wiggle {
+  0% { transform: rotate(0deg) scale(1); }
+  50% { transform: rotate(-5deg) scale(1.05); }
+  100% { transform: rotate(0deg) scale(1); }
+}
+@keyframes spin-slow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+@keyframes pulse-slow {
+  0% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.04); opacity: 1; }
+  100% { transform: scale(1); opacity: 0.9; }
+}
+
 
 /* BEST SELLERS Horizontal Carousel Section */
 .bestsellers-section {
@@ -3065,48 +3288,70 @@ main {
   color: #000000;
 }
 
-/* Bottom Infinite Marquee Bar */
+/* Bottom Infinite Marquee Bar (Deep Maroon-Red, Dual Rows) */
 .bottom-marquee-bar {
-  background-color: #000000;
+  background-color: #800000; /* Deep premium maroon red */
   overflow: hidden;
   white-space: nowrap;
   width: 100%;
   display: flex;
+  flex-direction: column;
+  gap: 14px; /* Separation gap between the two opposite scrolling rows */
   position: relative;
-  z-index: 1;
-  margin-top: -15px; /* Premium sticker cut overlap */
-  padding: 24px 0;
+  z-index: 2;
+  margin-top: 0;
+  padding: 20px 0;
   cursor: pointer;
   box-sizing: border-box;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
-.bottom-marquee-bar:hover .bottom-marquee-track {
-  animation-play-state: paused;
+.bottom-marquee-row {
+  display: flex;
+  overflow: hidden;
+  width: 100%;
 }
 
-.bottom-marquee-track {
+.bottom-marquee-bar:hover .bottom-marquee-track-left,
+.bottom-marquee-bar:hover .bottom-marquee-track-right {
+  animation-play-state: paused; /* Stop both tracks when hovered */
+}
+
+.bottom-marquee-track-left {
   display: inline-flex;
   white-space: nowrap;
-  animation: bottom-marquee-scroll 28s linear infinite;
+  animation: bottom-marquee-scroll 24s linear infinite; /* Smooth right to left scroll */
+  will-change: transform;
+}
+
+.bottom-marquee-track-right {
+  display: inline-flex;
+  white-space: nowrap;
+  animation: bottom-marquee-scroll-right 24s linear infinite; /* Smooth left to right scroll */
   will-change: transform;
 }
 
 .bottom-marquee-item {
   font-family: 'Outfit', sans-serif;
-  font-size: 28px;
+  font-size: 20px;
   font-weight: 800;
-  letter-spacing: 0.5px;
-  padding: 0 30px;
+  letter-spacing: 1.5px;
+  padding: 0 45px;
+  color: #ffffff !important; /* Pure white text */
   flex-shrink: 0;
-  background: linear-gradient(90deg, #ff6b6b 0%, #a855f7 50%, #3b82f6 100%);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   display: inline-block;
+  text-transform: uppercase;
 }
 
 @keyframes bottom-marquee-scroll {
   0% { transform: translateX(0); }
   100% { transform: translateX(-50%); }
+}
+
+@keyframes bottom-marquee-scroll-right {
+  0% { transform: translateX(-50%); }
+  100% { transform: translateX(0); }
 }
 
 /* Reviews Section Styles */
@@ -3407,4 +3652,145 @@ main {
   display: flex;
   align-items: flex-end;
   z-index: 4; /* sit on top of the card border */
+}
+
+/* ===== TOP PICKS BAR ===== */
+.top-picks-bar {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 28px 40px 20px 40px;
+  background-color: #FFFDD0;
+  box-sizing: border-box;
+}
+
+.top-picks-title {
+  margin: 0;
+  font-size: 26px;
+  font-weight: 900;
+  letter-spacing: 0.5px;
+  color: #000000;
+  white-space: nowrap;
+  font-family: 'Outfit', sans-serif;
+  flex-shrink: 0;
+}
+
+.top-picks-line {
+  flex-grow: 1;
+  height: 8px;
+  border-radius: 99px;
+  background: linear-gradient(
+    90deg,
+    #ff6b6b 0%,
+    #f59e0b 20%,
+    #a855f7 40%,
+    #3b82f6 60%,
+    #10b981 80%,
+    #ff6b6b 100%
+  );
+  background-size: 200% 100%;
+  animation: top-picks-shimmer 3s linear infinite;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+@keyframes top-picks-shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+
+.top-picks-tabs {
+  display: flex;
+  gap: 0;
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 6px;
+  overflow: hidden;
+  flex-shrink: 0;
+}
+
+.top-picks-tab {
+  background-color: #FFFDD0;
+  color: #000000;
+  border: none;
+  border-right: 1px solid rgba(0, 0, 0, 0.15);
+  padding: 8px 18px;
+  font-size: 12px;
+  font-weight: 800;
+  letter-spacing: 0.8px;
+  cursor: pointer;
+  font-family: 'Outfit', sans-serif;
+  text-transform: uppercase;
+  transition: background-color 0.2s ease, color 0.2s ease;
+}
+
+.top-picks-tab:last-child {
+  border-right: none;
+}
+
+.top-picks-tab.active,
+.top-picks-tab:hover {
+  background-color: #000000;
+  color: #FFFDD0;
+}
+
+@media (max-width: 768px) {
+  .top-picks-bar {
+    padding: 20px 15px 14px 15px;
+    gap: 12px;
+  }
+  .top-picks-title {
+    font-size: 18px;
+  }
+  .top-picks-tab {
+    padding: 7px 12px;
+    font-size: 11px;
+  }
+}
+
+/* ===== NEW COLLECTION RESPONSIVE BANNER ===== */
+.collection-banner-wrap {
+  width: 100%;
+  background-color: #FFFDD0;
+  padding: 0;
+  margin-top: -350px; /* Shift the banner slightly down */
+  box-sizing: border-box;
+}
+
+.collection-banner-link {
+  display: block;
+  width: 100%;
+  border-radius: 0;
+  overflow: hidden;
+  position: relative;
+  box-shadow: none;
+}
+
+.collection-banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* Desktop image: show on ≥768px, hide on mobile */
+.collection-banner-desktop {
+  display: block;
+}
+.collection-banner-mobile {
+  display: none;
+}
+
+/* Mobile: swap to portrait image */
+@media (max-width: 767px) {
+  .collection-banner-wrap {
+    padding: 0;
+    margin-top: -210px; /* Shift slightly down on mobile */
+  }
+  .collection-banner-link {
+    border-radius: 0;
+  }
+  .collection-banner-desktop {
+    display: none;
+  }
+  .collection-banner-mobile {
+    display: block;
+  }
 }
