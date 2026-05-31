@@ -3728,7 +3728,7 @@ main {
   width: 100%;
   background-color: #FFFDD0;
   padding: 0;
-  margin-top: -350px; /* Shift the banner slightly down */
+  margin-top: 0px; /* Reset margin to 0px to prevent overlapping the tracks */
   box-sizing: border-box;
 }
 
@@ -3759,7 +3759,7 @@ main {
 @media (max-width: 767px) {
   .collection-banner-wrap {
     padding: 0;
-    margin-top: -210px; /* Shift slightly down on mobile */
+    margin-top: 0px; /* Reset mobile margin to 0px to prevent overlapping */
   }
   .collection-banner-link {
     border-radius: 0;
