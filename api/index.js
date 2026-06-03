@@ -52,12 +52,63 @@ app.use(express.json({
   }
 }));
 
+// Middleware to ensure DB connection is active before processing requests (Vercel serverless safe)
+app.use(async (req, res, next) => {
+  if (process.env.NODE_ENV === 'test') {
+    return next();
+  }
+  try {
+    await connectDB();
+    next();
+  } catch (error) {
+    logEvent('error', 'DATABASE_CONNECTION_FAIL', `Database connection failure: ${error.message}`);
+    res.status(500).json({ message: 'Database connection failed. Please try again.' });
+  }
+});
+
 // Simple in-memory rate limiter to prevent dependencies count inflation
 const ipRequestCounts = new Map();
 const rateLimiter = (limit, windowMs) => {
-  return (req, res, next) => {
+  return async (req, res, next) => {
     const ip = req.ip;
     const now = Date.now();
+
+    // Upstash Redis configuration check (Serverless-safe rate limiting)
+    const redisUrl = process.env.UPSTASH_REDIS_REST_URL;
+    const redisToken = process.env.UPSTASH_REDIS_REST_TOKEN;
+
+    if (redisUrl && redisToken) {
+      try {
+        const windowIndex = Math.floor(now / windowMs);
+        const key = `rate_limit:${ip.replace(/:/g, '_')}:${windowIndex}`;
+
+        // Atomically increment and set TTL in a single request to Upstash REST pipeline
+        const response = await fetch(`${redisUrl}/pipeline`, {
+          method: 'POST',
+          headers: {
+            Authorization: `Bearer ${redisToken}`,
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify([
+            ['INCR', key],
+            ['EXPIRE', key, Math.ceil(windowMs / 1000)]
+          ])
+        });
+
+        if (response.ok) {
+          const results = await response.json();
+          const count = results[0]?.result;
+          if (count && count > limit) {
+            return res.status(429).json({ message: 'Too many requests. Please try again later.' });
+          }
+          return next();
+        } else {
+          logEvent('warn', 'RATE_LIMIT_REDIS_FAIL', `Upstash Redis returned status ${response.status}. Falling back to memory.`);
+        }
+      } catch (err) {
+        logEvent('error', 'RATE_LIMIT_REDIS_ERROR', `Upstash Redis error: ${err.message}. Falling back to memory.`);
+      }
+    }
 
     if (!ipRequestCounts.has(ip)) {
       ipRequestCounts.set(ip, []);
@@ -86,18 +137,17 @@ const verifyWebhookSignature = (req, res, next) => {
   const signatureRazorpay = req.headers['x-razorpay-signature'];
   const signatureCashfree = req.headers['x-cf-signature'];
   const signaturePhonePe = req.headers['x-verify'];
-  
-  const secret = process.env.WEBHOOK_SECRET;
-  if (!secret) {
-    logEvent('error', 'PAYMENT_WEBHOOK_CRITICAL', 'WEBHOOK_SECRET environment variable is missing.');
-    return res.status(500).json({ message: 'Webhook signature validation is misconfigured on the server.' });
-  }
 
   try {
     const rawBody = req.rawBody || JSON.stringify(req.body);
     let isValid = false;
 
     if (signatureStripe) {
+      const stripeSecret = process.env.STRIPE_WEBHOOK_SECRET;
+      if (!stripeSecret) {
+        logEvent('error', 'PAYMENT_WEBHOOK_CRITICAL', 'STRIPE_WEBHOOK_SECRET environment variable is missing.');
+        return res.status(500).json({ message: 'Stripe webhook signature validation is misconfigured on the server.' });
+      }
       // Stripe signature check (t=TIMESTAMP,v1=SIGNATURE)
       const parts = signatureStripe.split(',').reduce((acc, part) => {
         const [k, v] = part.split('=');
@@ -105,23 +155,42 @@ const verifyWebhookSignature = (req, res, next) => {
         return acc;
       }, {});
       if (parts.t && parts.v1) {
-        const hmac = crypto.createHmac('sha256', secret);
+        const hmac = crypto.createHmac('sha256', stripeSecret);
         const calculated = hmac.update(`${parts.t}.${rawBody}`).digest('hex');
         isValid = calculated === parts.v1;
       }
     } else if (signatureRazorpay) {
+      const razorpaySecret = process.env.RAZORPAY_WEBHOOK_SECRET;
+      if (!razorpaySecret) {
+        logEvent('error', 'PAYMENT_WEBHOOK_CRITICAL', 'RAZORPAY_WEBHOOK_SECRET environment variable is missing.');
+        return res.status(500).json({ message: 'Razorpay webhook signature validation is misconfigured on the server.' });
+      }
       // Razorpay signature check (HMAC SHA256 hex)
-      const calculated = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
+      const calculated = crypto.createHmac('sha256', razorpaySecret).update(rawBody).digest('hex');
       isValid = calculated === signatureRazorpay;
     } else if (signatureCashfree) {
+      const cashfreeSecret = process.env.CASHFREE_WEBHOOK_SECRET;
+      if (!cashfreeSecret) {
+        logEvent('error', 'PAYMENT_WEBHOOK_CRITICAL', 'CASHFREE_WEBHOOK_SECRET environment variable is missing.');
+        return res.status(500).json({ message: 'Cashfree webhook signature validation is misconfigured on the server.' });
+      }
       // Cashfree signature check (HMAC SHA256 hex)
-      const calculated = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
+      const calculated = crypto.createHmac('sha256', cashfreeSecret).update(rawBody).digest('hex');
       isValid = calculated === signatureCashfree;
     } else if (signaturePhonePe) {
-      // PhonePe signature check (SHA256 of raw body + secret + salt index)
-      const saltIndex = secret.split('###')[1] || '1';
-      const calculated = crypto.createHash('sha256').update(rawBody + secret).digest('hex') + '###' + saltIndex;
+      const phonepeSecret = process.env.PHONEPE_WEBHOOK_SECRET; // Format: SaltKey###SaltIndex
+      if (!phonepeSecret || !phonepeSecret.includes('###')) {
+        logEvent('error', 'PAYMENT_WEBHOOK_CRITICAL', 'PHONEPE_WEBHOOK_SECRET env variable is missing or invalid. Expected SaltKey###SaltIndex');
+        return res.status(500).json({ message: 'PhonePe webhook signature validation is misconfigured on the server.' });
+      }
+      const [saltKey, saltIndex] = phonepeSecret.split('###');
+      // PhonePe webhook body structure contains { response: "BASE64" }
+      const base64Response = req.body.response || '';
+      const calculated = crypto.createHash('sha256').update(base64Response + saltKey).digest('hex') + '###' + saltIndex;
       isValid = (calculated === signaturePhonePe);
+    } else {
+      logEvent('warn', 'PAYMENT_WEBHOOK_FAIL', `Unauthenticated webhook request rejected from IP ${req.ip}. No gateway header found.`);
+      return res.status(401).json({ message: 'Missing webhook signature headers.' });
     }
 
     if (!isValid) {
@@ -1206,12 +1275,22 @@ app.post('/api/payments/webhook', verifyWebhookSignature, async (req, res, next)
           { session }
         );
 
-        // Fetch document and run pre-save hooks to enforce bounds and recalculate availableStock
+        // Atomic bounds check using a single query to ensure stock/reservedStock cannot fall below zero, eliminating read-modify-write races
+        await Product.updateOne(
+          { _id: item.productId },
+          [
+            {
+              $set: {
+                stock: { $cond: { if: { $lt: ["$stock", 0] }, then: 0, else: "$stock" } },
+                reservedStock: { $cond: { if: { $lt: ["$reservedStock", 0] }, then: 0, else: "$reservedStock" } }
+              }
+            }
+          ],
+          { session }
+        );
+
+        // Fetch document in read-only mode to trigger low-stock alerts without calling product.save()
         const product = await Product.findById(item.productId).session(session);
-        if (product) {
-          if (product.stock < 0) product.stock = 0;
-          if (product.reservedStock < 0) product.reservedStock = 0;
-          await product.save({ session });
 
           // Mark active reservations as completed
           await Reservation.updateMany(
