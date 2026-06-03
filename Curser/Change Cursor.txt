@@ -1,0 +1,40 @@
+---- Animated Custom Cursor @code_wars_official ----
+
+--> to chnage or use other cursors
+
+there are total 7 folder like cursor1 , cursor2, etc...
+which contains many frames.
+
+cursor1 -> 8 frames   -- cursor1 is folder name and 3frames is framecount
+cursor2 -> 6 frames
+cursor3 -> 4 frames
+cursor4 -> 3 frames
+cursor5 -> 4 frames
+cursor6 -> 2 frames
+cursor7 -> 2 frames
+cursor8 -> 2 frames
+cursor9 -> 6 frames
+cursor10 -> 3 frames
+cursor11 -> 5 frames
+cursor12 -> 2 frames
+cursor13 -> 4 frames
+cursor14 -> 5 frames
+cursor15 -> 4 frames
+cursor16 -> 3 frames
+cursor17 -> 3 frames
+cursor18 -> 4 frames
+cursor19 -> 4 frames
+cursor20 -> 2 frames
+cursor21 -> 3 frames
+cursor22 -> 2 frames
+cursor23 -> 2 frames
+cursor24 -> 4 frames
+
+Now to chnage cursor. goto index.html   and
+
+chnage the Folder and Framecount in script like this
+
+const folder = "cursor4";  
+const frameCount = 2;
+
+If You have any doubght please DM us.

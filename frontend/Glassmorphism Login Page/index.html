@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>StickItUp | Authenticate</title>
+	<link rel="stylesheet" href="style.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+	<link rel="stylesheet" href="../../src/loader.css">
+	<style>
+		.toggle-auth {
+			color: #8f2c24;
+			text-decoration: underline;
+			cursor: pointer;
+			text-align: center;
+			font-size: 0.95em;
+			font-weight: 500;
+			margin-top: 0.5rem;
+		}
+		.inputBox {
+			margin-bottom: 10px;
+		}
+		.back-btn {
+			cursor: pointer;
+		}
+	</style>
+</head>
+<body>
+	<script src="../../src/loader.js"></script>
+	<a href="/" class="back-btn">
+		<i class="fas fa-arrow-left"></i> Home
+	</a>
+	<section>
+		<div class="leaves">
+			<div class="set">
+				<div><img src="leaf_01.png"></div>
+				<div><img src="leaf_02.png"></div>
+				<div><img src="leaf_03.png"></div>
+				<div><img src="leaf_04.png"></div>
+				<div><img src="leaf_01.png"></div>
+				<div><img src="leaf_02.png"></div>
+				<div><img src="leaf_03.png"></div>
+				<div><img src="leaf_04.png"></div>
+			</div>
+		</div>
+		<img src="bg.jpg" class="bg">
+		<img src="girl.png" class="girl">
+		<img src="trees.png" class="trees">
+		
+		<div class="login" id="auth-box">
+			<h2 id="auth-title">Sign In</h2>
+			
+			<div class="inputBox" id="name-box" style="display: none;">
+				<input type="text" id="auth-name" placeholder="Full Name">
+			</div>
+			
+			<div class="inputBox">
+				<input type="email" id="auth-email" placeholder="Email Address" required>
+			</div>
+			
+			<div class="inputBox">
+				<input type="password" id="auth-password" placeholder="Password" required>
+			</div>
+			
+			<div class="inputBox">
+				<input type="submit" value="Login" id="auth-submit-btn">
+			</div>
+
+			<div class="toggle-auth" id="toggle-auth-btn">
+				Don't have an account? Sign Up
+			</div>
+		</div>
+		
+	</section>
+
+	<script>
+		const API_BASE = '/api';
+		let isSignUp = false;
+
+		const authTitle = document.getElementById('auth-title');
+		const nameBox = document.getElementById('name-box');
+		const authSubmit = document.getElementById('auth-submit-btn');
+		const toggleBtn = document.getElementById('toggle-auth-btn');
+
+		toggleBtn.addEventListener('click', () => {
+			isSignUp = !isSignUp;
+			if (isSignUp) {
+				authTitle.textContent = 'Sign Up';
+				nameBox.style.display = 'block';
+				authSubmit.value = 'Register';
+				toggleBtn.textContent = 'Already have an account? Sign In';
+			} else {
+				authTitle.textContent = 'Sign In';
+				nameBox.style.display = 'none';
+				authSubmit.value = 'Login';
+				toggleBtn.textContent = "Don't have an account? Sign Up";
+			}
+		});
+
+		authSubmit.addEventListener('click', async (e) => {
+			e.preventDefault();
+			
+			const email = document.getElementById('auth-email').value;
+			const password = document.getElementById('auth-password').value;
+			const name = document.getElementById('auth-name').value;
+
+			if (!email || !password || (isSignUp && !name)) {
+				alert('Please fill out all required fields.');
+				return;
+			}
+
+			const endpoint = isSignUp ? `${API_BASE}/auth/register` : `${API_BASE}/auth/login`;
+			const payload = isSignUp ? { name, email, password } : { email, password };
+
+			authSubmit.disabled = true;
+			authSubmit.value = 'Processing...';
+
+			try {
+				const res = await fetch(endpoint, {
+					method: 'POST',
+					headers: { 'Content-Type': 'application/json' },
+					body: JSON.stringify(payload)
+				});
+
+				const data = await res.json();
+				authSubmit.disabled = false;
+				authSubmit.value = isSignUp ? 'Register' : 'Login';
+
+				if (!res.ok) {
+					alert(data.message || 'Authentication failed.');
+					return;
+				}
+
+				// Auth successful!
+				localStorage.setItem('token', data.token);
+				localStorage.setItem('user', JSON.stringify({
+					_id: data._id,
+					name: data.name,
+					email: data.email,
+					isAdmin: data.isAdmin
+				}));
+
+				// Duplicate for admin panel compatibility
+				if (data.isAdmin) {
+					localStorage.setItem('admin_token', data.token);
+					localStorage.setItem('admin_user', JSON.stringify({
+						_id: data._id,
+						name: data.name,
+						email: data.email,
+						isAdmin: data.isAdmin
+					}));
+					alert('Admin login success. Redirecting to admin panel...');
+					window.location.href = '/admin.html';
+				} else {
+					alert('Authentication success. Returning to catalog...');
+					window.location.href = '/';
+				}
+
+			} catch (err) {
+				console.error(err);
+				alert('Server communication error.');
+				authSubmit.disabled = false;
+				authSubmit.value = isSignUp ? 'Register' : 'Login';
+			}
+		});
+	</script>
+</body>
+</html>

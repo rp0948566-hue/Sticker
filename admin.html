@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StickItUp | Admin Management Dashboard</title>
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-secondary: rgba(17, 24, 39, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      overflow-x: hidden;
+    }
+
+    /* Sidebar Navigation */
+    .sidebar {
+      width: 260px;
+      background: var(--bg-secondary);
+      border-right: 1px solid var(--glass-border);
+      backdrop-filter: blur(12px);
+      display: flex;
+      flex-direction: column;
+      padding: 2rem 1.5rem;
+      position: fixed;
+      height: 100vh;
+      z-index: 100;
+    }
+
+    .brand {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-bottom: 3rem;
+    }
+
+    .brand span {
+      color: var(--accent);
+    }
+
+    .nav-links {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      flex-grow: 1;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.85rem 1rem;
+      color: var(--text-muted);
+      text-decoration: none;
+      border-radius: 8px;
+      font-weight: 500;
+      transition: all 0.3s ease;
+      cursor: pointer;
+    }
+
+    .nav-item:hover, .nav-item.active {
+      color: #fff;
+      background: rgba(99, 102, 241, 0.15);
+      border-left: 4px solid var(--accent);
+    }
+
+    .nav-item i {
+      font-size: 1.2rem;
+      width: 20px;
+    }
+
+    .logout-btn {
+      margin-top: auto;
+      border-top: 1px solid var(--glass-border);
+      padding-top: 1.5rem;
+    }
+
+    /* Main Content Area */
+    .main-content {
+      margin-left: 260px;
+      flex-grow: 1;
+      padding: 2.5rem;
+      min-height: 100vh;
+      background: radial-gradient(circle at 80% 10%, rgba(99, 102, 241, 0.08), transparent 40%);
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2.5rem;
+    }
+
+    .header h1 {
+      font-size: 2rem;
+      font-weight: 700;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .user-profile {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      background: var(--bg-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: 50px;
+      border: 1px solid var(--glass-border);
+    }
+
+    .user-avatar {
+      width: 32px;
+      height: 32px;
+      background: var(--accent);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 700;
+      color: #fff;
+    }
+
+    /* Analytics Dashboard Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1.5rem;
+      margin-bottom: 2.5rem;
+    }
+
+    .stat-card {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+      overflow: hidden;
+      backdrop-filter: blur(10px);
+    }
+
+    .stat-card::after {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 4px;
+      height: 100%;
+      background: var(--accent);
+    }
+
+    .stat-card.success::after { background: var(--success); }
+    .stat-card.warning::after { background: var(--warning); }
+    .stat-card.danger::after { background: var(--danger); }
+
+    .stat-label {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      font-weight: 500;
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-val {
+      font-size: 1.8rem;
+      font-weight: 700;
+      margin-bottom: 0.25rem;
+    }
+
+    .stat-trend {
+      font-size: 0.85rem;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    /* Content Views */
+    .view-section {
+      display: none;
+    }
+
+    .view-section.active {
+      display: block;
+      animation: fadeIn 0.4s ease;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Tables & Lists */
+    .card-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 1.5rem;
+      margin-bottom: 2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 1rem;
+    }
+
+    .panel-title {
+      font-size: 1.25rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    /* Styled Tables */
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      color: var(--text-muted);
+      font-weight: 500;
+      padding: 1rem;
+      font-size: 0.9rem;
+      border-bottom: 1px solid var(--glass-border);
+    }
+
+    td {
+      padding: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      font-size: 0.95rem;
+      vertical-align: middle;
+    }
+
+    tr:hover td {
+      background: rgba(255, 255, 255, 0.01);
+    }
+
+    /* Status Badges */
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      text-transform: capitalize;
+    }
+
+    .badge.success { background: rgba(16, 185, 129, 0.15); color: var(--success); }
+    .badge.warning { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+    .badge.danger { background: rgba(239, 68, 68, 0.15); color: var(--danger); }
+    .badge.info { background: rgba(99, 102, 241, 0.15); color: var(--accent); }
+
+    /* Button styles */
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 0.6rem 1.2rem;
+      border-radius: 8px;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: background 0.3s ease;
+    }
+
+    .btn:hover {
+      background: var(--accent-hover);
+    }
+
+    .btn-secondary {
+      background: transparent;
+      border: 1px solid var(--glass-border);
+      color: var(--text-main);
+    }
+
+    .btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-sm {
+      padding: 0.4rem 0.8rem;
+      font-size: 0.85rem;
+      border-radius: 6px;
+    }
+
+    /* Inputs & Forms */
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent);
+    }
+
+    /* Notifications feed styling */
+    .notif-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      padding: 1rem;
+      border-bottom: 1px solid var(--glass-border);
+      position: relative;
+    }
+
+    .notif-item.unread {
+      background: rgba(99, 102, 241, 0.05);
+    }
+
+    .notif-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .notif-icon.order { background: rgba(99, 102, 241, 0.15); color: var(--accent); }
+    .notif-icon.inventory { background: rgba(245, 158, 11, 0.15); color: var(--warning); }
+
+    .notif-text {
+      flex-grow: 1;
+    }
+
+    .notif-message {
+      font-size: 0.95rem;
+      margin-bottom: 0.25rem;
+    }
+
+    .notif-time {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    /* Modal dialog */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.6);
+      backdrop-filter: blur(4px);
+      z-index: 1000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s ease;
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-box {
+      background: var(--bg-primary);
+      border: 1px solid var(--glass-border);
+      width: 90%;
+      max-width: 500px;
+      border-radius: 16px;
+      padding: 2rem;
+      transform: translateY(-20px);
+      transition: transform 0.3s ease;
+    }
+
+    .modal-overlay.active .modal-box {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .modal-close {
+      cursor: pointer;
+      color: var(--text-muted);
+      font-size: 1.25rem;
+    }
+
+    .modal-close:hover {
+      color: #fff;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <div class="brand">
+      <i class="fa-solid fa-wand-magic-sparkles"></i> StickIt<span>Up</span>
+    </div>
+    
+    <div class="nav-links">
+      <a class="nav-item active" data-view="overview">
+        <i class="fa-solid fa-chart-line"></i> Overview
+      </a>
+      <a class="nav-item" data-view="inventory">
+        <i class="fa-solid fa-boxes-stacked"></i> Inventory
+      </a>
+      <a class="nav-item" data-view="products">
+        <i class="fa-solid fa-tags"></i> Products CRUD
+      </a>
+      <a class="nav-item" data-view="orders">
+        <i class="fa-solid fa-receipt"></i> Orders List
+      </a>
+      <a class="nav-item" data-view="notifications">
+        <i class="fa-solid fa-bell"></i> Alerts Feed <span id="alerts-count-badge" class="badge danger" style="padding: 0.1rem 0.4rem; display: none;">0</span>
+      </a>
+      <a class="nav-item" data-view="settings">
+        <i class="fa-solid fa-gears"></i> Settings
+      </a>
+    </div>
+
+    <div class="nav-item logout-btn" id="logout-btn">
+      <i class="fa-solid fa-right-from-bracket"></i> Sign Out
+    </div>
+  </div>
+
+  <!-- Main Content -->
+  <div class="main-content">
+    
+    <div class="header">
+      <h1 id="view-title">Overview</h1>
+      <div class="header-actions">
+        <div class="user-profile">
+          <div class="user-avatar" id="avatar-letter">A</div>
+          <span id="admin-name">Administrator</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- OVERVIEW VIEW -->
+    <div class="view-section active" id="view-overview">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-label">Total Revenue</span>
+          <span class="stat-val" id="stats-revenue">Rs. 0.00</span>
+          <span class="stat-trend"><i class="fa-solid fa-wallet"></i> Confirmed Orders</span>
+        </div>
+        <div class="stat-card success">
+          <span class="stat-label">Total Orders</span>
+          <span class="stat-val" id="stats-orders">0</span>
+          <span class="stat-trend"><i class="fa-solid fa-bag-shopping"></i> Checkout success</span>
+        </div>
+        <div class="stat-card warning">
+          <span class="stat-label">Abandoned Carts</span>
+          <span class="stat-val" id="stats-abandoned">0</span>
+          <span class="stat-trend"><i class="fa-solid fa-cart-arrow-down"></i> Over 24h idle</span>
+        </div>
+        <div class="stat-card danger">
+          <span class="stat-label">Reservation Success</span>
+          <span class="stat-val" id="stats-res-success">0%</span>
+          <span class="stat-trend"><i class="fa-solid fa-circle-check"></i> Conversion Rate</span>
+        </div>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-header">
+          <h2 class="panel-title"><i class="fa-solid fa-star"></i> Top Selling Products</h2>
+        </div>
+        <table id="top-products-table">
+          <thead>
+            <tr>
+              <th>Sticker Title</th>
+              <th>Price</th>
+              <th>Physical Stock</th>
+              <th>Items Sold</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dynamic Injection -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-header">
+          <h2 class="panel-title"><i class="fa-solid fa-circle-exclamation"></i> Abandoned Cart List</h2>
+        </div>
+        <table id="abandoned-carts-table">
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Items in Cart</th>
+              <th>Cart Value</th>
+              <th>Last Activity</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dynamic Injection -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- INVENTORY VIEW -->
+    <div class="view-section" id="view-inventory">
+      <div class="stats-grid">
+        <div class="stat-card">
+          <span class="stat-label">Total Physical Stock</span>
+          <span class="stat-val" id="inv-total-stock">0</span>
+          <span class="stat-trend">Stored in database</span>
+        </div>
+        <div class="stat-card warning">
+          <span class="stat-label">Reserved Locks</span>
+          <span class="stat-val" id="inv-reserved">0</span>
+          <span class="stat-trend">2-hour checkout locks</span>
+        </div>
+        <div class="stat-card success">
+          <span class="stat-label">Available for Purchase</span>
+          <span class="stat-val" id="inv-available">0</span>
+          <span class="stat-trend">Stock - Reserved</span>
+        </div>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-header">
+          <h2 class="panel-title"><i class="fa-solid fa-clock"></i> Active Reservations Queue</h2>
+        </div>
+        <table id="queue-table">
+          <thead>
+            <tr>
+              <th>Customer</th>
+              <th>Sticker</th>
+              <th>Qty</th>
+              <th>Reserved At</th>
+              <th>Expires At</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dynamic Injection -->
+          </tbody>
+        </table>
+      </div>
+
+      <div class="card-panel">
+        <div class="panel-header">
+          <h2 class="panel-title"><i class="fa-solid fa-triangle-exclamation"></i> Stock Alarms (Low / Out of Stock)</h2>
+        </div>
+        <table id="alarms-table">
+          <thead>
+            <tr>
+              <th>Product</th>
+              <th>Physical Stock</th>
+              <th>Reserved Stock</th>
+              <th>Available Stock</th>
+              <th>Threshold</th>
+              <th>Alarm Level</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dynamic Injection -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- PRODUCTS CRUD VIEW -->
+    <div class="view-section" id="view-products">
+      <div class="card-panel">
+        <div class="panel-header">
+          <h2 class="panel-title"><i class="fa-solid fa-tag"></i> Store Catalog</h2>
+          <button class="btn btn-sm" id="new-product-btn"><i class="fa-solid fa-plus"></i> Add New Product</button>
+        </div>
+        <table id="crud-products-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Price</th>
+              <th>Physical Stock</th>
+              <th>Low Stock Threshold</th>
+              <th>Reserve settings</th>
+              <th>Actions</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dynamic Injection -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- ORDERS VIEW -->
+    <div class="view-section" id="view-orders">
+      <div class="card-panel">
+        <div class="panel-header">
+          <h2 class="panel-title"><i class="fa-solid fa-receipt"></i> Orders Feed</h2>
+        </div>
+        <table id="orders-table">
+          <thead>
+            <tr>
+              <th>Order ID</th>
+              <th>Customer</th>
+              <th>Date</th>
+              <th>Amount</th>
+              <th>Shipping Address</th>
+              <th>Status</th>
+              <th>Update Status</th>
+            </tr>
+          </thead>
+          <tbody>
+            <!-- Dynamic Injection -->
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- NOTIFICATIONS VIEW -->
+    <div class="view-section" id="view-notifications">
+      <div class="card-panel">
+        <div class="panel-header">
+          <h2 class="panel-title"><i class="fa-solid fa-bell"></i> Critical Activity Feed</h2>
+          <button class="btn btn-secondary btn-sm" id="mark-all-read-btn">Mark All Read</button>
+        </div>
+        <div id="notifications-list">
+          <!-- Dynamic Injection -->
+        </div>
+      </div>
+    </div>
+
+    <!-- SETTINGS VIEW -->
+    <div class="view-section" id="view-settings">
+      <div class="card-panel" style="max-width: 500px;">
+        <div class="panel-header">
+          <h2 class="panel-title"><i class="fa-solid fa-gears"></i> Reservation Configurations</h2>
+        </div>
+        <div class="form-group">
+          <label for="setting-duration">Default Reservation Window (Hours)</label>
+          <input type="number" id="setting-duration" class="form-control" min="1" max="24" value="3">
+        </div>
+        <button class="btn" id="save-settings-btn"><i class="fa-solid fa-floppy-disk"></i> Save Configurations</button>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MODAL: ADD / EDIT PRODUCT -->
+  <div class="modal-overlay" id="product-modal">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="modal-title">Add Product</h3>
+        <i class="fa-solid fa-xmark modal-close" id="modal-close-btn"></i>
+      </div>
+      <form id="product-form">
+        <input type="hidden" id="form-product-id">
+        
+        <div class="form-group">
+          <label>Title</label>
+          <input type="text" id="form-title" class="form-control" required>
+        </div>
+        <div class="form-group">
+          <label>Description</label>
+          <input type="text" id="form-description" class="form-control" required>
+        </div>
+        <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div>
+            <label>Price (Rs.)</label>
+            <input type="number" id="form-price" class="form-control" required>
+          </div>
+          <div>
+            <label>Compare At Price (Rs.)</label>
+            <input type="number" id="form-compare-price" class="form-control">
+          </div>
+        </div>
+        <div class="form-group">
+          <label>Image URL (Cloudinary or relative)</label>
+          <input type="text" id="form-image" class="form-control" placeholder="/IMAGE/1.png" required>
+        </div>
+        <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+          <div>
+            <label>Physical Stock</label>
+            <input type="number" id="form-stock" class="form-control" min="0" required>
+          </div>
+          <div>
+            <label>Low Stock Warning Threshold</label>
+            <input type="number" id="form-threshold" class="form-control" min="1" value="5" required>
+          </div>
+        </div>
+        <div class="form-group" style="display: grid; grid-template-columns: 1.2fr 0.8fr; gap: 1rem; align-items: center; padding-top: 0.5rem;">
+          <div style="display: flex; align-items: center; gap: 0.5rem;">
+            <input type="checkbox" id="form-reservation-enabled" checked style="width: 18px; height: 18px; cursor: pointer;">
+            <label for="form-reservation-enabled" style="margin-bottom: 0; cursor: pointer;">Enable Reservations</label>
+          </div>
+          <div>
+            <label>Reserve Hours</label>
+            <input type="number" id="form-reservation-hours" class="form-control" min="1" value="3" required>
+          </div>
+        </div>
+        
+        <button type="submit" class="btn" style="width: 100%; margin-top: 1rem;">Submit Product</button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Constants
+    const API_BASE = '/api';
+
+    // Global session state
+    let token = localStorage.getItem('admin_token');
+    let user = JSON.parse(localStorage.getItem('admin_user'));
+
+    // Authenticate Admin Session
+    if (!token || !user || !user.isAdmin) {
+      // For testing, if there is no token or not admin, check if a login exists, or redirect to login.
+      // Redirect to Glassmorphism Login Page
+      window.location.href = '/frontend/Glassmorphism Login Page/index.html';
+    }
+
+    // Header updates
+    if (user) {
+      document.getElementById('admin-name').textContent = user.name;
+      document.getElementById('avatar-letter').textContent = user.name[0].toUpperCase();
+    }
+
+    // UI Tab Navigation
+    document.querySelectorAll('.nav-item[data-view]').forEach(item => {
+      item.addEventListener('click', () => {
+        document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('active'));
+        document.querySelectorAll('.view-section').forEach(v => v.classList.remove('active'));
+        
+        item.classList.add('active');
+        const view = item.dataset.view;
+        document.getElementById(`view-${view}`).classList.add('active');
+        document.getElementById('view-title').textContent = item.textContent.trim();
+        
+        // Refresh specific view data
+        refreshViewData(view);
+      });
+    });
+
+    // Sign Out Action
+    document.getElementById('logout-btn').addEventListener('click', () => {
+      localStorage.removeItem('admin_token');
+      localStorage.removeItem('admin_user');
+      window.location.href = '/frontend/Glassmorphism Login Page/index.html';
+    });
+
+    // Refresh Data Routing
+    function refreshViewData(view) {
+      if (view === 'overview') loadOverviewData();
+      if (view === 'inventory') loadInventoryData();
+      if (view === 'products') loadProductsData();
+      if (view === 'orders') loadOrdersData();
+      if (view === 'notifications') loadNotificationsData();
+      if (view === 'settings') loadSettingsData();
+    }
+
+    // API fetch wrapping with Auth headers
+    async function apiFetch(url, options = {}) {
+      options.headers = options.headers || {};
+      options.headers['Content-Type'] = 'application/json';
+      if (token) {
+        options.headers['Authorization'] = `Bearer ${token}`;
+      }
+      const response = await fetch(url, options);
+      if (response.status === 401 || response.status === 403) {
+        // Clear expired auth session
+        localStorage.removeItem('admin_token');
+        localStorage.removeItem('admin_user');
+        window.location.href = '/frontend/Glassmorphism Login Page/index.html';
+        return;
+      }
+      return response.json();
+    }
+
+    // 1. OVERVIEW DATA
+    async function loadOverviewData() {
+      const analytics = await apiFetch(`${API_BASE}/admin/analytics`);
+      if (!analytics) return;
+
+      document.getElementById('stats-revenue').textContent = `Rs. ${analytics.revenue.toFixed(2)}`;
+      document.getElementById('stats-orders').textContent = analytics.totalOrders;
+      document.getElementById('stats-abandoned').textContent = analytics.abandonedCartsCount;
+      document.getElementById('stats-res-success').textContent = `${analytics.reservationSuccessRate.toFixed(1)}%`;
+
+      // Top Products Table
+      const topTbody = document.querySelector('#top-products-table tbody');
+      topTbody.innerHTML = '';
+      analytics.topProducts.forEach(prod => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${prod.title}</strong></td>
+          <td>Rs. ${prod.price.toFixed(2)}</td>
+          <td>${prod.stock} unit(s)</td>
+          <td><span class="badge info">${prod.soldCount} sold</span></td>
+          <td><span class="badge ${prod.inventoryStatus === 'In Stock' ? 'success' : prod.inventoryStatus === 'Low Stock' ? 'warning' : 'danger'}">${prod.inventoryStatus}</span></td>
+        `;
+        topTbody.appendChild(tr);
+      });
+
+      // Abandoned Carts Table
+      const abTbody = document.querySelector('#abandoned-carts-table tbody');
+      abTbody.innerHTML = '';
+      if (analytics.abandonedCarts.length === 0) {
+        abTbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: var(--text-muted);">No abandoned carts logged.</td></tr>';
+      }
+      analytics.abandonedCarts.forEach(cart => {
+        const lastDate = new Date(cart.lastActivity).toLocaleString();
+        tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${cart.userId?.name || 'Anonymous Guest'} (${cart.userId?.email || 'N/A'})</td>
+          <td>${cart.items.length} items (Products: ${cart.items.map(i => i.productId?.title).join(', ')})</td>
+          <td>Rs. ${cart.cartValue.toFixed(2)}</td>
+          <td>${lastDate}</td>
+        `;
+        abTbody.appendChild(tr);
+      });
+    }
+
+    // 2. INVENTORY DATA
+    async function loadInventoryData() {
+      const inv = await apiFetch(`${API_BASE}/admin/inventory`);
+      if (!inv) return;
+
+      document.getElementById('inv-total-stock').textContent = inv.totalStock;
+      document.getElementById('inv-reserved').textContent = inv.totalReserved;
+      document.getElementById('inv-available').textContent = inv.totalAvailable;
+
+      // Reservation Queue Table
+      const qTbody = document.querySelector('#queue-table tbody');
+      qTbody.innerHTML = '';
+      if (inv.reservationQueue.length === 0) {
+        qTbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">Queue is empty.</td></tr>';
+      }
+      inv.reservationQueue.forEach(res => {
+        const starts = new Date(res.reservedAt).toLocaleTimeString();
+        const expires = new Date(res.expiresAt).toLocaleTimeString();
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${res.userId?.name || 'User ID: ' + res.userId}</td>
+          <td>${res.productId?.title || 'Product ID: ' + res.productId}</td>
+          <td>${res.quantity}</td>
+          <td>${starts}</td>
+          <td>${expires}</td>
+          <td><button class="btn btn-secondary btn-sm" onclick="releaseReservation('${res.productId?._id}', '${res.userId?._id}')">Release</button></td>
+        `;
+        qTbody.appendChild(tr);
+      });
+
+      // Stock Alarm Warnings Table
+      const alarmTbody = document.querySelector('#alarms-table tbody');
+      alarmTbody.innerHTML = '';
+      
+      const allAlarms = [...inv.outOfStockItems.map(p => ({p, lvl: 'OUT OF STOCK'})), ...inv.lowStockItems.map(p => ({p, lvl: 'LOW STOCK'}))];
+      if (allAlarms.length === 0) {
+        alarmTbody.innerHTML = '<tr><td colspan="6" style="text-align: center; color: var(--text-muted);">All items have healthy inventory stock.</td></tr>';
+      }
+      allAlarms.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${item.p.title}</strong></td>
+          <td>${item.p.stock}</td>
+          <td>${item.p.reservedStock}</td>
+          <td>${item.p.availableStock}</td>
+          <td>${item.p.lowStockThreshold}</td>
+          <td><span class="badge ${item.lvl === 'OUT OF STOCK' ? 'danger' : 'warning'}">${item.lvl}</span></td>
+        `;
+        alarmTbody.appendChild(tr);
+      });
+    }
+
+    // Force release of user reservation by Admin
+    async function releaseReservation(prodId, userId) {
+      if (confirm('Are you sure you want to force release this reservation? The stock will be returned to inventory.')) {
+        // Simulating release request with auth mock payload or admin override
+        await apiFetch(`${API_BASE}/cart/release`, {
+          method: 'POST',
+          body: JSON.stringify({ productId: prodId }) // Note: Release in schema works based on active user, standard API releases active user, admin needs custom or overrides
+        });
+        loadInventoryData();
+      }
+    }
+
+    // 3. PRODUCTS CRUD DATA
+    async function loadProductsData() {
+      const products = await apiFetch(`${API_BASE}/products`);
+      if (!products) return;
+
+      const pTbody = document.querySelector('#crud-products-table tbody');
+      pTbody.innerHTML = '';
+      products.forEach(p => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>${p.title}</strong></td>
+          <td>Rs. ${p.price.toFixed(2)}</td>
+          <td>
+            <div style="display: flex; align-items: center; gap: 0.5rem;">
+              <span>${p.stock}</span>
+              <button class="btn btn-secondary btn-sm" style="padding: 0.1rem 0.3rem;" onclick="promptEditStock('${p._id}', ${p.stock})"><i class="fa-solid fa-pen"></i></button>
+            </div>
+          </td>
+          <td>${p.lowStockThreshold}</td>
+          <td>${p.reservationEnabled ? 'Enabled (' + p.reservationHours + ' hrs)' : 'Disabled'}</td>
+          <td>
+            <button class="btn btn-sm btn-secondary" onclick="editProduct('${p._id}')">Edit</button>
+            <button class="btn btn-sm btn-secondary" style="border-color: var(--danger); color: var(--danger);" onclick="deleteProduct('${p._id}')">Delete</button>
+          </td>
+        `;
+        pTbody.appendChild(tr);
+      });
+    }
+
+    // Prompt stock edit
+    async function promptEditStock(id, oldStock) {
+      const newStock = prompt('Enter new stock count for this product:', oldStock);
+      if (newStock !== null && !isNaN(newStock)) {
+        await apiFetch(`${API_BASE}/admin/products/${id}/stock`, {
+          method: 'POST',
+          body: JSON.stringify({ stock: Number(newStock) })
+        });
+        loadProductsData();
+      }
+    }
+
+    // Add / Edit Product Modals
+    const modal = document.getElementById('product-modal');
+    document.getElementById('new-product-btn').addEventListener('click', () => {
+      document.getElementById('product-form').reset();
+      document.getElementById('form-product-id').value = '';
+      document.getElementById('modal-title').textContent = 'Add Product';
+      modal.classList.add('active');
+    });
+
+    document.getElementById('modal-close-btn').addEventListener('click', () => {
+      modal.classList.remove('active');
+    });
+
+    document.getElementById('product-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('form-product-id').value;
+      const data = {
+        title: document.getElementById('form-title').value,
+        description: document.getElementById('form-description').value,
+        price: Number(document.getElementById('form-price').value),
+        compareAtPrice: Number(document.getElementById('form-compare-price').value) || undefined,
+        image: document.getElementById('form-image').value,
+        stock: Number(document.getElementById('form-stock').value),
+        lowStockThreshold: Number(document.getElementById('form-threshold').value),
+        reservationEnabled: document.getElementById('form-reservation-enabled').checked,
+        reservationHours: Number(document.getElementById('form-reservation-hours').value)
+      };
+
+      const method = id ? 'PUT' : 'POST';
+      const endpoint = id ? `${API_BASE}/products/${id}` : `${API_BASE}/products`;
+
+      await apiFetch(endpoint, {
+        method: method,
+        body: JSON.stringify(data)
+      });
+
+      modal.classList.remove('active');
+      loadProductsData();
+    });
+
+    async function editProduct(id) {
+      const p = await apiFetch(`${API_BASE}/products/${id}`);
+      if (!p) return;
+
+      document.getElementById('form-product-id').value = p._id;
+      document.getElementById('form-title').value = p.title;
+      document.getElementById('form-description').value = p.description;
+      document.getElementById('form-price').value = p.price;
+      document.getElementById('form-compare-price').value = p.compareAtPrice || '';
+      document.getElementById('form-image').value = p.image;
+      document.getElementById('form-stock').value = p.stock;
+      document.getElementById('form-threshold').value = p.lowStockThreshold;
+      document.getElementById('form-reservation-enabled').checked = p.reservationEnabled;
+      document.getElementById('form-reservation-hours').value = p.reservationHours;
+
+      document.getElementById('modal-title').textContent = 'Edit Product';
+      modal.classList.add('active');
+    }
+
+    async function deleteProduct(id) {
+      if (confirm('Are you sure you want to delete this product?')) {
+        await apiFetch(`${API_BASE}/products/${id}`, {
+          method: 'DELETE'
+        });
+        loadProductsData();
+      }
+    }
+
+    // 4. ORDERS FEED DATA
+    async function loadOrdersData() {
+      const orders = await apiFetch(`${API_BASE}/admin/orders`);
+      if (!orders) return;
+
+      const oTbody = document.querySelector('#orders-table tbody');
+      oTbody.innerHTML = '';
+      if (orders.length === 0) {
+        oTbody.innerHTML = '<tr><td colspan="7" style="text-align: center; color: var(--text-muted);">No orders found.</td></tr>';
+      }
+      orders.forEach(o => {
+        const orderDate = new Date(o.createdAt).toLocaleDateString();
+        const address = `${o.shippingAddress.address}, ${o.shippingAddress.city}, ${o.shippingAddress.state} - ${o.shippingAddress.pinCode}`;
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td><strong>#${o._id.substring(o._id.length - 8)}</strong></td>
+          <td>${o.userId?.name || 'N/A'} (${o.userId?.email || 'N/A'})</td>
+          <td>${orderDate}</td>
+          <td><strong>Rs. ${o.total.toFixed(2)}</strong></td>
+          <td>${address}</td>
+          <td><span class="badge ${getStatusBadgeClass(o.status)}">${o.status}</span></td>
+          <td>
+            <select class="form-control" style="padding: 0.35rem 0.5rem; font-size: 0.85rem;" onchange="updateOrderStatus('${o._id}', this.value)">
+              <option value="pending" ${o.status === 'pending' ? 'selected' : ''}>Pending</option>
+              <option value="confirmed" ${o.status === 'confirmed' ? 'selected' : ''}>Confirmed</option>
+              <option value="processing" ${o.status === 'processing' ? 'selected' : ''}>Processing</option>
+              <option value="shipped" ${o.status === 'shipped' ? 'selected' : ''}>Shipped</option>
+              <option value="delivered" ${o.status === 'delivered' ? 'selected' : ''}>Delivered</option>
+              <option value="cancelled" ${o.status === 'cancelled' ? 'selected' : ''}>Cancelled</option>
+              <option value="refunded" ${o.status === 'refunded' ? 'selected' : ''}>Refunded</option>
+            </select>
+          </td>
+        `;
+        oTbody.appendChild(tr);
+      });
+    }
+
+    function getStatusBadgeClass(status) {
+      if (status === 'confirmed' || status === 'delivered') return 'success';
+      if (status === 'processing' || status === 'shipped') return 'info';
+      if (status === 'pending') return 'warning';
+      return 'danger';
+    }
+
+    async function updateOrderStatus(orderId, newStatus) {
+      await apiFetch(`${API_BASE}/admin/orders/${orderId}/status`, {
+        method: 'PUT',
+        body: JSON.stringify({ status: newStatus })
+      });
+      loadOrdersData();
+    }
+
+    // 5. ALERTS FEED DATA
+    async function loadNotificationsData() {
+      const list = await apiFetch(`${API_BASE}/admin/notifications`);
+      if (!list) return;
+
+      const container = document.getElementById('notifications-list');
+      container.innerHTML = '';
+      
+      let unreadCount = 0;
+      if (list.length === 0) {
+        container.innerHTML = '<div style="text-align: center; padding: 2rem; color: var(--text-muted);">Alert feed is empty.</div>';
+      }
+      
+      list.forEach(n => {
+        if (!n.read) unreadCount++;
+        const timeStr = new Date(n.createdAt).toLocaleString();
+        const div = document.createElement('div');
+        div.className = `notif-item ${n.read ? '' : 'unread'}`;
+        div.innerHTML = `
+          <div class="notif-icon ${n.type}">
+            <i class="fa-solid ${n.type === 'order' ? 'fa-receipt' : 'fa-triangle-exclamation'}"></i>
+          </div>
+          <div class="notif-text">
+            <div class="notif-message">${n.message}</div>
+            <div class="notif-time">${timeStr}</div>
+          </div>
+          ${n.read ? '' : `<button class="btn btn-sm btn-secondary" onclick="markAsRead('${n._id}')">Mark Read</button>`}
+        `;
+        container.appendChild(div);
+      });
+
+      const badge = document.getElementById('alerts-count-badge');
+      if (unreadCount > 0) {
+        badge.textContent = unreadCount;
+        badge.style.display = 'inline-block';
+      } else {
+        badge.style.display = 'none';
+      }
+    }
+
+    async function markAsRead(id) {
+      await apiFetch(`${API_BASE}/admin/notifications/${id}/read`, {
+        method: 'POST'
+      });
+      loadNotificationsData();
+    }
+
+    document.getElementById('mark-all-read-btn').addEventListener('click', async () => {
+      const list = await apiFetch(`${API_BASE}/admin/notifications`);
+      for (const n of list) {
+        if (!n.read) {
+          await apiFetch(`${API_BASE}/admin/notifications/${n._id}/read`, { method: 'POST' });
+        }
+      }
+      loadNotificationsData();
+    });
+
+    // 6. GLOBAL CONFIG SETTINGS
+    async function loadSettingsData() {
+      const duration = await apiFetch(`${API_BASE}/admin/settings`);
+      if (duration) {
+        document.getElementById('setting-duration').value = duration.value;
+      }
+    }
+
+    document.getElementById('save-settings-btn').addEventListener('click', async () => {
+      const val = document.getElementById('setting-duration').value;
+      await apiFetch(`${API_BASE}/admin/settings`, {
+        method: 'POST',
+        body: JSON.stringify({ value: Number(val) })
+      });
+      alert('Configurations saved successfully!');
+    });
+
+    // Load initial view
+    loadOverviewData();
+    
+    // Poll notifications status count badge every 10 seconds
+    setInterval(async () => {
+      if (token) {
+        const list = await apiFetch(`${API_BASE}/admin/notifications`);
+        if (list) {
+          const unread = list.filter(n => !n.read).length;
+          const badge = document.getElementById('alerts-count-badge');
+          if (unread > 0) {
+            badge.textContent = unread;
+            badge.style.display = 'inline-block';
+          } else {
+            badge.style.display = 'none';
+          }
+        }
+      }
+    }, 10000);
+  </script>
+</body>
+</html>

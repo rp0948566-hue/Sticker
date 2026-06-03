@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>StickItUp | Secure Checkout</title>
+  <!-- Google Fonts & FontAwesome -->
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <style>
+    :root {
+      --bg-primary: #0b0f19;
+      --bg-secondary: rgba(17, 24, 39, 0.7);
+      --glass-border: rgba(255, 255, 255, 0.08);
+      --accent: #6366f1;
+      --accent-hover: #4f46e5;
+      --text-main: #f3f4f6;
+      --text-muted: #9ca3af;
+      --success: #10b981;
+      --warning: #f59e0b;
+      --danger: #ef4444;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Outfit', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-primary);
+      color: var(--text-main);
+      min-height: 100vh;
+      background: radial-gradient(circle at 50% 50%, rgba(99, 102, 241, 0.03), transparent 60%);
+    }
+
+    /* Navbar */
+    .navbar {
+      background: rgba(11, 15, 25, 0.8);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--glass-border);
+      padding: 1rem 2rem;
+    }
+
+    .nav-container {
+      max-width: 1100px;
+      margin: 0 auto;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: #fff;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo span {
+      color: var(--accent);
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: 3rem auto;
+      padding: 0 1.5rem;
+    }
+
+    .checkout-grid {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 3rem;
+    }
+
+    @media (max-width: 768px) {
+      .checkout-grid {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+    }
+
+    /* Left form panel */
+    .form-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .panel-title {
+      font-size: 1.5rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid var(--glass-border);
+      padding-bottom: 0.75rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .form-group {
+      margin-bottom: 1.25rem;
+    }
+
+    .form-group label {
+      display: block;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+      font-weight: 500;
+    }
+
+    .form-control {
+      width: 100%;
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid var(--glass-border);
+      border-radius: 8px;
+      padding: 0.75rem 1rem;
+      color: #fff;
+      font-size: 0.95rem;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .form-control:focus {
+      border-color: var(--accent);
+    }
+
+    /* Right checkout locks panel */
+    .order-summary-panel {
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 16px;
+      padding: 2rem;
+      backdrop-filter: blur(10px);
+      height: fit-content;
+    }
+
+    .summary-items {
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .summary-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+      padding-bottom: 0.75rem;
+    }
+
+    .summary-item-left {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .summary-item-left img {
+      width: 50px;
+      height: 50px;
+      border-radius: 8px;
+      object-fit: contain;
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid var(--glass-border);
+    }
+
+    .item-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+      margin-bottom: 0.15rem;
+    }
+
+    .item-qty {
+      color: var(--text-muted);
+      font-size: 0.85rem;
+    }
+
+    .item-price {
+      color: var(--accent);
+      font-weight: 700;
+    }
+
+    .total-box {
+      border-top: 1px solid var(--glass-border);
+      padding-top: 1.5rem;
+      display: flex;
+      justify-content: space-between;
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: 2rem;
+    }
+
+    .lock-notice {
+      background: rgba(16, 185, 129, 0.05);
+      border: 1px solid rgba(16, 185, 129, 0.15);
+      border-radius: 8px;
+      color: var(--success);
+      padding: 0.75rem 1rem;
+      font-size: 0.85rem;
+      margin-bottom: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .btn {
+      background: var(--accent);
+      color: #fff;
+      border: none;
+      padding: 1rem 2rem;
+      border-radius: 10px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      cursor: pointer;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: background 0.3s ease;
+      box-shadow: 0 4px 15px rgba(99, 102, 241, 0.25);
+    }
+
+    .btn:hover {
+      background: var(--accent-hover);
+    }
+
+    .success-panel {
+      text-align: center;
+      padding: 4rem 2rem;
+      background: var(--bg-secondary);
+      border: 1px solid var(--glass-border);
+      border-radius: 20px;
+      max-width: 600px;
+      margin: 4rem auto;
+      backdrop-filter: blur(10px);
+    }
+
+    .success-icon {
+      font-size: 4rem;
+      color: var(--success);
+      margin-bottom: 1.5rem;
+    }
+
+    .success-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .success-text {
+      color: var(--text-muted);
+      line-height: 1.6;
+      margin-bottom: 2.5rem;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Navigation -->
+  <nav class="navbar">
+    <div class="nav-container">
+      <a href="/" class="logo">
+        <i class="fa-solid fa-wand-magic-sparkles"></i> STICK<span>IT</span>UP
+      </a>
+    </div>
+  </nav>
+
+  <!-- Checkout Layout container -->
+  <div class="container" id="checkout-container">
+    <div class="checkout-grid">
+      <!-- Left Panel: shipping details -->
+      <div class="form-panel">
+        <h2 class="panel-title"><i class="fa-solid fa-truck-fast"></i> Shipping Details</h2>
+        <form id="checkout-form">
+          <div class="form-group">
+            <label for="address">Street Address</label>
+            <input type="text" id="address" class="form-control" placeholder="123 Main Street, Apt 4B" required>
+          </div>
+          <div class="form-group">
+            <label for="city">City</label>
+            <input type="text" id="city" class="form-control" placeholder="Mumbai" required>
+          </div>
+          <div class="form-group" style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+            <div>
+              <label for="state">State / Region</label>
+              <input type="text" id="state" class="form-control" placeholder="Maharashtra" required>
+            </div>
+            <div>
+              <label for="pincode">Pin Code</label>
+              <input type="text" id="pincode" class="form-control" placeholder="400001" required>
+            </div>
+          </div>
+          
+          <button type="submit" class="btn" style="margin-top: 1.5rem;" id="checkout-btn">
+            <i class="fa-solid fa-circle-check"></i> Place Secure Order
+          </button>
+        </form>
+      </div>
+
+      <!-- Right Panel: reserved items summary -->
+      <div class="order-summary-panel">
+        <h2 class="panel-title"><i class="fa-solid fa-lock"></i> Order Summary</h2>
+        
+        <div class="lock-notice">
+          <i class="fa-solid fa-shield-halved"></i> Active reservation lock is holding items.
+        </div>
+
+        <div class="summary-items" id="summary-items-container">
+          <!-- Dynamic Injection -->
+        </div>
+
+        <div class="total-box">
+          <span>Total Amount</span>
+          <span id="summary-total">Rs. 0.00</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Success confirmation state (Hidden initially) -->
+  <div class="success-panel" id="success-panel" style="display: none;">
+    <i class="fa-solid fa-circle-check success-icon"></i>
+    <h2 class="success-title">Order Placed Successfully!</h2>
+    <p class="success-text" id="success-msg">
+      Thank you for your order. Your items reservation lock has been converted. An order confirmation has been simulation-sent to your registered email address.
+    </p>
+    <a href="/" class="btn" style="display: inline-flex; width: auto;"><i class="fa-solid fa-house"></i> Continue Shopping</a>
+  </div>
+
+  <script>
+    const API_BASE = '/api';
+    let localCart = JSON.parse(localStorage.getItem('cart') || '[]');
+    let token = localStorage.getItem('token');
+
+    if (!token) {
+      alert('Please log in before accessing checkout.');
+      window.location.href = '/frontend/Glassmorphism Login Page/index.html';
+    }
+
+    if (localCart.length === 0) {
+      alert('Your cart is empty. Please add products first.');
+      window.location.href = '/';
+    }
+
+    function renderSummary() {
+      const container = document.getElementById('summary-items-container');
+      container.innerHTML = '';
+
+      let total = 0;
+      localCart.forEach(item => {
+        total += item.price * item.quantity;
+        const div = document.createElement('div');
+        div.className = 'summary-item';
+        div.innerHTML = `
+          <div class="summary-item-left">
+            <img src="${item.image}" alt="${item.title}">
+            <div>
+              <div class="item-title">${item.title}</div>
+              <div class="item-qty">Quantity: ${item.quantity}</div>
+            </div>
+          </div>
+          <span class="item-price">Rs. ${(item.price * item.quantity).toFixed(2)}</span>
+        `;
+        container.appendChild(div);
+      });
+
+      document.getElementById('summary-total').textContent = `Rs. ${total.toFixed(2)}`;
+    }
+
+    document.getElementById('checkout-form').addEventListener('submit', async (e) => {
+      e.preventDefault();
+      
+      const shippingAddress = {
+        address: document.getElementById('address').value,
+        city: document.getElementById('city').value,
+        state: document.getElementById('state').value,
+        pinCode: document.getElementById('pincode').value
+      };
+
+      const btn = document.getElementById('checkout-btn');
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Placing Order...';
+
+      try {
+        const response = await fetch(`${API_BASE}/orders/checkout`, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'Authorization': `Bearer ${token}`
+          },
+          body: JSON.stringify({ shippingAddress })
+        });
+
+        const data = await response.json();
+
+        if (!response.ok) {
+          alert(data.message || 'Checkout failed. Please retry.');
+          btn.disabled = false;
+          btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Place Secure Order';
+          return;
+        }
+
+        // Successful checkout
+        localStorage.removeItem('cart'); // Empty local representation
+        
+        // Hide form, show success screen
+        document.getElementById('checkout-container').style.display = 'none';
+        document.getElementById('success-msg').textContent = `Thank you for your order! Your Order ID is #${data._id}. An order confirmation email simulation has been dispatched to your email.`;
+        document.getElementById('success-panel').style.display = 'block';
+
+      } catch (err) {
+        console.error(err);
+        alert('Server communication error.');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="fa-solid fa-circle-check"></i> Place Secure Order';
+      }
+    });
+
+    renderSummary();
+  </script>
+</body>
+</html>
