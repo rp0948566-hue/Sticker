@@ -1,5 +1,5 @@
 
-// Global Loader Logic
+// Global Loader & Telemetry Logic
 (function() {
     const loaderHTML = `
         <div id="global-loader" class="loader-container">
@@ -29,8 +29,27 @@
     }
     document.body.classList.add('loader-active');
 
-    // Function to hide loader
+    const startTime = performance.now();
+    const telemetry = {
+        startTime,
+        endTime: null,
+        loaderDuration: null,
+        assets: {},
+        api: {},
+        renderTime: null
+    };
+
+    const registeredPromises = [];
+    let isFinished = false;
+
     function hideLoader() {
+        if (isFinished) return;
+        isFinished = true;
+        
+        telemetry.endTime = performance.now();
+        telemetry.loaderDuration = telemetry.endTime - telemetry.startTime;
+        console.log('[Telemetry] Loader completed in', telemetry.loaderDuration.toFixed(2), 'ms', telemetry);
+        
         const loader = document.getElementById('global-loader');
         if (loader) {
             loader.classList.add('loaded');
@@ -41,11 +60,69 @@
         }
     }
 
-    // Show for 3 seconds, then hide
-    window.addEventListener('load', () => {
-        setTimeout(hideLoader, 3000);
-    });
+    // Expose GlobalPreloader API
+    window.GlobalPreloader = {
+        telemetry,
+        register: function(promise, name = 'unnamed-task') {
+            const taskStart = performance.now();
+            const wrappedPromise = Promise.resolve(promise)
+                .then(val => {
+                    const duration = performance.now() - taskStart;
+                    telemetry.assets[name] = duration;
+                    return val;
+                })
+                .catch(err => {
+                    const duration = performance.now() - taskStart;
+                    telemetry.assets[name] = { error: err.message, duration };
+                    return null;
+                });
+            registeredPromises.push(wrappedPromise);
+            return wrappedPromise;
+        },
+        registerApi: function(promise, name = 'unnamed-api') {
+            const taskStart = performance.now();
+            const wrappedPromise = Promise.resolve(promise)
+                .then(val => {
+                    const duration = performance.now() - taskStart;
+                    telemetry.api[name] = duration;
+                    return val;
+                })
+                .catch(err => {
+                    const duration = performance.now() - taskStart;
+                    telemetry.api[name] = { error: err.message, duration };
+                    return null;
+                });
+            registeredPromises.push(wrappedPromise);
+            return wrappedPromise;
+        },
+        complete: async function() {
+            const checkAndHide = async () => {
+                const currentCount = registeredPromises.length;
+                await Promise.all(registeredPromises);
+                if (registeredPromises.length > currentCount) {
+                    await checkAndHide();
+                }
+            };
+            
+            try {
+                await checkAndHide();
+            } catch (err) {
+                console.error('[Preloader] Error waiting for assets:', err);
+            } finally {
+                hideLoader();
+            }
+        },
+        getMetrics: function() {
+            return telemetry;
+        }
+    };
 
-    // Fallback if window load takes too long
-    setTimeout(hideLoader, 5000);
+    // Safety Fallback Timeout: 8 seconds (to prevent loader deadlock)
+    setTimeout(() => {
+        if (!isFinished) {
+            console.warn('[Preloader] Safety timeout triggered after 8s');
+            hideLoader();
+        }
+    }, 8000);
 })();
+

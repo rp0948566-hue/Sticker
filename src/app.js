@@ -425,71 +425,33 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// Register critical static images and font loads with GlobalPreloader
+if (window.GlobalPreloader) {
+  // 1. Fonts preload promise
+  if (document.fonts) {
+    window.GlobalPreloader.register(document.fonts.ready, 'fonts-loading');
+  }
+
+  // 2. Preload critical images: Hero image & Collection banners (desktop + mobile)
+  const criticalImageUrls = [
+    '/IMAGE/1.png',
+    '/collection-desktop.png',
+    '/collection-mobile.jpg'
+  ];
+
+  criticalImageUrls.forEach(url => {
+    const p = new Promise(resolve => {
+      const img = new Image();
+      img.src = url;
+      img.onload = () => resolve();
+      img.onerror = () => resolve(); // Always resolve to avoid deadlock
+    });
+    window.GlobalPreloader.register(p, `static-image-${url.split('/').pop()}`);
+  });
+}
+
 initLazyLoad();
 
-// DYNAMIC CATALOG LOADING AT HOME/CATALOG PAGE
-const loadDynamicCatalog = async () => {
-  const grid = document.querySelector('.products-grid');
-  if (!grid) return;
-
-  try {
-    const res = await fetch('/api/products');
-    if (!res.ok) throw new Error('Failed to fetch products');
-    const products = await res.json();
-
-    // Clear existing product cards
-    grid.innerHTML = '';
-
-    products.forEach(p => {
-      const card = document.createElement('div');
-      card.className = 'product-card';
-      card.style.cursor = 'pointer';
-      
-      // Navigate to details page on card click
-      card.addEventListener('click', (e) => {
-        if (e.target.closest('.add-to-cart-btn')) return;
-        window.location.href = `/product-details.html?id=${p._id}`;
-      });
-
-      const savedAmt = p.compareAtPrice ? p.compareAtPrice - p.price : 0;
-      const saveBadge = savedAmt > 0 ? `<div class="save-badge">Save Rs. ${savedAmt.toFixed(2)}</div>` : '';
-      const oldPrice = p.compareAtPrice ? `<span class="price-old">Rs. ${p.compareAtPrice.toFixed(2)}</span>` : '';
-      const discountBadge = savedAmt > 0 ? `<span class="price-badge">-Rs. ${savedAmt.toFixed(2)}</span>` : '';
-
-      card.innerHTML = `
-        <div class="product-image-container">
-          ${saveBadge}
-          <div class="placeholder-image" style="background: rgba(255,255,255,0.02); height: 200px; display:flex; align-items:center; justify-content:center;">
-            <img src="${p.image}" alt="${p.title}" style="max-height: 180px; max-width: 90%; object-fit: contain; filter: drop-shadow(0 10px 15px rgba(0,0,0,0.3));" />
-          </div>
-          <div class="quick-view">
-            <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
-          </div>
-        </div>
-        <div class="product-info">
-          <h3 class="product-title">${p.title}</h3>
-          <div class="product-rating">
-            <span class="stars">★★★★★</span>
-            <span class="reviews-count">(39)</span>
-          </div>
-          <div class="product-pricing">
-            ${oldPrice}
-            ${discountBadge}
-          </div>
-          <div class="price-current">Rs. ${p.price.toFixed(2)}</div>
-          <div style="font-size: 0.85rem; color: #9ca3af; margin: 0.25rem 0 0.75rem 0;">
-            Status: <span style="font-weight:600; color: ${p.inventoryStatus === 'In Stock' ? '#10b981' : p.inventoryStatus === 'Low Stock' ? '#f59e0b' : '#ef4444'}">${p.inventoryStatus}</span>
-          </div>
-          <button class="add-to-cart-btn" data-id="${p._id}">Add to cart</button>
-        </div>
-      `;
-      grid.appendChild(card);
-    });
-  } catch (err) {
-    console.error('Catalog load error:', err.message);
-  }
-};
-
-loadDynamicCatalog();
 // Run Cart UI update on load
 setTimeout(updateCartUI, 100);
+
