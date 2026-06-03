@@ -12,5 +12,8 @@ NotificationSchema.index({ createdAt: 1 }, { expireAfterSeconds: 2592000 });
 // Optimize descending sorts on notifications
 NotificationSchema.index({ createdAt: -1 });
 
+// Optimize read filter queries
+NotificationSchema.index({ read: 1 });
+
 const Notification = mongoose.model('Notification', NotificationSchema);
 export default Notification;

@@ -11,7 +11,8 @@ const OrderSchema = new mongoose.Schema({
   status: { 
     type: String, 
     enum: ['pending', 'confirmed', 'processing', 'shipped', 'delivered', 'cancelled', 'refunded'], 
-    default: 'pending' 
+    default: 'pending',
+    index: true
   },
   customerName: { type: String, required: true },
   customerPhone: { type: String, required: true },
@@ -25,7 +26,8 @@ const OrderSchema = new mongoose.Schema({
   paymentStatus: { 
     type: String, 
     enum: ['unpaid', 'paid', 'failed'], 
-    default: 'unpaid' 
+    default: 'unpaid',
+    index: true
   },
   paymentGateway: { type: String, default: 'none' },
   gatewayOrderId: { type: String, index: true },

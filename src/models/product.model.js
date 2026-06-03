@@ -16,11 +16,12 @@ const ProductSchema = new mongoose.Schema({
   soldCount: { type: Number, required: true, default: 0 },
   lowStockThreshold: { type: Number, required: true, default: 5 },
   reservationEnabled: { type: Boolean, required: true, default: true },
-  reservationHours: { type: Number, required: true, default: 3 },
+  reservationHours: { type: Number, required: true, default: 0.25 }, // default 15 minutes (0.25 hours)
   inventoryStatus: {
     type: String,
     enum: ['In Stock', 'Low Stock', 'Out Of Stock'],
-    default: 'Out Of Stock'
+    default: 'Out Of Stock',
+    index: true
   }
 }, { timestamps: true });
 

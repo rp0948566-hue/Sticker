@@ -5,7 +5,9 @@ const UserSchema = new mongoose.Schema({
   email: { type: String, required: true, unique: true, index: true },
   password: { type: String, required: true },
   isAdmin: { type: Boolean, default: false },
-  authSalt: { type: String, required: true, default: () => Math.random().toString(36).substring(2) }
+  authSalt: { type: String, required: true, default: () => Math.random().toString(36).substring(2) },
+  failedAttempts: { type: Number, default: 0 },
+  cooldownUntil: { type: Date }
 }, { timestamps: true });
 
 const User = mongoose.model('User', UserSchema);

@@ -88,8 +88,8 @@ const initSettings = async () => {
   try {
     const duration = await Settings.findOne({ key: 'reservationDurationHours' });
     if (!duration) {
-      await Settings.create({ key: 'reservationDurationHours', value: 3 });
-      logEvent('info', 'SYSTEM', 'Default global reservation hours set to 3 hours.');
+      await Settings.create({ key: 'reservationDurationHours', value: 0.25 }); // 15 mins default
+      logEvent('info', 'SYSTEM', 'Default global reservation hours set to 15 minutes.');
     }
   } catch (error) {
     logEvent('error', 'SYSTEM', `Failed to initialize settings: ${error.message}`);
@@ -100,12 +100,79 @@ if (process.env.NODE_ENV !== 'test') {
   initSettings();
 }
 
+// Security Cooldown helper logs
+const handleFailureCooldown = async (userId) => {
+  try {
+    const user = await User.findById(userId);
+    if (user) {
+      user.failedAttempts = (user.failedAttempts || 0) + 1;
+      if (user.failedAttempts >= 3) {
+        user.cooldownUntil = new Date(Date.now() + 15 * 60 * 1000); // 15 minute cooldown
+        user.failedAttempts = 0;
+        logEvent('warn', 'USER_COOLDOWN', `User ${user.email} put in 15 minute checkout cooldown.`);
+      }
+      await user.save();
+    }
+  } catch (error) {
+    logEvent('error', 'SYSTEM', `Failed to set cooldown: ${error.message}`);
+  }
+};
+
+const handleSuccessReset = async (userId) => {
+  try {
+    await User.updateOne({ _id: userId }, { $set: { failedAttempts: 0, cooldownUntil: null } });
+  } catch (error) {
+    logEvent('error', 'SYSTEM', `Failed to reset cooldown attempts: ${error.message}`);
+  }
+};
+
+// Merge guest user local storage cart into authenticated database cart
+const mergeCarts = async (userId, cartItems) => {
+  if (!cartItems || !Array.isArray(cartItems) || cartItems.length === 0) return;
+  
+  try {
+    let cart = await Cart.findOne({ userId });
+    if (!cart) {
+      cart = new Cart({ userId, items: [], cartValue: 0 });
+    }
+
+    for (const item of cartItems) {
+      const prod = await Product.findById(item.productId);
+      if (prod) {
+        const existingItemIndex = cart.items.findIndex(
+          i => i.productId.toString() === item.productId.toString()
+        );
+        if (existingItemIndex > -1) {
+          cart.items[existingItemIndex].quantity += item.quantity;
+        } else {
+          cart.items.push({ productId: item.productId, quantity: item.quantity });
+        }
+      }
+    }
+
+    // Recalculate total value
+    let totalValue = 0;
+    for (const item of cart.items) {
+      const prod = await Product.findById(item.productId);
+      if (prod) {
+        totalValue += prod.price * item.quantity;
+      }
+    }
+    cart.cartValue = totalValue;
+    cart.lastActivity = new Date();
+    await cart.save();
+    logEvent('info', 'CART_MERGE', `Merged local storage cart into database cart for user ID: ${userId}`);
+  } catch (error) {
+    logEvent('error', 'CART_MERGE', `Failed to merge guest cart: ${error.message}`);
+  }
+};
+
 // Passive reservations clean-up & notifications function
 export const cleanupReservations = async () => {
   try {
     const now = new Date();
 
-    // 1. Send expiring soon emails (30 mins warning)
+    // 1. Send expiring soon emails (30 mins warning) - Only relevant if reservation exceeds 30 mins
     const warningTime = new Date(now.getTime() + 30 * 60 * 1000);
     const expiringSoon = await Reservation.find({
       status: 'active',
@@ -204,12 +271,11 @@ const generateToken = (id, authSalt) => {
 // Register API
 app.post('/api/auth/register', authLimiter, async (req, res, next) => {
   try {
-    const { name, email, password } = req.body;
+    const { name, email, password, cartItems } = req.body;
     if (!name || !email || !password) {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
-    // Force strict type sanitization to prevent NoSQL injection object values
     const cleanEmail = String(email).trim().toLowerCase();
     const userExists = await User.findOne({ email: cleanEmail });
     if (userExists) {
@@ -231,6 +297,11 @@ app.post('/api/auth/register', authLimiter, async (req, res, next) => {
 
     logEvent('info', 'AUTH', `User registered: ${user.email} (Admin: ${user.isAdmin})`);
 
+    // Merge cart items if registered
+    if (cartItems) {
+      await mergeCarts(user._id, cartItems);
+    }
+
     res.status(201).json({
       _id: user._id,
       name: user.name,
@@ -246,7 +317,7 @@ app.post('/api/auth/register', authLimiter, async (req, res, next) => {
 // Login API
 app.post('/api/auth/login', authLimiter, async (req, res, next) => {
   try {
-    const { email, password } = req.body;
+    const { email, password, cartItems } = req.body;
     if (!email || !password) {
       return res.status(400).json({ message: 'Email and password are required' });
     }
@@ -256,6 +327,12 @@ app.post('/api/auth/login', authLimiter, async (req, res, next) => {
 
     if (user && (await bcrypt.compare(String(password), user.password))) {
       logEvent('info', 'AUTH', `User logged in: ${user.email}`);
+
+      // Merge local storage cart into DB cart upon login
+      if (cartItems) {
+        await mergeCarts(user._id, cartItems);
+      }
+
       res.json({
         _id: user._id,
         name: user.name,
@@ -320,7 +397,7 @@ app.post('/api/products', protect, admin, async (req, res, next) => {
       stock: stock || 0,
       lowStockThreshold: lowStockThreshold || 5,
       reservationEnabled: reservationEnabled !== false,
-      reservationHours: reservationHours || 3
+      reservationHours: reservationHours || 0.25
     });
 
     const createdProduct = await product.save();
@@ -399,19 +476,43 @@ app.post('/api/cart/reserve', protect, async (req, res, next) => {
       return res.status(400).json({ message: 'Invalid productId or quantity' });
     }
 
-    // 1. Fetch product details
+    // 1. Enforce validation cooldown window checks
+    if (req.user.cooldownUntil && req.user.cooldownUntil > new Date()) {
+      return res.status(429).json({
+        message: `Account is in cooldown due to repeated reservation failures. Please retry after ${req.user.cooldownUntil.toLocaleTimeString()}.`
+      });
+    }
+
+    // 2. Enforce Max Active Reservations limit per user (max 5 active)
+    const activeCount = await Reservation.countDocuments({ userId: req.user._id, status: 'active' });
+    if (activeCount >= 5) {
+      await handleFailureCooldown(req.user._id);
+      return res.status(400).json({ message: 'Maximum active reservations limit (5) reached. Please complete your checkouts first.' });
+    }
+
+    // 3. Enforce Max Active Reservations limit per product per user (max 2 active)
+    const productActiveCount = await Reservation.countDocuments({ userId: req.user._id, productId, status: 'active' });
+    if (productActiveCount >= 2) {
+      await handleFailureCooldown(req.user._id);
+      return res.status(400).json({ message: 'Maximum active reservations per product (2) reached for this item.' });
+    }
+
+    // 4. Fetch product details
     const product = await Product.findById(productId);
     if (!product) {
+      await handleFailureCooldown(req.user._id);
       return res.status(404).json({ message: 'Product not found' });
     }
 
     if (!product.reservationEnabled) {
+      await handleFailureCooldown(req.user._id);
       return res.status(400).json({ message: 'Reservation is disabled for this product' });
     }
 
-    // 2. Multi-User Protection: Atomic Stock Check using Optimistic Locking
+    // 5. Multi-User Protection: Atomic Stock Check using Optimistic Locking
     const available = product.stock - product.reservedStock;
     if (available < quantity) {
+      await handleFailureCooldown(req.user._id);
       return res.status(400).json({ message: `Insufficient stock. Only ${available} items available.` });
     }
 
@@ -429,29 +530,34 @@ app.post('/api/cart/reserve', protect, async (req, res, next) => {
     );
 
     if (!updatedProduct) {
+      await handleFailureCooldown(req.user._id);
       return res.status(409).json({ message: 'Inventory update collision. Please retry your reservation.' });
     }
 
     // Save calculation fields
     await updatedProduct.save();
 
-    // 3. Retrieve reservation duration configuration
+    // 6. Retrieve reservation duration configuration (default 15 minutes, i.e. 0.25 hours)
     let hours = product.reservationHours;
     if (!hours) {
       const globalSetting = await Settings.findOne({ key: 'reservationDurationHours' });
-      hours = globalSetting ? globalSetting.value : 3;
+      hours = globalSetting ? globalSetting.value : 0.25;
     }
     const expiresAt = new Date(Date.now() + hours * 60 * 60 * 1000);
+    const maxExpiresAt = new Date(Date.now() + 45 * 60 * 1000); // Hard maximum lifetime of 45 minutes
 
-    // 4. Create reservation record catching compound unique index violations atomically
+    // 7. Create reservation record catching compound unique index violations atomically
     try {
       const reservation = await Reservation.create({
         userId: req.user._id,
         productId,
         quantity,
-        expiresAt
+        expiresAt,
+        maxExpiresAt,
+        extensionCount: 0
       });
 
+      await handleSuccessReset(req.user._id);
       logEvent('info', 'RESERVATION', `Stock reserved by ${req.user.email} for ${product.title} (Quantity: ${quantity})`);
       res.status(201).json(reservation);
     } catch (dbError) {
@@ -463,6 +569,8 @@ app.post('/api/cart/reserve', protect, async (req, res, next) => {
       if (revertedProduct) {
         await revertedProduct.save();
       }
+
+      await handleFailureCooldown(req.user._id);
 
       if (dbError.code === 11000) {
         return res.status(400).json({ message: 'You already have an active reservation for this product' });
@@ -482,15 +590,38 @@ app.post('/api/cart/reserve/extend', protect, async (req, res, next) => {
       status: 'active'
     });
 
-    const extendedExpiry = new Date(Date.now() + 20 * 60 * 1000); // Extend active reservations by 20 minutes
+    let count = 0;
+    const now = Date.now();
 
     for (const r of reservations) {
-      r.expiresAt = extendedExpiry;
+      // If we have already hit 2 extensions or max lifetime is passed, skip/release
+      if (r.extensionCount >= 2 || now >= r.maxExpiresAt.getTime()) {
+        r.status = 'expired';
+        r.deleteAt = new Date();
+        await r.save();
+
+        const product = await Product.findById(r.productId);
+        if (product) {
+          await Product.updateOne({ _id: product._id }, { $inc: { reservedStock: -r.quantity } });
+          await Product.updateOne({ _id: product._id, reservedStock: { $lt: 0 } }, { $set: { reservedStock: 0 } });
+          const updatedProduct = await Product.findById(product._id);
+          if (updatedProduct) {
+            await updatedProduct.save();
+          }
+        }
+        continue;
+      }
+
+      // Extend by 15 minutes, capped at maxExpiresAt
+      const extendedTime = now + 15 * 60 * 1000;
+      r.expiresAt = new Date(Math.min(extendedTime, r.maxExpiresAt.getTime()));
+      r.extensionCount += 1;
       await r.save();
+      count++;
     }
 
-    logEvent('info', 'RESERVATION_EXTEND', `Extended ${reservations.length} reservations for user ${req.user.email} by 20 minutes.`);
-    res.json({ message: 'Reservations extended successfully', count: reservations.length });
+    logEvent('info', 'RESERVATION_EXTEND', `Extended ${count} reservations for user ${req.user.email} (releases handled).`);
+    res.json({ message: 'Reservations extended successfully', count });
   } catch (error) {
     next(error);
   }
@@ -605,6 +736,11 @@ app.post('/api/orders', protect, checkoutLimiter, async (req, res, next) => {
       throw new Error('Cart items list is empty.');
     }
 
+    // Check cooldown status
+    if (req.user.cooldownUntil && req.user.cooldownUntil > new Date()) {
+      throw new Error(`Account is in cooldown due to repeated failures. Retry after ${req.user.cooldownUntil.toLocaleTimeString()}.`);
+    }
+
     // 1. Prevent duplicate submissions using Idempotency Key check
     const existingOrderQuery = Order.findOne({ idempotencyKey });
     const existingOrder = session ? await existingOrderQuery.session(session) : await existingOrderQuery;
@@ -616,7 +752,7 @@ app.post('/api/orders', protect, checkoutLimiter, async (req, res, next) => {
     let orderTotal = 0;
     const reservationIds = [];
 
-    // 2. Validate availability and create atomic reservations
+    // 2. Validate availability and create atomic reservations (15 mins window)
     for (const item of cartItems) {
       const productQuery = Product.findById(item.productId);
       const product = session ? await productQuery.session(session) : await productQuery;
@@ -650,13 +786,16 @@ app.post('/api/orders', protect, checkoutLimiter, async (req, res, next) => {
 
       await updatedProduct.save({ session });
 
-      // Create Reservation record
-      const expiresAt = new Date(Date.now() + 20 * 60 * 1000); // 20 mins reservation window during checkout session
+      // Create Reservation record (15 mins duration default, 45 mins cap)
+      const expiresAt = new Date(Date.now() + 15 * 60 * 1000); 
+      const maxExpiresAt = new Date(Date.now() + 45 * 60 * 1000);
       const resData = {
         userId: req.user._id,
         productId: product._id,
         quantity: item.quantity,
-        expiresAt
+        expiresAt,
+        maxExpiresAt,
+        extensionCount: 0
       };
       
       const createdRes = session ? await Reservation.create([resData], { session }) : await Reservation.create(resData);
@@ -711,11 +850,14 @@ app.post('/api/orders', protect, checkoutLimiter, async (req, res, next) => {
       return res.status(200).json(result.order);
     }
 
+    await handleSuccessReset(req.user._id);
     logEvent('info', 'ORDER_CREATED', `Pending order #${result.order._id} created for ${req.user.email} (Total: ${result.orderTotal})`);
     res.status(201).json(result.order);
   } catch (error) {
     await session.abortTransaction();
     session.endSession();
+
+    await handleFailureCooldown(req.user._id);
 
     // Catch database-level unique constraint collision for idempotencyKey
     if (error.code === 11000 && error.message.includes('idempotencyKey')) {
@@ -736,8 +878,10 @@ app.post('/api/orders', protect, checkoutLimiter, async (req, res, next) => {
         if (result.duplicate) {
           return res.status(200).json(result.order);
         }
+        await handleSuccessReset(req.user._id);
         return res.status(201).json(result.order);
       } catch (fallbackError) {
+        await handleFailureCooldown(req.user._id);
         if (fallbackError.code === 11000 && fallbackError.message.includes('idempotencyKey')) {
           const order = await Order.findOne({ idempotencyKey: req.body.idempotencyKey });
           return res.status(200).json(order);
