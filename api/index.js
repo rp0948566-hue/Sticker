@@ -4,6 +4,7 @@ import jwt from 'jsonwebtoken';
 import bcrypt from 'bcryptjs';
 import mongoose from 'mongoose';
 import dotenv from 'dotenv';
+import crypto from 'crypto';
 
 import connectDB from '../src/config/db.js';
 import User from '../src/models/user.model.js';
@@ -77,6 +78,63 @@ const rateLimiter = (limit, windowMs) => {
 
 const authLimiter = rateLimiter(15, 15 * 60 * 1000); // 15 requests per 15 minutes
 const checkoutLimiter = rateLimiter(5, 5 * 60 * 1000); // 5 requests per 5 minutes
+const extendLimiter = rateLimiter(3, 60 * 1000); // 3 requests per 1 minute
+
+// Webhook signature verification middleware (supports Stripe, Razorpay, Cashfree, and PhonePe)
+const verifyWebhookSignature = (req, res, next) => {
+  const signatureStripe = req.headers['stripe-signature'];
+  const signatureRazorpay = req.headers['x-razorpay-signature'];
+  const signatureCashfree = req.headers['x-cf-signature'];
+  const signaturePhonePe = req.headers['x-verify'];
+  
+  const secret = process.env.WEBHOOK_SECRET;
+  if (!secret) {
+    logEvent('error', 'PAYMENT_WEBHOOK_CRITICAL', 'WEBHOOK_SECRET environment variable is missing.');
+    return res.status(500).json({ message: 'Webhook signature validation is misconfigured on the server.' });
+  }
+
+  try {
+    const rawBody = req.rawBody || JSON.stringify(req.body);
+    let isValid = false;
+
+    if (signatureStripe) {
+      // Stripe signature check (t=TIMESTAMP,v1=SIGNATURE)
+      const parts = signatureStripe.split(',').reduce((acc, part) => {
+        const [k, v] = part.split('=');
+        acc[k] = v;
+        return acc;
+      }, {});
+      if (parts.t && parts.v1) {
+        const hmac = crypto.createHmac('sha256', secret);
+        const calculated = hmac.update(`${parts.t}.${rawBody}`).digest('hex');
+        isValid = calculated === parts.v1;
+      }
+    } else if (signatureRazorpay) {
+      // Razorpay signature check (HMAC SHA256 hex)
+      const calculated = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
+      isValid = calculated === signatureRazorpay;
+    } else if (signatureCashfree) {
+      // Cashfree signature check (HMAC SHA256 hex)
+      const calculated = crypto.createHmac('sha256', secret).update(rawBody).digest('hex');
+      isValid = calculated === signatureCashfree;
+    } else if (signaturePhonePe) {
+      // PhonePe signature check (SHA256 of raw body + secret + salt index)
+      const saltIndex = secret.split('###')[1] || '1';
+      const calculated = crypto.createHash('sha256').update(rawBody + secret).digest('hex') + '###' + saltIndex;
+      isValid = (calculated === signaturePhonePe);
+    }
+
+    if (!isValid) {
+      logEvent('warn', 'PAYMENT_WEBHOOK_FAIL', `Unauthenticated webhook request rejected from IP ${req.ip}`);
+      return res.status(401).json({ message: 'Invalid or missing signature.' });
+    }
+
+    next();
+  } catch (error) {
+    logEvent('error', 'PAYMENT_WEBHOOK_ERROR', `Verification process failed: ${error.message}`);
+    return res.status(400).json({ message: 'Webhook verification error' });
+  }
+};
 
 // Initialize Database connection
 if (process.env.NODE_ENV !== 'test') {
@@ -276,23 +334,28 @@ app.post('/api/auth/register', authLimiter, async (req, res, next) => {
       return res.status(400).json({ message: 'All fields are required' });
     }
 
+    // Password Complexity Policy Validation (at least 8 chars, 1 uppercase, 1 lowercase, 1 number)
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,}$/;
+    if (!passwordRegex.test(password)) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters long, and contain at least one uppercase letter, one lowercase letter, and one number.' });
+    }
+
     const cleanEmail = String(email).trim().toLowerCase();
     const userExists = await User.findOne({ email: cleanEmail });
     if (userExists) {
-      return res.status(400).json({ message: 'User already exists' });
+      // Obfuscated error message to prevent email enumeration
+      return res.status(400).json({ message: 'Registration failed. Email is invalid or already in use.' });
     }
 
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
-    // If first user, make them Admin
-    const isFirstUser = (await User.countDocuments({})) === 0;
-
+    // Disabled automatic bootstrap admin role assignment for security
     const user = await User.create({
       name: String(name),
       email: cleanEmail,
       password: hashedPassword,
-      isAdmin: isFirstUser
+      isAdmin: false
     });
 
     logEvent('info', 'AUTH', `User registered: ${user.email} (Admin: ${user.isAdmin})`);
@@ -302,12 +365,22 @@ app.post('/api/auth/register', authLimiter, async (req, res, next) => {
       await mergeCarts(user._id, cartItems);
     }
 
+    const token = generateToken(user._id, user.authSalt);
+
+    // Set secure HttpOnly session cookie
+    res.cookie('token', token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === 'production',
+      sameSite: 'strict',
+      maxAge: 24 * 60 * 60 * 1000 // 1 day
+    });
+
     res.status(201).json({
       _id: user._id,
       name: user.name,
       email: user.email,
       isAdmin: user.isAdmin,
-      token: generateToken(user._id, user.authSalt)
+      token
     });
   } catch (error) {
     next(error);
@@ -325,22 +398,54 @@ app.post('/api/auth/login', authLimiter, async (req, res, next) => {
     const cleanEmail = String(email).trim().toLowerCase();
     const user = await User.findOne({ email: cleanEmail });
 
+    // Lockout verification checks
+    if (user && user.cooldownUntil && user.cooldownUntil > new Date()) {
+      return res.status(429).json({
+        message: `Account is temporarily locked due to repeated login failures. Please try again after ${user.cooldownUntil.toLocaleTimeString()}.`
+      });
+    }
+
     if (user && (await bcrypt.compare(String(password), user.password))) {
       logEvent('info', 'AUTH', `User logged in: ${user.email}`);
+
+      // Reset login lock counters
+      user.failedAttempts = 0;
+      user.cooldownUntil = null;
+      await user.save();
 
       // Merge local storage cart into DB cart upon login
       if (cartItems) {
         await mergeCarts(user._id, cartItems);
       }
 
+      const token = generateToken(user._id, user.authSalt);
+
+      // Set secure HttpOnly session cookie
+      res.cookie('token', token, {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === 'production',
+        sameSite: 'strict',
+        maxAge: 24 * 60 * 60 * 1000 // 1 day
+      });
+
       res.json({
         _id: user._id,
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
-        token: generateToken(user._id, user.authSalt)
+        token
       });
     } else {
+      // Apply brute-force counter updates on match failures
+      if (user) {
+        user.failedAttempts = (user.failedAttempts || 0) + 1;
+        if (user.failedAttempts >= 5) {
+          user.cooldownUntil = new Date(Date.now() + 15 * 60 * 1000); // 15 minute lock
+          user.failedAttempts = 0;
+          logEvent('warn', 'AUTH_LOCKOUT', `User account ${user.email} locked for 15 minutes due to 5 consecutive login failures.`);
+        }
+        await user.save();
+      }
       res.status(401).json({ message: 'Invalid email or password' });
     }
   } catch (error) {
@@ -351,6 +456,109 @@ app.post('/api/auth/login', authLimiter, async (req, res, next) => {
 // Validate Token Check
 app.get('/api/auth/me', protect, async (req, res) => {
   res.json(req.user);
+});
+
+// Logout API (active session revocation)
+app.post('/api/auth/logout', protect, async (req, res, next) => {
+  try {
+    const user = await User.findById(req.user._id);
+    if (user) {
+      // Invalidate current JWT signatures globally by changing user's salt
+      user.authSalt = Math.random().toString(36).substring(2);
+      await user.save();
+      logEvent('info', 'AUTH_LOGOUT', `User logged out and session revoked: ${user.email}`);
+    }
+    
+    // Clear HttpOnly cookie on client side
+    res.clearCookie('token');
+    res.json({ success: true, message: 'Logged out successfully, session revoked.' });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Forgot Password API (Simulates email recovery link generation)
+app.post('/api/auth/forgot-password', async (req, res, next) => {
+  try {
+    const { email } = req.body;
+    if (!email) {
+      return res.status(400).json({ message: 'Email address is required' });
+    }
+
+    const cleanEmail = String(email).trim().toLowerCase();
+    const user = await User.findOne({ email: cleanEmail });
+
+    if (user) {
+      // Generate a short-lived recovery token containing user ID
+      const resetToken = jwt.sign(
+        { id: user._id, type: 'reset', currentSalt: user.authSalt },
+        process.env.JWT_SECRET,
+        { expiresIn: '15m' }
+      );
+
+      const resetLink = `http://localhost:5173/reset-password.html?token=${resetToken}`;
+      
+      // Send simulation email
+      sendCustomerEmail(
+        user.email,
+        'Reset Your Password',
+        `Hi ${user.name},\n\nYou requested a password reset. Please use the following link within 15 minutes to reset your credentials:\n\n${resetLink}\n\nIf you did not request this, please ignore this email.`
+      );
+      logEvent('info', 'AUTH_FORGOT_PASSWORD', `Password reset token generated and simulation-sent for ${user.email}`);
+    }
+
+    // Generic response to mitigate email enumeration
+    res.json({
+      success: true,
+      message: 'If the email address is registered on our platform, a recovery link has been dispatched.'
+    });
+  } catch (error) {
+    next(error);
+  }
+});
+
+// Reset Password API (Processes token validation and resets credentials)
+app.post('/api/auth/reset-password', async (req, res, next) => {
+  try {
+    const { token, newPassword } = req.body;
+    if (!token || !newPassword) {
+      return res.status(400).json({ message: 'Token and new password are required' });
+    }
+
+    // 1. Verify token
+    let decoded;
+    try {
+      decoded = jwt.verify(token, process.env.JWT_SECRET);
+    } catch (err) {
+      return res.status(400).json({ message: 'Invalid or expired recovery token.' });
+    }
+
+    if (decoded.type !== 'reset') {
+      return res.status(400).json({ message: 'Invalid recovery token type.' });
+    }
+
+    const user = await User.findById(decoded.id);
+    if (!user || user.authSalt !== decoded.currentSalt) {
+      return res.status(400).json({ message: 'This recovery link has expired or has already been used.' });
+    }
+
+    // 2. Enforce complexity policy check
+    const passwordRegex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d\w\W]{8,}$/;
+    if (!passwordRegex.test(newPassword)) {
+      return res.status(400).json({ message: 'Password must be at least 8 characters long, and contain at least one uppercase letter, one lowercase letter, and one number.' });
+    }
+
+    // 3. Update password and rotate authSalt (to revoke active tokens)
+    const salt = await bcrypt.genSalt(10);
+    user.password = await bcrypt.hash(newPassword, salt);
+    user.authSalt = Math.random().toString(36).substring(2);
+    await user.save();
+
+    logEvent('info', 'AUTH_RESET_PASSWORD', `Password successfully reset for user: ${user.email}`);
+    res.json({ success: true, message: 'Password updated successfully. You can now log in.' });
+  } catch (error) {
+    next(error);
+  }
 });
 
 /* ================= PRODUCT SYSTEM ================= */
@@ -472,8 +680,8 @@ app.delete('/api/products/:id', protect, admin, async (req, res, next) => {
 app.post('/api/cart/reserve', protect, async (req, res, next) => {
   try {
     const { productId, quantity } = req.body;
-    if (!productId || !quantity || quantity < 1) {
-      return res.status(400).json({ message: 'Invalid productId or quantity' });
+    if (!productId || quantity === undefined || quantity < 1 || !Number.isInteger(Number(quantity))) {
+      return res.status(400).json({ message: 'Invalid productId or quantity (must be a positive integer)' });
     }
 
     // 1. Enforce validation cooldown window checks
@@ -583,7 +791,7 @@ app.post('/api/cart/reserve', protect, async (req, res, next) => {
 });
 
 // Extend Reservations Heartbeat API
-app.post('/api/cart/reserve/extend', protect, async (req, res, next) => {
+app.post('/api/cart/reserve/extend', protect, extendLimiter, async (req, res, next) => {
   try {
     const reservations = await Reservation.find({
       userId: req.user._id,
@@ -592,6 +800,7 @@ app.post('/api/cart/reserve/extend', protect, async (req, res, next) => {
 
     let count = 0;
     const now = Date.now();
+    const limitWindow = 3 * 60 * 1000; // 3 minutes expiring warning window
 
     for (const r of reservations) {
       // If we have already hit 2 extensions or max lifetime is passed, skip/release
@@ -610,6 +819,12 @@ app.post('/api/cart/reserve/extend', protect, async (req, res, next) => {
           }
         }
         continue;
+      }
+
+      // Enforce check: only allow extension if the reservation has less than 3 minutes remaining
+      const timeRemaining = r.expiresAt.getTime() - now;
+      if (timeRemaining > limitWindow) {
+        continue; // Prevents premature heartbeat spamming
       }
 
       // Extend by 15 minutes, capped at maxExpiresAt
@@ -752,7 +967,7 @@ app.post('/api/orders', protect, checkoutLimiter, async (req, res, next) => {
     let orderTotal = 0;
     const reservationIds = [];
 
-    // 2. Validate availability and create atomic reservations (15 mins window)
+    // 2. Validate availability and consume/create reservations (15 mins window)
     for (const item of cartItems) {
       const productQuery = Product.findById(item.productId);
       const product = session ? await productQuery.session(session) : await productQuery;
@@ -761,46 +976,76 @@ app.post('/api/orders', protect, checkoutLimiter, async (req, res, next) => {
         throw new Error(`Product not found: ${item.productId}`);
       }
 
-      // Check stock availability
-      const available = product.stock - product.reservedStock;
-      if (available < item.quantity) {
-        throw new Error(`Insufficient stock for "${product.title}". Only ${available} available.`);
-      }
-
-      // Reserve stock atomically via update
-      const updatedProduct = await Product.findOneAndUpdate(
-        {
-          _id: product._id,
-          stock: product.stock,
-          reservedStock: product.reservedStock
-        },
-        {
-          $inc: { reservedStock: item.quantity }
-        },
-        { new: true, session }
-      );
-
-      if (!updatedProduct) {
-        throw new Error(`Inventory locking collision for "${product.title}". Please try checking out again.`);
-      }
-
-      await updatedProduct.save({ session });
-
-      // Create Reservation record (15 mins duration default, 45 mins cap)
-      const expiresAt = new Date(Date.now() + 15 * 60 * 1000); 
-      const maxExpiresAt = new Date(Date.now() + 45 * 60 * 1000);
-      const resData = {
+      // Check if user has an active reservation for this product
+      const activeResQuery = Reservation.findOne({
         userId: req.user._id,
         productId: product._id,
-        quantity: item.quantity,
-        expiresAt,
-        maxExpiresAt,
-        extensionCount: 0
-      };
-      
-      const createdRes = session ? await Reservation.create([resData], { session }) : await Reservation.create(resData);
-      const reservation = Array.isArray(createdRes) ? createdRes[0] : createdRes;
-      reservationIds.push(reservation._id);
+        status: 'active'
+      });
+      const activeRes = session ? await activeResQuery.session(session) : await activeResQuery;
+
+      let quantityToLock = item.quantity;
+      if (activeRes) {
+        // Stock is already reserved and accounted for in product.reservedStock.
+        // We only lock the remainder if the checkout quantity exceeds the reserved quantity.
+        quantityToLock = Math.max(0, item.quantity - activeRes.quantity);
+
+        // Mark active reservation as completed
+        activeRes.status = 'completed';
+        activeRes.deleteAt = new Date();
+        if (session) {
+          await activeRes.save({ session });
+        } else {
+          await activeRes.save();
+        }
+      }
+
+      if (quantityToLock > 0) {
+        // Check stock availability for the additional quantity
+        const available = product.stock - product.reservedStock;
+        if (available < quantityToLock) {
+          throw new Error(`Insufficient stock for "${product.title}". Only ${available} available.`);
+        }
+
+        // Reserve stock atomically via update
+        const updatedProduct = await Product.findOneAndUpdate(
+          {
+            _id: product._id,
+            stock: product.stock,
+            reservedStock: product.reservedStock
+          },
+          {
+            $inc: { reservedStock: quantityToLock }
+          },
+          { new: true, session }
+        );
+
+        if (!updatedProduct) {
+          throw new Error(`Inventory locking collision for "${product.title}". Please try checking out again.`);
+        }
+
+        if (session) {
+          await updatedProduct.save({ session });
+        } else {
+          await updatedProduct.save();
+        }
+
+        // Create a new Reservation record for the newly locked quantity
+        const expiresAt = new Date(Date.now() + 15 * 60 * 1000); 
+        const maxExpiresAt = new Date(Date.now() + 45 * 60 * 1000);
+        const resData = {
+          userId: req.user._id,
+          productId: product._id,
+          quantity: quantityToLock,
+          expiresAt,
+          maxExpiresAt,
+          extensionCount: 0
+        };
+        
+        const createdRes = session ? await Reservation.create([resData], { session }) : await Reservation.create(resData);
+        const reservation = Array.isArray(createdRes) ? createdRes[0] : createdRes;
+        reservationIds.push(reservation._id);
+      }
 
       orderItems.push({
         productId: product._id,
@@ -872,6 +1117,11 @@ app.post('/api/orders', protect, checkoutLimiter, async (req, res, next) => {
 
     // Standalone replica set connection error handler
     if (error.message.includes('Transaction numbers are only allowed') || error.message.includes('replica set')) {
+      if (process.env.NODE_ENV === 'production') {
+        logEvent('error', 'CHECKOUT_FAIL', 'Strict database transactions are required in production, but replica set support is missing.');
+        return res.status(500).json({ message: 'E-commerce transactions are misconfigured in production.' });
+      }
+
       logEvent('warn', 'TRANSACTION_FALLBACK', 'Mongoose transactions not supported in environment. Running sequential fallback.');
       try {
         const result = await runOrderCreation(null);
@@ -909,7 +1159,7 @@ app.get('/api/orders', protect, async (req, res, next) => {
 /* ================= WEBHOOKS & PAYMENTS GATEWAY ================= */
 
 // Webhook callback (POST /api/payments/webhook)
-app.post('/api/payments/webhook', async (req, res, next) => {
+app.post('/api/payments/webhook', verifyWebhookSignature, async (req, res, next) => {
   const session = await mongoose.startSession();
   try {
     // Standard mock verification of body elements
