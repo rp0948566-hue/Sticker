@@ -14,11 +14,27 @@ import { runStartupRecovery } from '../src/services/security-recovery.service.js
 
 dotenv.config();
 
-// Ensure JWT secret is explicitly set on boot
+// ── Required environment variable guards ──────────────────────────────────────
+// Both are checked immediately on boot. Clear messages tell the operator exactly
+// where to set them — without logging the secret values themselves.
+
 if (!process.env.JWT_SECRET) {
-  logEvent('error', 'SYSTEM', 'CRITICAL BOOT ERROR: JWT_SECRET environment variable is missing.');
+  logEvent('error', 'SYSTEM',
+    'CRITICAL BOOT ERROR: JWT_SECRET is not set. ' +
+    'Add it in Vercel → Project → Settings → Environment Variables.'
+  );
   process.exit(1);
 }
+
+if (!process.env.MONGODB_URI) {
+  logEvent('error', 'SYSTEM',
+    'CRITICAL BOOT ERROR: MONGODB_URI is not set. ' +
+    'Add it in Vercel → Project → Settings → Environment Variables. ' +
+    'Format: mongodb+srv://<user>:<password>@<cluster>.mongodb.net/<dbname>'
+  );
+  process.exit(1);
+}
+
 
 const app = express();
 
