@@ -2,6 +2,18 @@ import { defineConfig } from 'vite';
 import { resolve } from 'path';
 
 export default defineConfig({
+  // ── Local dev: proxy /api/* to Express server on :5000 ────────────────────
+  // Without this, browser fetches to /api/v1/products hit Vite (port 5173)
+  // and get back HTML instead of JSON → JSON.parse throws → catalog fails.
+  server: {
+    proxy: {
+      '/api': {
+        target: 'http://localhost:5000',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
+  },
   build: {
     rollupOptions: {
       input: {
@@ -21,3 +33,4 @@ export default defineConfig({
     },
   },
 });
+

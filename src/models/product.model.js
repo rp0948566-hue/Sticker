@@ -19,8 +19,8 @@ const ProductSchema = new mongoose.Schema({
   reservationHours: { type: Number, required: true, default: 0.25 }, // default 15 minutes (0.25 hours)
   inventoryStatus: {
     type: String,
-    enum: ['In Stock', 'Low Stock', 'Out Of Stock'],
-    default: 'Out Of Stock',
+    enum: ['In Stock', 'Low Stock', 'Out of Stock'],
+    default: 'Out of Stock',
     index: true
   }
 }, { timestamps: true });
@@ -45,7 +45,7 @@ ProductSchema.pre('save', function (next) {
   } else if (this.availableStock > 0) {
     this.inventoryStatus = 'Low Stock';
   } else {
-    this.inventoryStatus = 'Out Of Stock';
+    this.inventoryStatus = 'Out of Stock';
   }
   next();
 });

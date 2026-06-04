@@ -84,9 +84,12 @@ app.use(adaptiveProtection);
 // Initialize Database connection eagerly on load
 if (process.env.NODE_ENV !== 'test') {
   connectDB()
+    .then((conn) => {
+      logEvent('info', 'DATABASE', `MongoDB Atlas connected — host: ${conn.connection.host}, db: ${conn.connection.name}`);
+    })
     .then(() => initSettings())
     .then(() => runStartupRecovery())
-    .catch(err => logEvent('error', 'DATABASE_INIT', `Initial DB connection failed: ${err.message}`));
+    .catch(err => logEvent('error', 'DATABASE_INIT', `Startup DB connection failed: ${err.message}`));
 }
 
 // Setup default settings on start
