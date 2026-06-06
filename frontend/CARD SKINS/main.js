@@ -62,6 +62,20 @@ if (cartInfoBtn) cartInfoBtn.addEventListener('click', toggleCart);
 if (cartClose) cartClose.addEventListener('click', closeCart);
 if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 
+// Handle Checkout Button
+const checkoutBtn = document.getElementById('checkout-btn');
+if (checkoutBtn) {
+  checkoutBtn.addEventListener('click', () => {
+    if (cart.length > 0) {
+      // Save cart to localStorage for the checkout page
+      localStorage.setItem('cart', JSON.stringify(cart));
+      window.location.href = '/order-system/frontend/checkout/index.html';
+    } else {
+      alert('Your cart is empty!');
+    }
+  });
+}
+
 // Dropdown Toggle Logic
 const filterPills = document.querySelectorAll('.filter-pill');
 const filterDropdowns = document.querySelectorAll('.filter-dropdown');
@@ -344,8 +358,6 @@ if (recomPrevBtn && recomNextBtn) {
 
 // Event listeners moved to global click handler below
 
-updateCartUI();
-
 // Quick View Logic
 const qvModal = document.getElementById('quick-view-modal');
 const qvOverlay = document.getElementById('quick-view-overlay');
@@ -419,18 +431,36 @@ document.addEventListener('click', (e) => {
     const title = card.querySelector('.product-title').textContent.trim();
     const priceText = card.querySelector('.price-current').textContent.trim();
     const price = parseFloat(priceText.replace('Rs. ', '').trim());
+    const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(title);
     
     const existingItem = cart.find(item => item.title === title);
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      cart.push({ title, price, image: '/IMAGE/1.png', quantity: 1 });
+      cart.push({ title, price, image: '/IMAGE/1.png', quantity: 1, url: productUrl });
     }
     
     updateCartUI();
     updateQuickViewPrice(); // Update progress bar if modal is open
   }
 });
+
+function handleDeepLink() {
+  const params = new URLSearchParams(window.location.search);
+  const productTitle = params.get('product');
+  if (productTitle) {
+    setTimeout(() => {
+      const cards = document.querySelectorAll('.product-card');
+      const targetCard = Array.from(cards).find(card => 
+        card.querySelector('.product-title')?.textContent.trim() === productTitle
+      );
+      if (targetCard) {
+        const qvBtn = targetCard.querySelector('.quick-view');
+        if (qvBtn) qvBtn.click();
+      }
+    }, 500);
+  }
+}
 
 function updateQuickViewPrice() {
   const qvModalEl = document.getElementById('quick-view-modal');
@@ -523,12 +553,13 @@ if (qvAddBtn) {
     const title = qvTitle.textContent.trim();
     const price = parseFloat(qvModalEl.dataset.unitPrice) || 0;
     const qty = parseInt(qvQtyInput.value) || 1;
+    const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(title);
     
     const existingItem = cart.find(item => item.title === title);
     if (existingItem) {
       existingItem.quantity += qty;
     } else {
-      cart.push({ title, price, image: '/IMAGE/1.png', quantity: qty });
+      cart.push({ title, price, image: '/IMAGE/1.png', quantity: qty, url: productUrl });
     }
     
     updateCartUI();
@@ -888,3 +919,5 @@ function animateEye() {
 requestAnimationFrame(animateEye);
 
 initLazyLoad();
+updateCartUI();
+handleDeepLink();

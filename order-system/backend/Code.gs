@@ -1,8 +1,8 @@
 /**
- * PRODUCTION-READY BACKEND v4.1 (GUARANTEED PERSISTENCE)
+ * PRODUCTION-READY BACKEND v4.2 (FINAL CLEAN LINK)
  */
 const CONFIG = {
-  ADMIN_TOKEN: "CHANGE_THIS_TO_A_SECURE_TOKEN",
+  ADMIN_TOKEN: "CHANGE_THIS_TO_A_SECURE_TOKEN", // Set your password here
   MAX_ORDERS_PER_SHEET: 300,
   BASE_SHEET_NAME: "Orders",
   LOG_SHEET_NAME: "SystemLogs",
@@ -17,9 +17,8 @@ function doPost(e) {
     lock.waitLock(30000);
     const data = JSON.parse(e.postData.contents);
     
-    // Security: Only allow requests with the correct human token
+    // Security Token Check
     if (data.verify_token !== "USER_VERIFIED_77") {
-       logEvent("SECURITY_BLOCK", "Invalid Token", data.phone);
        return createResponse({ success: false, message: "Security Validation Failed" });
     }
 
@@ -32,7 +31,13 @@ function doPost(e) {
     const orderId = "ORD-" + Utilities.getUuid().split("-")[0].toUpperCase();
     const now = new Date();
     
-    const row = [
+    // Generate the SINGLE Sandbox Link
+    const storeDomain = data.storeDomain || "";
+    const sandboxUrl = storeDomain + "/order-system/frontend/product-showcase-area/index.html?id=" + orderId;
+    const clickableUrl = '=HYPERLINK("' + sandboxUrl + '", "View Order Sandbox")';
+
+    // 17 Column Mapping
+    sheet.appendRow([
       orderId,
       Utilities.formatDate(now, CONFIG.TIMEZONE, "yyyy-MM-dd"),
       Utilities.formatDate(now, CONFIG.TIMEZONE, "HH:mm:ss"),
@@ -44,27 +49,34 @@ function doPost(e) {
       cleanData.state,
       cleanData.pincode,
       cleanData.productName,
-      cleanData.productUrl || "N/A",
+      clickableUrl, // Clean magic link only!
       cleanData.quantity,
       cleanData.totalPrice,
-      "COD",
-      CONFIG.DEFAULT_STATUS
-    ];
+      "Paytm",
+      CONFIG.DEFAULT_STATUS,
+      data.cartData || "" // Column Q: Detailed JSON for Sandbox
+    ]);
 
-    sheet.appendRow(row);
     logEvent("ORDER_CREATED", `Order ${orderId} saved`, cleanData.phone);
 
     return createResponse({ success: true, orderId: orderId, message: "Order placed successfully!" });
 
   } catch (err) {
     logEvent("SYSTEM_ERROR", err.toString(), "CRITICAL");
-    return createResponse({ success: false, message: "Server Error: " + err.message });
+    return createResponse({ success: false, message: "Server Error" });
   } finally { lock.releaseLock(); }
 }
 
 function doGet(e) {
-  if (e.parameter.token !== CONFIG.ADMIN_TOKEN) return createResponse({ success: false, message: "Unauthorized" });
+  const token = e.parameter.token;
   const action = e.parameter.action;
+
+  // Security Decoy for fetchSingleOrder without token
+  if (action === "fetchSingleOrder" && (!token || token !== CONFIG.ADMIN_TOKEN)) {
+    return createResponse({ success: false, message: "Link Expired" });
+  }
+
+  if (token !== CONFIG.ADMIN_TOKEN) return createResponse({ success: false, message: "Unauthorized" });
 
   if (action === "fetchOrders") {
     let all = [];
@@ -73,13 +85,45 @@ function doGet(e) {
       const d = s.getDataRange().getValues();
       if (d.length > 1) all = all.concat(d.slice(1).reverse());
     });
-    const q = (e.parameter.search || "").toLowerCase();
-    if (q) all = all.filter(r => r[0].toLowerCase().includes(q) || r[4].toString().includes(q) || r[3].toLowerCase().includes(q));
     return createResponse({ success: true, data: all.slice((parseInt(e.parameter.page || 1)-1)*100, parseInt(e.parameter.page || 1)*100), total: all.length });
   }
 
+  if (action === "fetchSingleOrder") {
+    const orderId = e.parameter.orderId;
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheets = ss.getSheets().filter(s => s.getName().includes(CONFIG.BASE_SHEET_NAME));
+    
+    for (let s of sheets) {
+      const data = s.getDataRange().getValues();
+      for (let i = 1; i < data.length; i++) {
+        if (data[i][0] === orderId) {
+          return createResponse({
+            success: true,
+            order: {
+              id: data[i][0],
+              date: data[i][1],
+              time: data[i][2],
+              customer: data[i][3],
+              phone: data[i][4],
+              email: data[i][5],
+              address: `${data[i][6]}, ${data[i][7]}, ${data[i][8]} - ${data[i][9]}`,
+              products: data[i][10],
+              qty: data[i][12],
+              total: data[i][13],
+              payment: data[i][14],
+              status: data[i][15],
+              cartData: data[i][16] // Return detailed links
+            }
+          });
+        }
+      }
+    }
+    return createResponse({ success: false });
+  }
+
   if (action === "updateStatus") {
-    const sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets().filter(s => s.getName().includes(CONFIG.BASE_SHEET_NAME));
+    const ss = SpreadsheetApp.getActiveSpreadsheet();
+    const sheets = ss.getSheets().filter(s => s.getName().includes(CONFIG.BASE_SHEET_NAME));
     for (let s of sheets) {
       const data = s.getRange("A:A").getValues();
       for (let i = 0; i < data.length; i++) {
@@ -106,9 +150,9 @@ function getActiveSheet() {
   if (!latest || latest.getLastRow() >= CONFIG.MAX_ORDERS_PER_SHEET) {
     part++;
     latest = ss.insertSheet(`${CONFIG.BASE_SHEET_NAME}_${year}_Part_${part}`);
-    latest.appendRow(["Order ID", "Date", "Time", "Name", "Phone", "Email", "Address", "City", "State", "Pincode", "Product", "URL", "Qty", "Price", "Payment", "Status"]);
+    latest.appendRow(["Order ID", "Date", "Time", "Name", "Phone", "Email", "Address", "City", "State", "Pincode", "Product", "URL", "Qty", "Price", "Payment", "Status", "RawData"]);
     latest.setFrozenRows(1);
-    latest.getRange(1,1,1,16).setFontWeight("bold").setBackground("#f3f3f3");
+    latest.getRange(1,1,1,17).setFontWeight("bold").setBackground("#f3f3f3");
   }
   return latest;
 }
@@ -143,34 +187,9 @@ function logEvent(type, msg, ctx) {
 
 function createResponse(o) {
   const ss = SpreadsheetApp.getActiveSpreadsheet();
-  const now = new Date();
-  let ssId = "NOT_BOUND";
-  let sheetName = "N/A";
-  
-  if (ss) {
-    ssId = ss.getId();
-    try {
-      // Safely check for the sheet name
-      const year = now.getFullYear();
-      let part = 0, latest = null;
-      ss.getSheets().forEach(s => {
-        if (s.getName().startsWith(CONFIG.BASE_SHEET_NAME)) {
-          let p = parseInt(s.getName().split('_Part_')[1] || "0");
-          if (p > part) { part = p; latest = s; }
-        }
-      });
-      sheetName = latest ? latest.getName() : "NONE_FOUND";
-    } catch(e) {
-      sheetName = "ERROR: " + e.message;
-    }
-  }
-
   o.diag = {
-    version: "DIAG_V1_STABLE",
-    spreadsheetId: ssId,
-    activeSheetName: sheetName,
-    serverTime: Utilities.formatDate(now, CONFIG.TIMEZONE, "yyyy-MM-dd HH:mm:ss")
+    ss_id: ss ? ss.getId() : "NOT_BOUND",
+    version: "v4.2_STABLE"
   };
-  
   return ContentService.createTextOutput(JSON.stringify(o)).setMimeType(ContentService.MimeType.JSON);
 }

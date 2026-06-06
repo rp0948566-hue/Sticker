@@ -62,20 +62,6 @@ if (cartInfoBtn) cartInfoBtn.addEventListener('click', toggleCart);
 if (cartClose) cartClose.addEventListener('click', closeCart);
 if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 
-// Handle Checkout Button
-const checkoutBtn = document.getElementById('checkout-btn');
-if (checkoutBtn) {
-  checkoutBtn.addEventListener('click', () => {
-    if (cart.length > 0) {
-      // Save cart to localStorage for the checkout page
-      localStorage.setItem('cart', JSON.stringify(cart));
-      window.location.href = '/order-system/frontend/checkout/index.html';
-    } else {
-      alert('Your cart is empty!');
-    }
-  });
-}
-
 // Dropdown Toggle Logic
 const filterPills = document.querySelectorAll('.filter-pill');
 const filterDropdowns = document.querySelectorAll('.filter-dropdown');
@@ -434,40 +420,17 @@ document.addEventListener('click', (e) => {
     const priceText = card.querySelector('.price-current').textContent.trim();
     const price = parseFloat(priceText.replace('Rs. ', '').trim());
     
-    // Generate slugified product URL
-    const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(title);
-
     const existingItem = cart.find(item => item.title === title);
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      cart.push({ title, price, image: '/IMAGE/1.png', quantity: 1, url: productUrl });
+      cart.push({ title, price, image: '/IMAGE/1.png', quantity: 1 });
     }
     
     updateCartUI();
     updateQuickViewPrice(); // Update progress bar if modal is open
   }
 });
-
-// Deep Linking: Auto-open Quick View from URL parameter
-function handleDeepLink() {
-  const params = new URLSearchParams(window.location.search);
-  const productTitle = params.get('product');
-  if (productTitle) {
-    // Wait for cards to be rendered by lazy load
-    setTimeout(() => {
-      const cards = document.querySelectorAll('.product-card');
-      const targetCard = Array.from(cards).find(card => 
-        card.querySelector('.product-title')?.textContent.trim() === productTitle
-      );
-      
-      if (targetCard) {
-        const qvBtn = targetCard.querySelector('.quick-view');
-        if (qvBtn) qvBtn.click();
-      }
-    }, 500);
-  }
-}
 
 function updateQuickViewPrice() {
   const qvModalEl = document.getElementById('quick-view-modal');
@@ -925,5 +888,3 @@ function animateEye() {
 requestAnimationFrame(animateEye);
 
 initLazyLoad();
-updateCartUI();
-handleDeepLink();

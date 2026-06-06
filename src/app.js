@@ -6,11 +6,11 @@ import { initLazyLoad } from './lazy-load.js';
 // Configuration
 const CONFIG = {
   CHECKOUT_THRESHOLD: 249.00,
-  QUICK_VIEW_DELAY: 0, // Removed artificial delay
+  QUICK_VIEW_DELAY: 0,
   CART_IMAGE_DEFAULT: '/IMAGE/1.png'
 };
 
-let cart = [];
+let cart = JSON.parse(localStorage.getItem('cart') || '[]');
 
 // DOM Elements
 const cartBtn = document.getElementById('cart-btn');
@@ -54,6 +54,7 @@ function closeQuickView() {
 }
 
 function updateCartUI() {
+  localStorage.setItem('cart', JSON.stringify(cart));
   const cartItemsContainer = document.querySelector('.cart-items-container');
   const cartEmpty = document.querySelector('.cart-empty');
   const cartFooter = document.querySelector('.cart-footer');
@@ -107,7 +108,6 @@ function updateCartUI() {
   cartBadge.textContent = totalItems;
   if (topbarSubtotal) topbarSubtotal.textContent = `Rs. ${subtotal.toFixed(2)}`;
   
-  const drawerSubtotal = document.getElementById('topbar-subtotal'); // Reuse if ID is same
   const footerSubtotal = document.getElementById('footer-subtotal');
   if (footerSubtotal) footerSubtotal.textContent = `Rs. ${subtotal.toFixed(2)}`;
 
@@ -164,7 +164,6 @@ const checkoutBtn = document.getElementById('checkout-btn');
 if (checkoutBtn) {
   checkoutBtn.addEventListener('click', () => {
     if (cart.length > 0) {
-      // Save cart to localStorage for the checkout page
       localStorage.setItem('cart', JSON.stringify(cart));
       window.location.href = '/order-system/frontend/checkout/index.html';
     } else {
@@ -184,9 +183,7 @@ document.addEventListener('keydown', (e) => {
 // Mobile Menu Functions
 function toggleMobileMenu(force) {
   if (!mobileMenuDrawer) return;
-  
   const isActive = typeof force === 'boolean' ? force : !mobileMenuDrawer.classList.contains('active');
-  
   if (isActive) {
     mobileMenuDrawer.classList.add('active');
     if (mobileMenuOverlay) mobileMenuOverlay.classList.add('active');
@@ -196,16 +193,13 @@ function toggleMobileMenu(force) {
     if (mobileMenuOverlay) mobileMenuOverlay.classList.remove('active');
     document.body.classList.remove('menu-open');
   }
-  
   const icon = document.querySelector('.mobile-menu-btn i');
   if (icon) icon.className = isActive ? 'fas fa-times' : 'fas fa-bars';
 }
 
-// Mobile Menu Toggle Logic
 document.addEventListener('click', (e) => {
   const menuBtn = e.target.closest('.mobile-menu-btn');
   const overlayClick = e.target === mobileMenuOverlay;
-  
   if (menuBtn) {
     toggleMobileMenu();
   } else if (overlayClick) {
@@ -221,17 +215,28 @@ document.addEventListener('click', (e) => {
     quickViewBtn.classList.add('is-loading');
     
     setTimeout(() => {
-      // Mocking Quick View Data Population
       const title = card.querySelector('.product-title').textContent;
+      const currentPrice = card.querySelector('.price-current').textContent;
+      const oldPrice = card.querySelector('.price-old')?.textContent || "";
+      const saveBadge = card.querySelector('.save-badge')?.textContent || "";
       const img = card.querySelector('.placeholder-image img')?.src || CONFIG.CART_IMAGE_DEFAULT;
       
       if (qvModal) {
         qvModal.querySelector('.qv-title').textContent = title;
         qvModal.querySelector('.qv-main-image img').src = img;
+        qvModal.querySelectorAll('.qv-thumb img').forEach(thumb => { thumb.src = img; });
+        
+        const qvCurrent = qvModal.querySelector('.qv-price-current');
+        const qvOld = qvModal.querySelector('.qv-price-old');
+        const qvSave = qvModal.querySelector('.qv-save-badge');
+        
+        if (qvCurrent) qvCurrent.textContent = currentPrice;
+        if (qvOld) qvOld.textContent = oldPrice;
+        if (qvSave) qvSave.textContent = saveBadge;
+
         qvModal.classList.add('active');
       }
       if (qvOverlay) qvOverlay.classList.add('active');
-      
       document.body.classList.add('modal-open');
       document.documentElement.classList.add('modal-open');
       quickViewBtn.classList.remove('is-loading');
@@ -245,12 +250,13 @@ document.addEventListener('click', (e) => {
     const priceText = card.querySelector('.price-current').textContent.trim();
     const price = parseFloat(priceText.replace('Rs. ', '').trim());
     const image = card.querySelector('.placeholder-image img')?.src || CONFIG.CART_IMAGE_DEFAULT;
-    
+    const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(title);
+
     const existingItem = cart.find(item => item.title === title);
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      cart.push({ title, price, image, quantity: 1 });
+      cart.push({ title, price, image, quantity: 1, url: productUrl });
     }
     updateCartUI();
   }
@@ -274,4 +280,24 @@ document.addEventListener('click', (e) => {
   }
 });
 
+// Deep Linking: Auto-open Quick View from URL parameter
+function handleDeepLink() {
+  const params = new URLSearchParams(window.location.search);
+  const productTitle = params.get('product');
+  if (productTitle) {
+    setTimeout(() => {
+      const cards = document.querySelectorAll('.product-card');
+      const targetCard = Array.from(cards).find(card => 
+        card.querySelector('.product-title')?.textContent.trim() === productTitle
+      );
+      if (targetCard) {
+        const qvBtn = targetCard.querySelector('.quick-view');
+        if (qvBtn) qvBtn.click();
+      }
+    }, 500);
+  }
+}
+
 initLazyLoad();
+updateCartUI();
+handleDeepLink();

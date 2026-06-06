@@ -1,4 +1,4 @@
-const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbwabQOQHxgkxyLXc4q3-VFHBqUEmHl9w6mPieC6eQvKvN7INyP4BxPF-TOxliYRpvZx/exec";
+const SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCl2byGPvw17w4axjT7iLxrxPlTNPggDFbwMNuVHM7uDW01o1StjdufxQF9qE8p7cNvw/exec";
 
 document.addEventListener('DOMContentLoaded', () => {
     const cart = JSON.parse(localStorage.getItem('cart') || '[]');
@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const productName = cart.map(item => `${item.title} (x${item.quantity})`).join(", ");
     const totalQty = cart.reduce((sum, item) => sum + item.quantity, 0);
     const totalPrice = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+    // Capture specific deep-link URLs for each product
+    const productUrls = cart.map(item => item.url || (window.location.origin + "?product=" + encodeURIComponent(item.title))).join(", ");
 
     document.getElementById('summary-product').textContent = productName.substring(0, 50);
     document.getElementById('summary-qty').textContent = totalQty;
@@ -28,9 +30,11 @@ document.addEventListener('DOMContentLoaded', () => {
             pincode: document.getElementById('pincode').value,
             verify_token: "USER_VERIFIED_77", // Matches Backend
             productName: productName,
-            productUrl: window.location.origin,
+            cartData: JSON.stringify(cart), // Send full cart with URLs
+            storeDomain: window.location.origin, 
             totalPrice: totalPrice,
-            quantity: totalQty
+            quantity: totalQty,
+            paymentMethod: "Paytm"
         };
 
         btn.disabled = true;
@@ -45,6 +49,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
             const res = await resp.json();
             if (res.success) {
+                alert("Order Confirmed! Your Order ID is: " + res.orderId);
                 document.getElementById('message').innerHTML = `🎉 Success! Order ID: ${res.orderId}`;
                 document.getElementById('message').className = "message success";
                 document.getElementById('message').style.display = "block";
