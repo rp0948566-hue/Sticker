@@ -1,0 +1,941 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Solar REX — Light, given form</title>
+<meta name="description" content="A cinematic luxury future-energy experience for elite modern homes.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;0,500;1,300;1,400&family=Inter+Tight:wght@300;400;500;600&family=JetBrains+Mono:wght@300;400&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+<link rel="stylesheet" href="styles.css">
+<script type="module" src="boot.js" defer></script>
+</head>
+<body>
+
+<!-- Reusable SVG filters (liquid ripple for engineering card images) -->
+<svg width="0" height="0" style="position:absolute;pointer-events:none" aria-hidden="true">
+  <defs>
+    <filter id="liquid-ripple" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.008 0.012" numOctaves="2" seed="4" result="noise">
+        <animate attributeName="baseFrequency"
+                 dur="22s"
+                 values="0.008 0.012; 0.011 0.009; 0.007 0.014; 0.008 0.012"
+                 repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise" scale="6" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="liquid-ripple-soft" x="-5%" y="-5%" width="110%" height="110%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.004 0.006" numOctaves="2" seed="7" result="noise2">
+        <animate attributeName="baseFrequency"
+                 dur="30s"
+                 values="0.004 0.006; 0.006 0.004; 0.003 0.008; 0.004 0.006"
+                 repeatCount="indefinite"/>
+      </feTurbulence>
+      <feDisplacementMap in="SourceGraphic" in2="noise2" scale="3" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+  </defs>
+</svg>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                     BOOT / CINEMATIC LOADER                       │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<div id="boot" class="boot" role="status" aria-live="polite" aria-label="Loading Solar REX">
+  <div class="boot-bg" aria-hidden="true"></div>
+  <div class="boot-grain" aria-hidden="true"></div>
+
+  <div class="boot-stage">
+
+    <div class="boot-eyebrow">
+      <span class="dot"></span>
+      <span>Chapter 0 — Awakening</span>
+    </div>
+
+    <div class="boot-brand">Solar REX</div>
+
+    <div class="boot-loader-row">
+      <div class="loader">
+        <svg viewBox="0 0 80 80"><circle cx="40" cy="40" r="32"></circle></svg>
+      </div>
+      <div class="loader triangle">
+        <svg viewBox="0 0 86 80"><polygon points="43 8 79 72 7 72"></polygon></svg>
+      </div>
+      <div class="loader">
+        <svg viewBox="0 0 80 80"><rect x="8" y="8" width="64" height="64"></rect></svg>
+      </div>
+    </div>
+
+    <div class="boot-tagline">Composing your residence's energy</div>
+
+    <div class="boot-progress"><span class="boot-progress-bar"></span></div>
+
+    <div class="boot-meta">
+      <span>Studio Solar REX · Lugano</span>
+      <span>Atelier release 06.04</span>
+    </div>
+
+  </div>
+</div>
+
+<!-- atmospheric overlays -->
+<div class="grain"></div>
+<div class="vignette"></div>
+
+<!-- custom cursor -->
+<div class="cursor"></div>
+<div class="cursor-dot"></div>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                          PROMO BAR                                │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<div class="promo-bar" aria-label="Announcements">
+  <div class="promo-track">
+    <span>Spring 2026 intake — 12 European homes</span>
+    <span>Complimentary architectural consultation through April 2026</span>
+    <span>Solar REX Aureo II shipping Q3 2026 — reserve your slot</span>
+    <span>Atelier visits by appointment — Lugano · Zürich · Como · Provence</span>
+    <span>Spring 2026 intake — 12 European homes</span>
+    <span>Complimentary architectural consultation through April 2026</span>
+    <span>Solar REX Aureo II shipping Q3 2026 — reserve your slot</span>
+    <span>Atelier visits by appointment — Lugano · Zürich · Como · Provence</span>
+  </div>
+</div>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                              NAV                                  │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<header class="nav">
+  <div class="nav-inner">
+    <a href="#top" class="brand">Solar REX</a>
+    <nav class="nav-links">
+      <a href="#philosophy">Philosophy</a>
+      <a href="#silent">Silent Power</a>
+      <a href="#engineering">Engineering</a>
+      <a href="#ecosystem">Ecosystem</a>
+    </nav>
+    <div class="nav-right">
+      <button class="nav-cart" data-magnetic="0.2" aria-label="Open energy composition" data-cart-action="open" style="display: none !important;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <path d="M3 5h2l1.6 11.2A2 2 0 0 0 8.58 18H17.4a2 2 0 0 0 1.97-1.63L21 8H6"/>
+          <circle cx="9.5" cy="20.5" r="1"/>
+          <circle cx="16.5" cy="20.5" r="1"/>
+        </svg>
+        <span class="badge is-empty">0</span>
+      </button>
+      <a href="#future" class="nav-cta" data-magnetic="0.25" style="display: none !important;">Begin</a>
+      <button class="nav-burger" type="button" aria-label="Open menu" aria-expanded="false" aria-controls="mobileNav" style="display: none !important;">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile / Tablet drawer -->
+<div id="mobileNav" class="mobile-nav" role="dialog" aria-modal="true" aria-hidden="true" aria-label="Site navigation">
+  <div class="mobile-nav-backdrop" data-mnav-close></div>
+  <div class="mobile-nav-panel">
+    <div class="mobile-nav-head">
+      <span class="brand">Solar REX</span>
+      <button class="mobile-nav-close" type="button" aria-label="Close menu" data-mnav-close style="display: none !important;">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </div>
+    <nav class="mobile-nav-links">
+      <a href="#philosophy" data-mnav-close><span class="num">01</span><span>Philosophy</span></a>
+      <a href="#silent" data-mnav-close><span class="num">02</span><span>Silent Power</span></a>
+      <a href="#engineering" data-mnav-close><span class="num">03</span><span>Engineering</span></a>
+      <a href="#ecosystem" data-mnav-close><span class="num">04</span><span>Ecosystem</span></a>
+    </nav>
+    <a href="#future" class="mobile-nav-cta" data-mnav-close style="display: none !important; display: none !important;">Begin the consultation</a>
+    <div class="mobile-nav-foot">
+      <span>Studio Solar REX · Lugano</span>
+      <span>atelier@solarrex.energy</span>
+    </div>
+  </div>
+</div>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                              HERO                                 │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<section id="top" class="hero">
+  <canvas id="atmosphere"></canvas>
+  <div class="mobile-sun"></div>
+
+
+  <h1 class="hero-title" style="font-family: Garamond;" data-split="words">Solare in <em>silenzio.</em></h1>
+
+  <p class="hero-sub" data-split="lines">
+    A residential energy system engineered as architecture.<br>
+    Designed for the homes that will define the next century.
+  </p>
+
+  <div class="hero-meta">
+    <div class="col">
+      <a href="#future" class="btn-hero" data-magnetic="0.3" style="display: none !important;">
+        Reserve a consultation
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+          <path d="M5 12h14M13 6l6 6-6 6"/>
+        </svg>
+      </a>
+    </div>
+    <div class="col">
+      <span class="lbl">Annual output</span>
+      <span class="val"><strong>14.6 MWh</strong> per residence</span>
+    </div>
+    <div class="col">
+      <span class="lbl">Acoustic profile</span>
+      <span class="val"><strong>0 dB</strong> in operation</span>
+    </div>
+  </div>
+
+  <div class="scroll-cue">Scroll — Chapter II</div>
+</section>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                          MANIFESTO                                │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<section id="philosophy" class="manifesto">
+  <div class="manifesto-inner">
+    <div class="manifesto-label">Chapter II — Energy Philosophy</div>
+    <p class="manifesto-text" data-split="words">
+      We do not sell solar panels. We compose <em>quiet, intelligent buildings</em> that draw their power from the sky &mdash; an architecture of light, designed to disappear into the home and reappear, gently, as <em>independence.</em>
+    </p>
+    <div class="manifesto-sig">
+      Studio Solar REX — Founders' note
+    </div>
+  </div>
+  <div class="manifesto-scroll-msg">
+    <span>Scroll down</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                          SILENT POWER                             │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<section id="silent" class="silent">
+  <div class="silent-text">
+    <span class="section-label"><span class="num">03 — </span>Silent Power</span>
+    <h2 class="h-display" data-reveal data-split="words">
+      No fans. No hum. <em>No compromise.</em>
+    </h2>
+    <p class="eyebrow-italic" data-reveal>
+      The first residential array engineered to run beneath the noise floor of a quiet bedroom.
+    </p>
+    <p class="body-text" data-reveal>
+      A liquid-immersed inverter, monolithic glass, and conduction-cooled cell strings make Solar REX inaudible at three metres. The home runs. The architecture is undisturbed.
+    </p>
+    <div class="silent-stats">
+      <div>
+        <div class="stat-num">0<sup>dB</sup></div>
+        <div class="stat-label">Operating sound</div>
+      </div>
+      <div>
+        <div class="stat-num">98.4<sup>%</sup></div>
+        <div class="stat-label">Inverter efficiency</div>
+      </div>
+      <div>
+        <div class="stat-num">40<sup>yr</sup></div>
+        <div class="stat-label">Performance warranty</div>
+      </div>
+      <div>
+        <div class="stat-num">III<sup></sup></div>
+        <div class="stat-label">Grades of integration</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="silent-vis" data-clip-reveal>
+    <div class="img-frame">
+      <img class="img-inner" data-liquid crossorigin="anonymous" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1600&q=80&auto=format&fit=crop" alt="Solar panel field with golden reflection" data-parallax="0.08">
+    </div>
+    <div class="liquid-cursor"></div>
+    <div class="liquid-sheen"></div>
+    <div class="silent-caption">
+      <div>
+        <div class="lbl">Series — Aureo / I</div>
+        <div class="ttl">Roof-Integrated Cell Array</div>
+      </div>
+      <div class="meta">
+        N 46.0037<br>E 8.9511<br>2024 / 09
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                      ARCHITECTURAL INTEGRATION                    │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<section id="architecture" class="architecture">
+
+  <div class="arch-content">
+    <span class="section-label" style="color: var(--beige);"><span class="num">04 —</span> Architectural Integration</span>
+    <h2 class="arch-headline" data-reveal data-split="words">
+      Energy that <em>belongs</em> to the building.
+    </h2>
+    <div class="arch-footer">
+      <div class="box-card">
+        <div class="lbl">Studio in collaboration</div>
+        <p>Architettura Riva Foschi &mdash; structural envelope co-designed with the Solar REX integration atelier over eleven months.</p>
+      </div>
+      <div></div>
+      <div class="right box-card">
+        <div class="lbl">Casa Aurelia — Maggiore</div>
+        <p>Three south-facing roof planes resolved as a single, continuous glass surface &mdash; indistinguishable from slate at fifteen metres.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                          ENGINEERING                              │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<section id="engineering" class="engineering">
+  <div class="engineering-head">
+    <h2>The <em>engineering</em></h2>
+    <div class="meta">
+      Five components<br>One quiet system
+    </div>
+  </div>
+
+  <div class="engineering-track">
+
+    <div class="eng-intro">
+      <div class="eyebrow-italic">An ecosystem, not a product.</div>
+      <p class="body-text">
+        Five proprietary modules, designed in one studio, assembled by one hand. Each part is engineered to fall silent into the architecture &mdash; visible only as performance.
+      </p>
+    </div>
+
+    <article class="eng-card" data-cursor="hover" data-pid="aureo-i">
+      <div class="eng-img"><img data-liquid crossorigin="anonymous" src="https://images.unsplash.com/photo-1509391366360-2e959784a276?w=1200&q=85&auto=format&fit=crop" alt="Monocrystalline solar cell array" loading="lazy"><div class="liquid-cursor"></div></div>
+      <div class="eng-img-sheen"></div>
+      <div class="eng-tag">
+        <span class="lbl">Aureo I · Cell</span>
+        <span class="price"><span class="from">From</span><span class="amount">€ 1,840</span></span>
+      </div>
+      <div class="eng-body">
+        <div class="num">01 — Capture</div>
+        <h3 class="ttl">Monocrystalline glass cell</h3>
+        <p class="desc">N-type TOPCon cells laminated under hand-poured low-iron glass. Antireflective, matte-finished, indistinguishable from architectural slate.</p>
+        <div class="eng-spec"><span>440 W</span><span>22.6% eff.</span><span>1.96 m²</span></div>
+        <div class="eng-buy">
+          <div class="eng-price">From <strong>€ 1.840</strong></div>
+               <button class="eng-add" type="button" data-cart-action="add" data-id="aureo-i" style="display: none !important;">Add to composition<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+      </div>
+    <span class="hover-hint">Reveal Aureo I</span></article>
+
+    <article class="eng-card" data-cursor="hover" data-pid="aureo-ii">
+      <div class="eng-img"><img data-liquid crossorigin="anonymous" src="https://images.unsplash.com/photo-1581094794329-c8112a89af12?w=1200&q=85&auto=format&fit=crop" alt="Inverter electronics close-up" loading="lazy"><div class="liquid-cursor"></div></div>
+      <div class="eng-img-sheen"></div>
+      <div class="eng-tag">
+        <span class="lbl">Aureo II · Inverter</span>
+        <span class="price"><span class="from">From</span><span class="amount">€ 6,400</span></span>
+      </div>
+      <div class="eng-body">
+        <div class="num">02 — Convert</div>
+        <h3 class="ttl">Liquid-immersed inverter</h3>
+        <p class="desc">Three-phase, oil-cooled, fanless. Lives behind a panel in the utility wall &mdash; heard by no one, ever.</p>
+        <div class="eng-spec"><span>12 kW</span><span>98.4% η</span><span>0 dB</span></div>
+        <div class="eng-buy">
+          <div class="eng-price">From <strong>€ 6.400</strong></div>
+               <button class="eng-add" type="button" data-cart-action="add" data-id="aureo-ii" style="display: none !important;">Add to composition<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+      </div>
+    <span class="hover-hint">Reveal Aureo II</span></article>
+
+    <article class="eng-card" data-cursor="hover" data-pid="aureo-iii">
+      <div class="eng-img"><img data-liquid crossorigin="anonymous" src="https://images.unsplash.com/photo-1620714223084-8fcacc6dfd8d?w=1200&q=85&auto=format&fit=crop" alt="LFP battery reservoir" loading="lazy"><div class="liquid-cursor"></div></div>
+      <div class="eng-img-sheen"></div>
+      <div class="eng-tag">
+        <span class="lbl">Aureo III · Reservoir</span>
+        <span class="price"><span class="from">From</span><span class="amount">€ 18,200</span></span>
+      </div>
+      <div class="eng-body">
+        <div class="num">03 — Store</div>
+        <h3 class="ttl">Modular LFP reservoir</h3>
+        <p class="desc">Stackable lithium-iron-phosphate cells in a matte-anodised aluminium chassis. Twenty-year cycle warranty, recyclable to 96%.</p>
+        <div class="eng-spec"><span>40 kWh</span><span>10,000 cy</span><span>96% rec.</span></div>
+        <div class="eng-buy">
+          <div class="eng-price">From <strong>€ 18.200</strong></div>
+               <button class="eng-add" type="button" data-cart-action="add" data-id="aureo-iii" style="display: none !important;">Add to composition<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+      </div>
+    <span class="hover-hint">Reveal Aureo III</span></article>
+
+    <article class="eng-card" data-cursor="hover" data-pid="aureo-iv">
+      <div class="eng-img"><img data-liquid crossorigin="anonymous" src="https://images.unsplash.com/photo-1497436072909-60f360e1d4b1?w=1200&q=85&auto=format&fit=crop" alt="Architectural rooftop integration" loading="lazy"><div class="liquid-cursor"></div></div>
+      <div class="eng-img-sheen"></div>
+      <div class="eng-tag">
+        <span class="lbl">Aureo IV · Frame</span>
+        <span class="price"><span class="from">From</span><span class="amount">€ 4,900</span></span>
+      </div>
+      <div class="eng-body">
+        <div class="num">04 — Frame</div>
+        <h3 class="ttl">Continuous flush mount</h3>
+        <p class="desc">A jointless aluminium frame designed in collaboration with our partner ateliers. The roof reads as a single, dark plane.</p>
+        <div class="eng-spec"><span>≤ 4 mm</span><span>EN 12211</span><span>40 yr</span></div>
+        <div class="eng-buy">
+          <div class="eng-price">From <strong>€ 4.900</strong></div>
+               <button class="eng-add" type="button" data-cart-action="add" data-id="aureo-iv" style="display: none !important;">Add to composition<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+      </div>
+    <span class="hover-hint">Reveal Aureo IV</span></article>
+
+    <article class="eng-card" data-cursor="hover" data-pid="aureo-v">
+      <div class="eng-img"><img data-liquid crossorigin="anonymous" src="https://images.unsplash.com/photo-1558002038-1055907df827?w=1200&q=85&auto=format&fit=crop" alt="Companion OS interface" loading="lazy"><div class="liquid-cursor"></div></div>
+      <div class="eng-img-sheen"></div>
+      <div class="eng-tag">
+        <span class="lbl">Aureo V · OS</span>
+        <span class="price"><span class="from">Included</span><span class="amount">€ —</span></span>
+      </div>
+      <div class="eng-body">
+        <div class="num">05 — Orchestrate</div>
+        <h3 class="ttl">Companion energy OS</h3>
+        <p class="desc">A whisper-quiet ambient interface that predicts, balances, and distributes house-wide energy &mdash; learning the rhythm of the building it serves.</p>
+        <div class="eng-spec"><span>On-device AI</span><span>HomeKit / Matter</span><span>Encrypted</span></div>
+        <div class="eng-buy">
+          <div class="eng-price">Included with installation</div>
+               <button class="eng-add" type="button" data-cart-action="add" data-id="aureo-v" style="display: none !important;">Add module<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M12 5v14M5 12h14"/></svg></button>
+        </div>
+      </div>
+    <span class="hover-hint">Reveal Aureo V</span></article>
+
+    <div class="eng-outro">
+      <div class="eyebrow-italic">A single ledger of light.</div>
+      <p class="body-text">Every joule captured, converted, stored and consumed is rendered as one continuous, breathable narrative inside your home.</p>
+    </div>
+
+  </div>
+</section>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                          ECOSYSTEM                                │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<section id="ecosystem" class="ecosystem">
+  <div class="eco-head">
+    <div>
+      <span class="section-label"><span class="num">06 —</span> The Ecosystem</span>
+      <h2 class="h-display" data-reveal data-split="words">One <em>living</em> circuit of light.</h2>
+    </div>
+    <p class="body-text" data-reveal style="max-width: 44ch;">
+      Sun, glass, current, cell, home, return. A closed loop of capture and consumption &mdash; orchestrated as one autonomous building. Anything the home does not need flows back to the village, quietly.
+    </p>
+  </div>
+
+  <div class="eco-diagram">
+    <svg viewBox="0 0 1200 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
+      <defs>
+        <radialGradient id="sungrad" cx="50%" cy="50%" r="50%">
+          <stop offset="0%" stop-color="#ffe6b0" stop-opacity="0.8"/>
+          <stop offset="40%" stop-color="#ffaf37" stop-opacity="0.5"/>
+          <stop offset="100%" stop-color="#ffaf37" stop-opacity="0"/>
+        </radialGradient>
+        <filter id="glow" x="-200%" y="-200%" width="500%" height="500%">
+          <feGaussianBlur stdDeviation="3" result="b"/>
+          <feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge>
+        </filter>
+      </defs>
+
+      <!-- soft sun -->
+      <circle cx="600" cy="120" r="120" fill="url(#sungrad)"/>
+      <circle cx="600" cy="120" r="34" fill="#ffe6b0" opacity="0.95"/>
+      <circle cx="600" cy="120" r="34" fill="none" stroke="#ffaf37" stroke-width="0.6" opacity="0.6">
+        <animate attributeName="r" from="34" to="60" dur="3s" repeatCount="indefinite"/>
+        <animate attributeName="opacity" from="0.6" to="0" dur="3s" repeatCount="indefinite"/>
+      </circle>
+
+      <!-- flow paths (with ids for particle motion) -->
+      <path id="flowA" class="flow-path" d="M600 160 C 600 250, 300 280, 240 360"/>
+      <path id="flowB" class="flow-path" d="M600 160 C 600 250, 900 280, 960 360"/>
+      <path id="flowC" class="flow-path" d="M280 400 C 380 460, 520 470, 600 470"/>
+      <path id="flowD" class="flow-path" d="M920 400 C 820 460, 680 470, 600 470"/>
+      <path id="flowE" class="flow-path" d="M600 510 C 600 540, 600 560, 600 580"/>
+      <path id="flowF" class="flow-path" d="M280 400 C 200 440, 120 460, 60 480" stroke-dasharray="3 5"/>
+      <path id="flowG" class="flow-path" d="M920 400 C 1000 440, 1080 460, 1140 480" stroke-dasharray="3 5"/>
+
+      <!-- node dots -->
+      <circle cx="240" cy="380" r="3" fill="#ffaf37"/>
+      <circle cx="960" cy="380" r="3" fill="#ffaf37"/>
+      <circle cx="600" cy="480" r="3" fill="#ece4d5"/>
+      <circle cx="600" cy="585" r="3" fill="#6b7a5a"/>
+
+      <!-- flowing particles -->
+      <circle r="3.5" fill="#ffe6b0" opacity="0.95" filter="url(#glow)">
+        <animateMotion dur="3.6s" repeatCount="indefinite" rotate="auto">
+          <mpath href="#flowA"/>
+        </animateMotion>
+      </circle>
+      <circle r="3" fill="#ffaf37" opacity="0.9" filter="url(#glow)">
+        <animateMotion dur="4.0s" repeatCount="indefinite" begin="0.6s">
+          <mpath href="#flowB"/>
+        </animateMotion>
+      </circle>
+      <circle r="2.5" fill="#ece4d5" opacity="0.85" filter="url(#glow)">
+        <animateMotion dur="3.2s" repeatCount="indefinite" begin="1.2s">
+          <mpath href="#flowC"/>
+        </animateMotion>
+      </circle>
+      <circle r="2.5" fill="#ece4d5" opacity="0.85" filter="url(#glow)">
+        <animateMotion dur="3.2s" repeatCount="indefinite" begin="0.4s">
+          <mpath href="#flowD"/>
+        </animateMotion>
+      </circle>
+      <circle r="2.2" fill="#6b7a5a" opacity="0.9" filter="url(#glow)">
+        <animateMotion dur="2.6s" repeatCount="indefinite" begin="0.2s">
+          <mpath href="#flowE"/>
+        </animateMotion>
+      </circle>
+      <circle r="2" fill="#ffaf37" opacity="0.7" filter="url(#glow)">
+        <animateMotion dur="4.4s" repeatCount="indefinite" begin="1s">
+          <mpath href="#flowF"/>
+        </animateMotion>
+      </circle>
+      <circle r="2" fill="#ffaf37" opacity="0.7" filter="url(#glow)">
+        <animateMotion dur="4.4s" repeatCount="indefinite" begin="2s">
+          <mpath href="#flowG"/>
+        </animateMotion>
+      </circle>
+    </svg>
+
+    <div class="flow-node" style="left: 50%; top: 20%;">
+      <div class="ring">☀</div>
+      <div class="lbl">Sun</div>
+      <div class="desc">~1361 W/m²</div>
+    </div>
+    <div class="flow-node" style="left: 20%; top: 63%;">
+      <div class="ring">▢</div>
+      <div class="lbl">Capture</div>
+      <div class="desc">Roof array</div>
+    </div>
+    <div class="flow-node" style="left: 80%; top: 63%;">
+      <div class="ring">⟁</div>
+      <div class="lbl">Reservoir</div>
+      <div class="desc">40 kWh storage</div>
+    </div>
+    <div class="flow-node" style="left: 50%; top: 80%;">
+      <div class="ring">⌂</div>
+      <div class="lbl">Home</div>
+      <div class="desc">Living circuit</div>
+    </div>
+    <div class="flow-node" style="left: 7%; top: 76%;">
+      <div class="ring" style="width: 56px; height: 56px; font-size: 18px;">↻</div>
+      <div class="lbl">Grid</div>
+    </div>
+    <div class="flow-node" style="left: 93%; top: 76%;">
+      <div class="ring" style="width: 56px; height: 56px; font-size: 18px;">∞</div>
+      <div class="lbl">Return</div>
+    </div>
+  </div>
+</section>
+
+<div class="divider-line"></div>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                          TESTIMONIAL                              │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<section class="testimonial">
+  <span class="section-label" style="justify-content: center; margin: 0 auto 60px; display: inline-flex;"><span class="num">07 —</span> Cinematic testimony</span>
+  <blockquote class="testimonial-quote" data-reveal data-split="words">
+    <span class="mark">&ldquo;</span>The roof became <em>quieter</em> than the sky above it. We forgot, after a month, that the house was generating its own weather.<span class="mark">&rdquo;</span>
+  </blockquote>
+  <div class="testimonial-attr">
+    <em>Elena Marchetti</em> — Architect, Casa Aurelia
+  </div>
+</section>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                          FUTURE / CTA                             │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<section id="future" class="future">
+  <h2 data-reveal data-split="words">A future, <em>at home.</em></h2>
+  <p data-reveal>
+    Solar REX works alongside fifty-two ateliers across Europe. Each home is built in collaboration with its architect &mdash; quietly, and only once a year per region.
+  </p>
+
+  <div class="future-meta">
+    <span>Spring intake — 12 homes</span>
+    <span>Lugano · Zürich · Como · Provence</span>
+    <span>Est. 2024</span>
+  </div>
+</section>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                              FOOTER                               │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<footer class="footer">
+  <div class="footer-grid">
+    <div class="footer-brand">
+      <span class="brand">Solar REX</span>
+      <p>Light, given form. A residential energy atelier designing for the next century of European architecture.</p>
+    </div>
+    <div class="footer-col">
+      <h4>Studio</h4>
+      <ul>
+        <li><a href="#">Philosophy</a></li>
+        <li><a href="#">Founders</a></li>
+        <li><a href="#">Atelier</a></li>
+        <li><a href="#">Press</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Engineering</h4>
+      <ul>
+        <li><a href="#">Cell array</a></li>
+        <li><a href="#">Inverter</a></li>
+        <li><a href="#">Reservoir</a></li>
+        <li><a href="#">Energy OS</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Projects</h4>
+      <ul>
+        <li><a href="#">Casa Aurelia</a></li>
+        <li><a href="#">Villa Selene</a></li>
+        <li><a href="#">Casa Lume</a></li>
+        <li><a href="#">All residences</a></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h4>Contact</h4>
+      <ul>
+        <li><a href="#">Begin a project</a></li>
+        <li><a href="#">For architects</a></li>
+        <li><a href="#">atelier@solarrex.energy</a></li>
+        <li><a href="#">+41 91 921 00 14</a></li>
+      </ul>
+    </div>
+  </div>
+
+</footer>
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                         SCRIPTS                                   │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<script src="https://unpkg.com/three@0.158.0/build/three.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/gsap.min.js"></script>
+
+
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                       CART OVERLAY                                │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                FLOATING SHARE / CONNECT FAN MENU                  │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<nav class="connect-menu" aria-label="Connect with Solar REX" style="display: none !important;">
+  <button class="connect-toggle" type="button" aria-expanded="false" aria-label="Open Solar REX channels" style="display: none !important;">
+    <span class="connect-glyph">
+      <!-- elegant share glyph -->
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+        <circle cx="18" cy="5" r="3"/>
+        <circle cx="6" cy="12" r="3"/>
+        <circle cx="18" cy="19" r="3"/>
+        <path d="M8.59 13.51l6.83 3.98M15.41 6.51l-6.82 3.98"/>
+      </svg>
+    </span>
+    <span class="connect-label">Connect</span>
+  </button>
+  <ul class="connect-fan">
+    
+    <li style="--i: 0;">
+      <a href="#" aria-label="Instagram" data-tooltip="Instagram">
+        <i class="fa-brands fa-instagram"></i>
+      </a>
+    </li>
+    <li style="--i: 1;">
+      <a href="#" aria-label="LinkedIn" data-tooltip="LinkedIn">
+        <i class="fa-brands fa-linkedin-in"></i>
+      </a>
+    </li>
+    <li style="--i: 2;">
+      <a href="#" aria-label="X" data-tooltip="X">
+        <i class="fa-brands fa-x-twitter"></i>
+      </a>
+    </li>
+    <li style="--i: 3;">
+      <a href="#" aria-label="YouTube" data-tooltip="YouTube">
+        <i class="fa-brands fa-youtube"></i>
+      </a>
+    </li>
+    <li style="--i: 4;">
+      <a href="#" aria-label="Pinterest" data-tooltip="Pinterest">
+        <i class="fa-brands fa-pinterest-p"></i>
+      </a>
+    </li>
+    <li style="--i: 5;">
+      <a href="#" aria-label="Behance" data-tooltip="Behance">
+        <i class="fa-brands fa-behance"></i>
+      </a>
+    </li>
+    <li style="--i: 6;">
+      <a href="mailto:atelier@solarrex.energy" aria-label="Email" data-tooltip="Email">
+        <i class="fa-regular fa-envelope"></i>
+      </a>
+    </li>
+  </ul>
+</nav>
+
+<aside id="cartOverlay" class="cart-overlay" role="dialog" aria-modal="true" aria-labelledby="cartHeadline">
+  <div class="cart-backdrop" data-cart-action="close" aria-hidden="true"></div>
+
+  <div class="cart-stage" data-lenis-prevent>
+
+    <!-- top bar -->
+    <header class="cart-topbar">
+      <div class="cart-brand">Solar REX &nbsp;·&nbsp; Energy Composition</div>
+      <button class="cart-close" type="button" data-cart-action="close" aria-label="Close cart" style="display: none !important;">
+        <span>Close</span>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M6 6l12 12M18 6L6 18"/></svg>
+      </button>
+    </header>
+
+    <!-- headline -->
+    <section class="cart-headline">
+      <span class="section-label"><span class="num">VIII —</span> Your Energy Composition</span>
+      <h2 class="h-display">Your <em>composition</em>.</h2>
+      <p class="eyebrow-italic"><span class="count">0</span> items selected — refined with the Solar REX atelier.</p>
+    </section>
+
+    <!-- main grid: list + summary -->
+    <section class="cart-grid">
+
+      <div class="cart-list-wrap">
+        <header class="cart-list-head">
+          <span>Module</span>
+          <span>Quantity</span>
+          <span>Investment</span>
+        </header>
+        <div class="cart-list" aria-live="polite"></div>
+      </div>
+
+      <aside class="cart-summary" aria-label="Composition summary">
+        <div class="cart-summary-inner">
+          <h3 class="cart-summary-title">Composition summary</h3>
+
+          <dl class="cart-summary-rows">
+            <div class="row"><dt>Modules subtotal</dt><dd data-sum="subtotal">€ 0</dd></div>
+            <div class="row"><dt>Architectural installation</dt><dd data-sum="installation">—</dd></div>
+            <div class="row"><dt>Private consultation</dt><dd data-sum="consultation">—</dd></div>
+            <div class="row hint"><dt>Annual output (est.)</dt><dd data-sum="output">—</dd></div>
+          </dl>
+
+          <div class="cart-summary-total">
+            <span class="lbl">Total investment</span>
+            <span class="val" data-sum="total">€ 0</span>
+          </div>
+
+          <button class="btn-cart-cta" type="button" data-cart-action="checkout" data-magnetic="0.18" style="display: none !important;">
+            Proceed to consultation
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </button>
+          <button class="btn-cart-ghost" type="button" data-cart-action="close" style="display: none !important;">Continue exploring</button>
+
+          <p class="cart-summary-note">
+            All compositions are reviewed by a Solar REX architect before final pricing.
+            Figures shown are pre-consultation estimates, inclusive of European VAT.
+          </p>
+        </div>
+      </aside>
+
+    </section>
+
+    <!-- consultation section -->
+    <section class="cart-consult">
+      <div class="cart-consult-head">
+        <span class="section-label"><span class="num">IX —</span> Speak with a Solar Architect</span>
+        <h2 class="h-display">Every installation begins as a <em>conversation</em>.</h2>
+        <p class="eyebrow-italic">
+          Every Solar REX installation begins with a private architectural energy consultation —
+          a forty-eight-hour study of your residence, its orientation, and its rhythm.
+        </p>
+      </div>
+
+      <div class="cart-consult-grid">
+
+        <form class="cart-consult-form" novalidate>
+          <div class="field">
+            <label for="cf-name">Your name</label>
+            <input type="text" id="cf-name" name="name" autocomplete="name" placeholder="—" required>
+          </div>
+          <div class="field">
+            <label for="cf-email">Email</label>
+            <input type="email" id="cf-email" name="email" autocomplete="email" placeholder="—" required>
+          </div>
+          <div class="field">
+            <label for="cf-address">Residence address</label>
+            <input type="text" id="cf-address" name="address" autocomplete="street-address" placeholder="—">
+          </div>
+          <div class="field">
+            <label for="cf-architect">Working with an architect?</label>
+            <select id="cf-architect" name="architect">
+              <option value="">Select…</option>
+              <option>Yes — appointed</option>
+              <option>Yes — choosing one</option>
+              <option>No — I'd like a recommendation</option>
+            </select>
+          </div>
+          <div class="field span-2">
+            <label for="cf-notes">Project notes</label>
+            <textarea id="cf-notes" name="notes" rows="3" placeholder="Tell us about your residence, timeline, and energy ambitions."></textarea>
+          </div>
+          <div class="field span-2 actions">
+            <div class="cart-consult-confirm" role="status"></div>
+            <button class="btn-cart-cta" type="submit" data-magnetic="0.18" style="display: none !important;">
+              Request tailored proposal
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </button>
+          </div>
+        </form>
+
+        <aside class="cart-consult-aside">
+          <div class="contact-block">
+            <div class="lbl">Atelier · Lugano</div>
+            <p>Via Nassa 17<br>6900 Lugano, Switzerland</p>
+          </div>
+          <div class="contact-block">
+            <div class="lbl">Direct line</div>
+            <p>+41 91 921 00 14<br>Tuesday — Saturday, 09:00 — 18:00 CET</p>
+          </div>
+          <div class="contact-block">
+            <div class="lbl">Correspondence</div>
+            <p>atelier@solarrex.energy</p>
+          </div>
+          <div class="contact-block">
+            <div class="lbl">Next intake</div>
+            <p>Spring 2026 — 12 European homes<br>Provisional shortlist closes 15 April.</p>
+          </div>
+        </aside>
+      </div>
+
+      <div class="cart-cta-row">
+        <button class="btn-cta-tile" type="button" data-magnetic="0.15" style="display: none !important;">
+          <span class="num">i</span>
+          <span class="ttl">Speak with a Solar Architect</span>
+          <span class="arr">→</span>
+        </button>
+        <button class="btn-cta-tile" type="button" data-magnetic="0.15" style="display: none !important;">
+          <span class="num">ii</span>
+          <span class="ttl">Book Installation Consultation</span>
+          <span class="arr">→</span>
+        </button>
+        <button class="btn-cta-tile" type="button" data-magnetic="0.15" style="display: none !important;">
+          <span class="num">iii</span>
+          <span class="ttl">Request Tailored Proposal</span>
+          <span class="arr">→</span>
+        </button>
+      </div>
+
+    </section>
+
+    <footer class="cart-footer">
+      <span>Solar REX · Atelier release 06.04</span>
+      <span class="mono">— Designed in Lugano. Engineered for the sun. —</span>
+      <span>Press <kbd>ESC</kbd> to close</span>
+    </footer>
+
+  </div>
+</aside>
+
+
+<!-- ╭───────────────────────────────────────────────────────────────────╮
+     │                ORDER / CONSULTATION SUCCESS                       │
+     ╰───────────────────────────────────────────────────────────────────╯ -->
+<div id="orderSuccess" class="success-overlay" role="dialog" aria-modal="true" aria-hidden="true" aria-labelledby="successHeadline">
+  <div class="success-backdrop" data-success-action="close"></div>
+  <div class="success-grain" aria-hidden="true"></div>
+
+  <div class="success-stage">
+
+    <div class="success-eyebrow">
+      <span class="dot"></span>
+      <span>Confirmation — Chapter X</span>
+    </div>
+
+    <h2 id="successHeadline" class="success-headline">
+      Consultation <em>reserved.</em>
+    </h2>
+
+    <!-- Re-skinned "delivery" button, expanded to act as the cinematic widget -->
+    <button class="order" type="button" aria-label="Order confirmation animation" style="display: none !important;">
+      <span class="default">Composing your dossier</span>
+      <span class="success">Solar REX concierge notified
+        <svg viewBox="0 0 12 10"><polyline points="1.5 6 4.5 9 10.5 1"></polyline></svg>
+      </span>
+      <div class="box"></div>
+      <div class="truck">
+        <div class="back"></div>
+        <div class="front"><div class="window"></div></div>
+        <div class="light top"></div>
+        <div class="light bottom"></div>
+      </div>
+      <div class="lines"></div>
+    </button>
+
+    <p class="success-sub">
+      Your composition has been dispatched to the Solar REX atelier. A solar
+      architect will write within forty-eight hours to schedule a private
+      consultation at your residence.
+    </p>
+
+    <dl class="success-receipt">
+      <div><dt>Reference</dt><dd class="mono" data-success="ref">SLN-—————</dd></div>
+      <div><dt>Atelier</dt><dd>Lugano · Studio Solar REX</dd></div>
+      <div><dt>Window</dt><dd>48 hours · CET</dd></div>
+      <div><dt>Sent to</dt><dd class="mono" data-success="email">—</dd></div>
+    </dl>
+
+    <div class="success-actions">
+      <button type="button" class="btn-cart-ghost" data-success-action="close" style="display: none !important;">Return to atelier</button>
+      <button type="button" class="btn-cart-cta" data-success-action="continue" style="display: none !important;">
+        Continue composing
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </button>
+    </div>
+
+
+
+  </div>
+</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/gsap/3.12.5/ScrollTrigger.min.js"></script>
+<script src="https://unpkg.com/@studio-freight/lenis@1.0.42/dist/lenis.min.js"></script>
+<script type="module" src="atmosphere.js"></script>
+<script type="module" src="liquid-image.js"></script>
+<script type="module" src="motion.js"></script>
+<script type="module" src="cart.js"></script>
+<script>
+  // Mobile / tablet nav drawer
+  (function () {
+    const burger = document.querySelector('.nav-burger');
+    const drawer = document.getElementById('mobileNav');
+    if (!burger || !drawer) return;
+    const open = () => {
+      drawer.classList.add('is-open');
+      drawer.setAttribute('aria-hidden', 'false');
+      burger.setAttribute('aria-expanded', 'true');
+      document.documentElement.style.overflow = 'hidden';
+    };
+    const close = () => {
+      drawer.classList.remove('is-open');
+      drawer.setAttribute('aria-hidden', 'true');
+      burger.setAttribute('aria-expanded', 'false');
+      document.documentElement.style.overflow = '';
+    };
+    burger.addEventListener('click', () => {
+      drawer.classList.contains('is-open') ? close() : open();
+    });
+    drawer.querySelectorAll('[data-mnav-close]').forEach(el => el.addEventListener('click', close));
+    document.addEventListener('keydown', (e) => { if (e.key === 'Escape') close(); });
+  })();
+</script>
+</body>
+</html>

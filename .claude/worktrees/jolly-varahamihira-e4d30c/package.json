@@ -1,0 +1,19 @@
+{
+    "name":  "sticker",
+    "version":  "1.0.0",
+    "description":  "",
+    "main":  "index.js",
+    "scripts":  {
+                    "dev":  "serve ."
+                },
+    "keywords":  [
+
+                 ],
+    "author":  "",
+    "license":  "ISC",
+    "type":  "commonjs",
+    "devDependencies":  {
+                            "serve":  "^14.2.6",
+                            "vite":  "^8.0.14"
+                        }
+}

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Dashboard | STICK IT UP</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <style>
+    :root { --primary: #000; --accent: #facc15; --bg: #f4f4f7; }
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; }
+    .sidebar { width: 260px; height: 100vh; background: var(--primary); color: white; position: fixed; padding: 20px; }
+    .main-content { margin-left: 300px; padding: 40px; }
+    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
+    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
+    .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    .filters { background: white; padding: 20px; border-radius: 12px; display: flex; gap: 15px; align-items: center; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    .filters input, .filters select { padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
+    .search-input { flex-grow: 1; }
+    table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
+    th { background: #f8f9fa; padding: 15px; text-align: left; font-size: 13px; font-weight: 700; color: #666; text-transform: uppercase; }
+    td { padding: 15px; border-top: 1px solid #eee; font-size: 14px; vertical-align: middle; }
+    .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
+    .status-pending { background: #fff8e1; color: #ffa000; }
+    .status-confirmed { background: #e3f2fd; color: #1976d2; }
+    .status-shipped { background: #f3e5f5; color: #7b1fa2; }
+    .status-delivered { background: #e8f5e9; color: #388e3c; }
+    .status-cancelled { background: #ffebee; color: #d32f2f; }
+    .action-btn { border: none; background: #f0f0f0; padding: 8px; border-radius: 6px; cursor: pointer; margin-right: 5px; }
+    #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
+  </style>
+</head>
+<body>
+  <div class="sidebar">
+    <h1 style="color: var(--accent); font-style: italic;">STICK IT UP Admin</h1>
+    <div style="margin-top: 40px;">
+      <a href="#" style="color: white; text-decoration: none; display: block; margin-bottom: 20px;"><i class="fas fa-shopping-cart"></i> Orders</a>
+    </div>
+  </div>
+  <div class="main-content">
+    <div class="header"><h2>Order Management</h2><button onclick="loadOrders()" class="action-btn">Refresh</button></div>
+    <div class="filters">
+      <input type="text" id="search-input" class="search-input" placeholder="Search by Phone or Order ID...">
+    </div>
+    <table>
+      <thead><tr><th>Details</th><th>Customer</th><th>Product</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
+      <tbody id="order-table-body"></tbody>
+    </table>
+  </div>
+  <script src="admin.js"></script>
+</body>
+</html>

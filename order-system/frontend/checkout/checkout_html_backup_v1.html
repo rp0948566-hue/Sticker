@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Checkout | STICK IT UP</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  <link rel="stylesheet" href="../../src/style.css">
+  <style>
+    body { background-color: #f7f7f7; font-family: 'Outfit', sans-serif; }
+    .checkout-container { max-width: 600px; margin: 40px auto; padding: 20px; }
+    .checkout-card { background: white; padding: 30px; border-radius: 20px; box-shadow: 0 10px 30px rgba(0,0,0,0.05); }
+    .checkout-title { font-size: 28px; font-weight: 800; margin-bottom: 25px; text-align: center; }
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 14px; font-weight: 700; margin-bottom: 8px; color: #333; }
+    .form-group input, .form-group textarea, .form-group select {
+      width: 100%; padding: 12px 15px; border: 1px solid #ddd; border-radius: 10px; font-family: inherit; font-size: 15px; box-sizing: border-box;
+    }
+    .form-group input:focus { outline: none; border-color: #000; }
+    .row { display: flex; gap: 15px; }
+    .row .form-group { flex: 1; }
+    .order-summary { background: #f9f9f9; padding: 20px; border-radius: 15px; margin-bottom: 25px; border: 1px dashed #ccc; }
+    .summary-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-weight: 600; }
+    .summary-total { border-top: 1px solid #ddd; padding-top: 10px; font-size: 18px; font-weight: 800; }
+    .place-order-btn {
+      width: 100%; padding: 16px; background: #000; color: #fff; border: none; border-radius: 12px; font-size: 16px; font-weight: 700; cursor: pointer; transition: transform 0.2s;
+    }
+    .place-order-btn:disabled { background: #666; cursor: not-allowed; }
+    .place-order-btn:hover:not(:disabled) { transform: translateY(-2px); }
+    
+    /* Loading Spinner */
+    .spinner { display: none; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; margin-left: 10px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .place-order-btn.loading .spinner { display: inline-block; }
+    .place-order-btn.loading span { display: none; }
+
+    /* Messages */
+    .message { padding: 15px; border-radius: 10px; margin-bottom: 20px; display: none; font-weight: 600; text-align: center; }
+    .message.success { background: #e6fffa; color: #2c7a7b; border: 1px solid #b2f5ea; display: block; }
+    .message.error { background: #fff5f5; color: #c53030; border: 1px solid #feb2b2; display: block; }
+
+    @media (max-width: 480px) {
+      .checkout-container { margin: 10px; padding: 10px; }
+      .row { flex-direction: column; gap: 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="checkout-container">
+    <div class="checkout-card">
+      <h1 class="checkout-title">Checkout</h1>
+      
+      <div id="message" class="message"></div>
+
+      <div class="order-summary" id="order-summary">
+        <div class="summary-item">
+          <span>Product:</span>
+          <span id="summary-product">Loading...</span>
+        </div>
+        <div class="summary-item">
+          <span>Quantity:</span>
+          <span id="summary-qty">0</span>
+        </div>
+        <div class="summary-item summary-total">
+          <span>Total:</span>
+          <span id="summary-total">Rs. 0.00</span>
+        </div>
+      </div>
+
+      <form id="checkout-form">
+        <div class="form-group">
+          <label for="fullName">Full Name *</label>
+          <input type="text" id="fullName" required placeholder="John Doe">
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="phone">Phone Number *</label>
+            <input type="tel" id="phone" required placeholder="10-digit mobile number" pattern="[6-9][0-9]{9}">
+          </div>
+          <div class="form-group">
+            <label for="email">Email Address *</label>
+            <input type="email" id="email" required placeholder="john@example.com">
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label for="address">Full Address *</label>
+          <textarea id="address" rows="3" required placeholder="House No, Street, Landmark"></textarea>
+        </div>
+
+        <div class="row">
+          <div class="form-group">
+            <label for="city">City *</label>
+            <input type="text" id="city" required>
+          </div>
+          <div class="form-group">
+            <label for="state">State *</label>
+            <input type="text" id="state" required>
+          </div>
+          <div class="form-group">
+            <label for="pincode">Pincode *</label>
+            <input type="text" id="pincode" required pattern="\d{6}" maxlength="6">
+          </div>
+        </div>
+        
+        <!-- Honeypot -->
+        <div style="display:none;" aria-hidden="true">
+          <input type="text" id="_form_security_check" name="_form_security_check" tabindex="-1" autocomplete="off">
+        </div>
+
+        <div class="form-group">
+          <label>Payment Method</label>
+          <input type="text" value="Cash on Delivery (COD)" disabled>
+        </div>
+
+        <button type="submit" class="place-order-btn" id="submit-btn">
+          <span>Place Order (COD)</span>
+          <div class="spinner"></div>
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script src="checkout.js"></script>
+</body>
+</html>
