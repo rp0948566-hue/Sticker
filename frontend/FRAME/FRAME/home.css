@@ -1927,7 +1927,7 @@ main {
   aspect-ratio: 1 / 1;
   background-color: #FFFAFA; /* Same snow white as page background */
   border-radius: 12px;
-  margin-bottom: 20px;
+  margin-bottom: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -2081,7 +2081,7 @@ main {
 .product-info {
   display: flex;
   flex-direction: column;
-  gap: 8px;
+  gap: 5px;
 }
 
 .product-title {
@@ -2333,7 +2333,7 @@ main {
   }
 
   .product-image-container {
-    margin-bottom: 10px !important;
+    margin-bottom: 6px !important;
     border-radius: 8px !important;
     background-color: #FFFAFA !important; /* Snow White background matching website theme default */
     border: 1px solid rgba(0,0,0,0.03) !important;
@@ -2355,6 +2355,10 @@ main {
     border: none !important;
     box-shadow: none !important;
     mix-blend-mode: multiply !important;
+  }
+
+  .product-info {
+    gap: 4px !important;
   }
 
   .product-title {
