@@ -1072,6 +1072,50 @@ main {
   cursor: pointer;
 }
 
+.top-banner-container {
+  width: 100vw; /* Force it to take the full viewport width */
+  position: relative;
+  left: 50%;
+  right: 50%;
+  margin-left: -50vw;
+  margin-right: -50vw;
+  overflow: hidden;
+  background-color: #000;
+  display: block;
+}
+.top-banner-container picture {
+  width: 100%;
+  display: block;
+  position: relative;
+  padding-top: 11.51%; /* Crop to content height ratio (250px/2172px) */
+  overflow: hidden;
+}
+.top-banner-img {
+  position: absolute;
+  top: -90%; /* Center vertical content range 225-475 (225/250) */
+  left: 0;
+  width: 100%;
+  height: 289.6%; /* Scale relative to visible crop height (724/250) */
+  display: block;
+  object-fit: fill;
+}
+
+@media (max-width: 768px) {
+  .top-banner-container {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
+    left: 0;
+  }
+  .top-banner-container picture {
+    padding-top: 21.03%; /* Crop to mobile content height ratio (375px/1783px) */
+  }
+  .top-banner-img {
+    height: 235.2%; /* Scale relative to visible crop height (882/375) */
+    top: -65.33%; /* Center vertical content range 245-620 (245/375) */
+  }
+}
+
 .features-bar:hover .features-track {
   animation-play-state: paused;
 }
