@@ -29,3 +29,17 @@ dist-ssr
 
 # Claude dev files
 .claude/
+
+# Large image folders (served locally / via LFS separately)
+# whatsapp catalogue/ — tracked via Git LFS, pushed separately
+
+# Auto-generated analysis files
+ANALYSIS_SUMMARY.md
+INTEGRATION_RECOMMENDATIONS.md
+PRODUCT_ANALYSIS.md
+PRODUCT_PROPERTIES_GUIDE.md
+products-catalog.json
+products_analysis.json
+
+# Executables
+IMAGE/phone/SteamSetup.exe
