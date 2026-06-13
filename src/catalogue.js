@@ -59,43 +59,10 @@ function detectPage() {
 }
 
 function getProductsForPage(catalogue, pageCode) {
-  if (pageCode === 'HOME') {
-    // Round-robin across categories — strictly deduplicated
-    const byCode = {};
-    catalogue.forEach(r => {
-      const cc = r[0];
-      if (!byCode[cc]) byCode[cc] = [];
-      byCode[cc].push(r);
-    });
-    const keys = Object.keys(byCode);
-    const seen = new Set();
-    const result = [];
-    let round = 0;
-    while (result.length < 150) {
-      let added = 0;
-      for (const key of keys) {
-        const item = byCode[key][round];
-        if (item) {
-          const uid = item[0] + '|' + item[2];
-          if (!seen.has(uid)) { seen.add(uid); result.push(item); added++; }
-        }
-        if (result.length >= 150) break;
-      }
-      if (added === 0) break;
-      round++;
-    }
-    return result;
-  }
-  if (pageCode === 'MYSTERY') {
-    const seen = new Set();
-    const result = [];
-    for (let i = 3; i < catalogue.length && result.length < 180; i += 7) {
-      const uid = catalogue[i][0] + '|' + catalogue[i][2];
-      if (!seen.has(uid)) { seen.add(uid); result.push(catalogue[i]); }
-    }
-    return result;
-  }
-  return catalogue.filter(r => r[1] === pageCode);
+  // CARD SKINS page shows ALL catalogue products
+  if (pageCode === 'C') return catalogue;
+  // All other pages: no products
+  return [];
 }
 
 // Descriptive name prefixes per category code
