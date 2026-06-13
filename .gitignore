@@ -22,3 +22,10 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Env — keep production, ignore local secrets
+.env.local
+.env.*.local
+
+# Claude dev files
+.claude/

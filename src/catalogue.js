@@ -118,10 +118,12 @@ function getProductName(cc, filename, catNames) {
 
 function revCount(idx) { return 12 + ((idx * 41 + 17) % 238); }
 
+const IMG_BASE = (import.meta.env?.VITE_IMAGE_BASE_URL ?? '/whatsapp catalogue').replace(/\/$/, '');
+
 function createCard(record, idx, catFolders, catNames) {
   const [cc,, filename] = record;
   const folder = catFolders[cc] || '';
-  const imgSrc = encodeURI(`/whatsapp catalogue/${folder}/${filename}`);
+  const imgSrc = encodeURI(`${IMG_BASE}/${folder}/${filename}`);
   const name = getProductName(cc, filename, catNames);
   const card = document.createElement('div');
   card.className = 'product-card';
