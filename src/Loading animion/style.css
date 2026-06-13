@@ -2,23 +2,26 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 60px 0;
+  padding: 40px 0;
   width: 100%;
-  transform: translateX(-15px);
+  contain: layout style paint;
 }
 
 .tetrominos {
   position: relative;
   width: 96px;
   height: 112px;
+  contain: layout style paint;
 }
 
 .tetromino {
   width: 96px;
   height: 112px;
   position: absolute;
-  transition: all ease .3s;
   background: url('data:image/svg+xml;base64,PHN2ZyB4bWxucz0naHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmcnIHZpZXdCb3g9JzAgMCA2MTIgNjg0Jz48cGF0aCBmaWxsPScjMDEwMTAxJyBkPSdNMzA1LjcgMEwwIDE3MC45djM0Mi4zTDMwNS43IDY4NCA2MTIgNTEzLjJWMTcwLjlMMzA1LjcgMHonLz48cGF0aCBmaWxsPScjZmZmJyBkPSdNMzA1LjcgODAuMWwtMjMzLjYgMTMxIDIzMy42IDEzMSAyMzQuMi0xMzEtMjM0LjItMTMxJy8+PC9zdmc+') no-repeat top center;
+  will-change: transform;
+  backface-visibility: hidden;
+  -webkit-font-smoothing: antialiased;
 }
 
 .box1 {

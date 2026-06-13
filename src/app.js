@@ -2,6 +2,12 @@ import './home.css';
 import './loader.css';
 import './loader.js';
 import { initLazyLoad } from './lazy-load.js';
+import { initProductGrid } from './catalogue.js';
+import { initSearch } from './search.js';
+
+// Always start every page at the top
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual';
+window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
 
 // Configuration
 const CONFIG = {
@@ -219,7 +225,8 @@ document.addEventListener('click', (e) => {
       const currentPrice = card.querySelector('.price-current').textContent;
       const oldPrice = card.querySelector('.price-old')?.textContent || "";
       const saveBadge = card.querySelector('.save-badge')?.textContent || "";
-      const img = card.querySelector('.placeholder-image img')?.src || CONFIG.CART_IMAGE_DEFAULT;
+      const imgEl = card.querySelector('.placeholder-image img') || card.querySelector('img.placeholder-image');
+      const img = imgEl?.src || CONFIG.CART_IMAGE_DEFAULT;
       
       if (qvModal) {
         qvModal.querySelector('.qv-title').textContent = title;
@@ -249,7 +256,8 @@ document.addEventListener('click', (e) => {
     const title = card.querySelector('.product-title').textContent.trim();
     const priceText = card.querySelector('.price-current').textContent.trim();
     const price = parseFloat(priceText.replace('Rs. ', '').trim());
-    const image = card.querySelector('.placeholder-image img')?.src || CONFIG.CART_IMAGE_DEFAULT;
+    const cartImgEl = card.querySelector('.placeholder-image img') || card.querySelector('img.placeholder-image');
+    const image = cartImgEl?.src || CONFIG.CART_IMAGE_DEFAULT;
     const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(title);
 
     const existingItem = cart.find(item => item.title === title);
@@ -298,6 +306,8 @@ function handleDeepLink() {
   }
 }
 
+initProductGrid();
 initLazyLoad();
 updateCartUI();
 handleDeepLink();
+initSearch();

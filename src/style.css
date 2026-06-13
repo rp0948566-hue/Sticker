@@ -3538,3 +3538,274 @@ button:not(.qty-arrow-btn):not(.recom-arrow):not(.cart-close):not(.remove-btn):n
 .add-to-cart-btn:hover, .buy-now-btn:hover, .continue-shopping-btn-new:hover, .qv-add-to-cart-btn:hover, .recom-add-btn:hover, .view-all-btn:hover { color: #000000 !important; border-color: #facc15 !important; }
 
 .add-to-cart-btn:hover::after, .buy-now-btn:hover::after, .continue-shopping-btn-new:hover::after, .qv-add-to-cart-btn:hover::after, .recom-add-btn:hover::after, .view-all-btn:hover::after { top: -350px; transform: translateX(-50%) rotate(180deg); }
+
+/* Catalogue product images inside placeholder-image wrapper */
+.placeholder-image img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  display: block;
+  padding: 8px;
+  box-sizing: border-box;
+}
+
+/* ── GLOBAL BUG FIXES ───────────────────────────────────────────────────── */
+
+/* 1. Prevent images from being selected/highlighted on Ctrl+A or drag */
+img {
+  user-select: none;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  -webkit-user-drag: none;
+  -khtml-user-drag: none;
+}
+
+/* 2. Prevent product card content from being highlighted on Ctrl+A */
+.product-card,
+.products-grid,
+#products-carousel {
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+/* 3. Load-more animation hidden by CSS default (JS shows/hides inline) */
+#grid-load-anim {
+  display: none;
+}
+
+/* 4. Remove tap highlight flash on mobile for interactive elements */
+* {
+  -webkit-tap-highlight-color: transparent;
+}
+
+/* 5. Prevent text cursor appearing when clicking on product cards */
+.product-card {
+  cursor: default;
+}
+.product-card .add-to-cart-btn {
+  cursor: pointer;
+}
+.product-card .quick-view {
+  cursor: pointer;
+}
+
+/* 6. Filter dropdown responsive fix — prevent overflow on small screens */
+@media (max-width: 900px) {
+  .filter-dropdown {
+    width: 240px;
+  }
+}
+
+@media (max-width: 768px) {
+  .filters-section {
+    padding: 16px 20px;
+    gap: 12px;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+    flex-wrap: nowrap;
+  }
+  .filters-section::-webkit-scrollbar { display: none; }
+  .filters-left { flex-wrap: nowrap; }
+
+  /* Last 2 filter pills: open dropdown to the right edge */
+  .filter-wrapper:nth-last-child(-n+2) .filter-dropdown {
+    left: auto;
+    right: 0;
+    transform-origin: top right;
+  }
+  .filter-wrapper.active:nth-last-child(-n+2) .filter-dropdown {
+    transform: translateY(0) scale(1);
+  }
+
+  .filter-dropdown {
+    width: 220px;
+    max-height: 60vh;
+    overflow-y: auto;
+  }
+}
+
+@media (max-width: 480px) {
+  .filter-dropdown {
+    position: fixed;
+    left: 10px !important;
+    right: 10px !important;
+    width: auto !important;
+    top: auto;
+    bottom: 10px;
+    transform: translateY(20px) scale(0.97) !important;
+    transform-origin: bottom center !important;
+    max-height: 55vh;
+    overflow-y: auto;
+    z-index: 9999;
+  }
+  .filter-wrapper.active .filter-dropdown {
+    transform: translateY(0) scale(1) !important;
+  }
+}
+
+/* 7. Sentinel and grid-load-anim layout stability */
+#grid-sentinel {
+  height: 1px;
+  width: 100%;
+  display: block;
+}
+
+/* 8. Product card image — prevent accidental context menu on long-press (mobile) */
+.placeholder-image img,
+.product-card img {
+  -webkit-touch-callout: none;
+  pointer-events: none;
+}
+
+/* 9. Re-enable pointer events on containers so click/hover still works */
+.placeholder-image,
+.product-image-container,
+.quick-view,
+.add-to-cart-btn {
+  pointer-events: auto;
+}
+
+/* ── NAVBAR ALWAYS ABOVE MODALS & OVERLAYS ──────────────────────────────── */
+.navbar {
+  z-index: 2100 !important;
+}
+
+/* ── MOBILE NAV — FORCE BLACK ICONS (override any white-on-white rules) ─── */
+@media (max-width: 768px) {
+  .nav-mobile-menu i,
+  .mobile-menu-btn i,
+  .search-btn,
+  .nav-icons-group i,
+  .cart-wrapper i {
+    color: #000000 !important;
+  }
+}
+
+/* ── LIVE SEARCH PANEL ───────────────────────────────────────────────────── */
+#site-search-panel {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  z-index: 2050;
+  background: #fff;
+  border-bottom: 1px solid rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(-8px);
+  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.25,0.8,0.25,1);
+  max-height: calc(100vh - 65px);
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+#site-search-panel.active {
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
+}
+.sp-inner {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 40px;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+  background: #fff;
+  flex-shrink: 0;
+}
+.sp-icon {
+  color: #888;
+  font-size: 1rem;
+  flex-shrink: 0;
+}
+#sp-input {
+  flex: 1;
+  border: none;
+  outline: none;
+  font-size: 1rem;
+  font-family: 'Outfit', sans-serif;
+  font-weight: 500;
+  color: #000;
+  background: transparent;
+  min-width: 0;
+}
+#sp-input::placeholder { color: #bbb; }
+#sp-input::-webkit-search-cancel-button { display: none; }
+#sp-close {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: #888;
+  font-size: 1.1rem;
+  padding: 6px 8px;
+  border-radius: 6px;
+  transition: background 0.2s, color 0.2s;
+  flex-shrink: 0;
+  line-height: 1;
+}
+#sp-close:hover { background: #f5f5f5; color: #000; }
+.sp-results {
+  overflow-y: auto;
+  flex: 1;
+  padding: 0;
+}
+.sp-results:not(:empty) { padding: 8px 24px 16px; }
+.sp-result {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 10px 12px;
+  border-radius: 10px;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.sp-result:hover { background: #f5f5f5; }
+.sp-result img {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  border-radius: 8px;
+  background: #f9f9f9;
+  flex-shrink: 0;
+  pointer-events: none;
+}
+.sp-result-info {
+  flex: 1;
+  min-width: 0;
+}
+.sp-result-name {
+  display: block;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: #000;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.sp-result-price {
+  display: block;
+  font-size: 0.82rem;
+  color: #e63946;
+  font-weight: 700;
+  margin-top: 2px;
+}
+.sp-arrow {
+  color: #ccc;
+  font-size: 0.72rem;
+  flex-shrink: 0;
+}
+.sp-empty {
+  padding: 20px 12px;
+  text-align: center;
+  color: #999;
+  font-size: 0.9rem;
+  margin: 0;
+}
+@media (max-width: 768px) {
+  .sp-inner { padding: 12px 16px; }
+  .sp-results:not(:empty) { padding: 6px 8px 12px; }
+  .sp-result { padding: 8px 10px; }
+  .sp-result img { width: 44px; height: 44px; }
+}
