@@ -1,5 +1,3 @@
-const IMG_BASE = (import.meta.env?.VITE_IMAGE_BASE_URL ?? '/whatsapp catalogue').replace(/\/$/, '');
-
 const NAME_PREFIXES = {
   MOV: 'Movie Poster', ANM: 'Anime Art', CAR: 'Car Design', SPO: 'Sports Art',
   MAR: 'Marvel Design', AST: 'Aesthetic Art', QOU: 'Motivational Quote',
@@ -118,7 +116,7 @@ export function initSearch() {
       const frag = document.createDocumentFragment();
       hits.forEach(({ r, name }) => {
         const [cc,, fn] = r;
-        const src = encodeURI(`${IMG_BASE}/${CF[cc] || ''}/${fn}`);
+        const src = encodeURI(`/whatsapp catalogue/${CF[cc] || ''}/${fn}`);
         const div = document.createElement('div');
         div.className = 'sp-result';
         div.setAttribute('role', 'option');
