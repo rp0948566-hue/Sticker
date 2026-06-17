@@ -164,6 +164,13 @@ if (cartClose) cartClose.addEventListener('click', closeCart);
 if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 if (qvClose) qvClose.addEventListener('click', closeQuickView);
 if (qvOverlay) qvOverlay.addEventListener('click', closeQuickView);
+if (qvModal) {
+  qvModal.addEventListener('click', (e) => {
+    if (e.target === qvModal) {
+      closeQuickView();
+    }
+  });
+}
 
 // Handle Checkout Button
 const checkoutBtn = document.getElementById('checkout-btn');
@@ -225,7 +232,7 @@ document.addEventListener('click', (e) => {
       const currentPrice = card.querySelector('.price-current').textContent;
       const oldPrice = card.querySelector('.price-old')?.textContent || "";
       const saveBadge = card.querySelector('.save-badge')?.textContent || "";
-      const imgEl = card.querySelector('.placeholder-image img') || card.querySelector('img.placeholder-image');
+      const imgEl = card.querySelector('.placeholder-image img') || card.querySelector('img.placeholder-image') || card.querySelector('.product-image-container img') || card.querySelector('img');
       const img = imgEl?.src || CONFIG.CART_IMAGE_DEFAULT;
       
       if (qvModal) {
@@ -256,7 +263,7 @@ document.addEventListener('click', (e) => {
     const title = card.querySelector('.product-title').textContent.trim();
     const priceText = card.querySelector('.price-current').textContent.trim();
     const price = parseFloat(priceText.replace('Rs. ', '').trim());
-    const cartImgEl = card.querySelector('.placeholder-image img') || card.querySelector('img.placeholder-image');
+    const cartImgEl = card.querySelector('.placeholder-image img') || card.querySelector('img.placeholder-image') || card.querySelector('.product-image-container img') || card.querySelector('img');
     const image = cartImgEl?.src || CONFIG.CART_IMAGE_DEFAULT;
     const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(title);
 
