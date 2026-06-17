@@ -1317,7 +1317,7 @@ main {
 .quick-view-close {
   position: absolute;
   top: 40px;
-  right: max(24px, calc(50vw - 500px - 64px));
+  right: 40px;
   background: #ffffff;
   border: 1px solid rgba(0,0,0,0.08);
   width: 44px;
@@ -1330,6 +1330,7 @@ main {
   z-index: 2010;
   transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+  color: #374151;
 }
 
 .quick-view-close:hover {
