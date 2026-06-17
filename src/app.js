@@ -57,6 +57,113 @@ function closeQuickView() {
   if (qvOverlay) qvOverlay.classList.remove('active');
   document.body.classList.remove('modal-open');
   document.documentElement.classList.remove('modal-open');
+  
+  // Clean up zoom lens and window states
+  const lens = document.querySelector('.qv-zoom-lens');
+  const zoomWindow = document.querySelector('.qv-zoom-window');
+  if (lens) lens.style.display = 'none';
+  if (zoomWindow) zoomWindow.style.display = 'none';
+}
+
+function updateQuickViewVisuals(qvModal) {
+  const qvMainImageContainer = qvModal.querySelector('.qv-main-image');
+  if (!qvMainImageContainer) return;
+
+  // Handle visual frame toggle in preview
+  const activeFrame = qvModal.querySelector('#qv-frame-group .qv-option-pill.active')?.textContent.trim() || 'Without Frame';
+  if (activeFrame === 'With Frame') {
+    qvMainImageContainer.classList.add('has-frame');
+  } else {
+    qvMainImageContainer.classList.remove('has-frame');
+  }
+
+  // Handle visual size scaling in preview
+  const activeSize = qvModal.querySelector('#qv-size-group .qv-option-pill.active')?.textContent.trim() || '3" x 3"';
+  if (activeSize === '3" x 3"') {
+    qvMainImageContainer.style.transform = 'scale(0.75)';
+  } else if (activeSize === '4" x 4"') {
+    qvMainImageContainer.style.transform = 'scale(0.88)';
+  } else if (activeSize === '5" x 5"') {
+    qvMainImageContainer.style.transform = 'scale(1.0)';
+  }
+}
+
+function injectQuickViewOptions(qvModal) {
+  const addSection = qvModal.querySelector('.qv-add-section');
+  if (!addSection) return;
+
+  // Dynamically inject glass overlay if missing
+  const qvMainImageContainer = qvModal.querySelector('.qv-main-image');
+  if (qvMainImageContainer) {
+    let glass = qvMainImageContainer.querySelector('.qv-frame-glass');
+    if (!glass) {
+      glass = document.createElement('div');
+      glass.className = 'qv-frame-glass';
+      qvMainImageContainer.appendChild(glass);
+    }
+  }
+
+  let optionsContainer = qvModal.querySelector('.qv-options');
+  if (!optionsContainer) {
+    optionsContainer = document.createElement('div');
+    optionsContainer.className = 'qv-options';
+    optionsContainer.innerHTML = `
+      <div class="qv-option-group">
+        <span class="qv-option-label">Size</span>
+        <div class="qv-option-pills" id="qv-size-group">
+          <div class="qv-option-pill active" data-add="0">3" x 3"</div>
+          <div class="qv-option-pill" data-add="20">4" x 4"</div>
+          <div class="qv-option-pill" data-add="40">5" x 5"</div>
+        </div>
+      </div>
+      <div class="qv-option-group">
+        <span class="qv-option-label">Frame</span>
+        <div class="qv-option-pills" id="qv-frame-group">
+          <div class="qv-option-pill active" data-add="0">Without Frame</div>
+          <div class="qv-option-pill" data-add="120">With Frame</div>
+        </div>
+      </div>
+    `;
+    addSection.parentNode.insertBefore(optionsContainer, addSection);
+
+    // Wire up listeners for newly created pills
+    optionsContainer.querySelectorAll('.qv-option-pill').forEach(pill => {
+      pill.addEventListener('click', () => {
+        const group = pill.parentNode;
+        group.querySelectorAll('.qv-option-pill').forEach(p => p.classList.remove('active'));
+        pill.classList.add('active');
+        
+        updateQuickViewVisuals(qvModal);
+        updateQuickViewPrice(qvModal);
+      });
+    });
+  } else {
+    // Reset selections to first pill (active) for both groups
+    optionsContainer.querySelectorAll('.qv-option-pills').forEach(group => {
+      group.querySelectorAll('.qv-option-pill').forEach((p, idx) => {
+        if (idx === 0) p.classList.add('active');
+        else p.classList.remove('active');
+      });
+    });
+  }
+
+  // Ensure visuals match the selected options on load/reset
+  updateQuickViewVisuals(qvModal);
+}
+
+function updateQuickViewPrice(qvModal) {
+  const basePrice = parseFloat(qvModal.dataset.basePrice) || 0;
+  const activeSize = qvModal.querySelector('#qv-size-group .qv-option-pill.active');
+  const activeFrame = qvModal.querySelector('#qv-frame-group .qv-option-pill.active');
+
+  const sizeAdd = parseFloat(activeSize?.dataset.add) || 0;
+  const frameAdd = parseFloat(activeFrame?.dataset.add) || 0;
+
+  const total = basePrice + sizeAdd + frameAdd;
+  const priceDisplay = qvModal.querySelector('.qv-price-current');
+  if (priceDisplay) {
+    priceDisplay.textContent = `Rs. ${total.toFixed(2)}`;
+  }
 }
 
 function updateCartUI() {
@@ -248,6 +355,16 @@ document.addEventListener('click', (e) => {
         if (qvOld) qvOld.textContent = oldPrice;
         if (qvSave) qvSave.textContent = saveBadge;
 
+        // Parse and store base price, then inject size and frame options
+        const basePrice = parseFloat(currentPrice.replace('Rs. ', '').trim()) || 0;
+        qvModal.dataset.basePrice = basePrice;
+        injectQuickViewOptions(qvModal);
+        updateQuickViewPrice(qvModal);
+
+        // Reset the quantity input to 1
+        const qvQtyInput = qvModal.querySelector('#qv-qty-input');
+        if (qvQtyInput) qvQtyInput.value = 1;
+
         qvModal.classList.add('active');
       }
       if (qvOverlay) qvOverlay.classList.add('active');
@@ -313,8 +430,168 @@ function handleDeepLink() {
   }
 }
 
+// Quick View Zoom Effect (Amazon Style)
+function initQuickViewZoom() {
+  const qvMainImageContainer = document.querySelector('.qv-main-image');
+  const qvContent = document.querySelector('.quick-view-content');
+  
+  if (qvMainImageContainer && qvContent) {
+    // 1. Create or select the lens
+    let lens = qvMainImageContainer.querySelector('.qv-zoom-lens');
+    if (!lens) {
+      lens = document.createElement('div');
+      lens.className = 'qv-zoom-lens';
+      qvMainImageContainer.appendChild(lens);
+    }
+    
+    // 2. Create or select the zoom window
+    let zoomWindow = qvContent.querySelector('.qv-zoom-window');
+    if (!zoomWindow) {
+      zoomWindow = document.createElement('div');
+      zoomWindow.className = 'qv-zoom-window';
+      
+      const zoomImg = document.createElement('img');
+      zoomImg.className = 'qv-zoom-image';
+      zoomWindow.appendChild(zoomImg);
+      
+      qvContent.appendChild(zoomWindow);
+    }
+    
+    const qvImg = qvMainImageContainer.querySelector('img');
+    const zoomImg = zoomWindow.querySelector('.qv-zoom-image');
+    const zoomFactor = 2.5;
+    
+    // Set up hover/mousemove events
+    qvMainImageContainer.addEventListener('mouseenter', () => {
+      // Only show zoom on desktop
+      if (window.innerWidth > 768) {
+        lens.style.display = 'block';
+        zoomWindow.style.display = 'block';
+        if (qvImg && zoomImg) {
+          zoomImg.src = qvImg.src;
+        }
+      }
+    });
+    
+    qvMainImageContainer.addEventListener('mousemove', (e) => {
+      if (window.innerWidth <= 768) return;
+      
+      const rect = qvMainImageContainer.getBoundingClientRect();
+      
+      // Calculate lens size proportionally
+      const lensWidth = rect.width / zoomFactor;
+      const lensHeight = rect.height / zoomFactor;
+      
+      lens.style.width = lensWidth + 'px';
+      lens.style.height = lensHeight + 'px';
+      
+      // Calculate mouse position relative to container
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      
+      // Center the lens on the cursor
+      let left = x - lensWidth / 2;
+      let top = y - lensHeight / 2;
+      
+      // Constrain lens inside container boundaries
+      left = Math.max(0, Math.min(left, rect.width - lensWidth));
+      top = Math.max(0, Math.min(top, rect.height - lensHeight));
+      
+      // Position the lens
+      lens.style.left = left + 'px';
+      lens.style.top = top + 'px';
+      
+      // Position and size the zoomed image inside the zoom window
+      if (zoomImg) {
+        zoomImg.style.width = (rect.width * zoomFactor) + 'px';
+        zoomImg.style.height = (rect.height * zoomFactor) + 'px';
+        zoomImg.style.left = (-left * zoomFactor) + 'px';
+        zoomImg.style.top = (-top * zoomFactor) + 'px';
+      }
+    });
+    
+    qvMainImageContainer.addEventListener('mouseleave', () => {
+      lens.style.display = 'none';
+      zoomWindow.style.display = 'none';
+    });
+  }
+}
+
+// Quick View Quantity and Add to Cart action wiring
+function initQuickViewActions() {
+  const qtyInput = document.getElementById('qv-qty-input');
+  const qtyUpBtn = document.querySelector('.qv-qty-up');
+  const qtyDownBtn = document.querySelector('.qv-qty-down');
+  const qvAddToCartBtn = document.getElementById('qv-add-btn');
+
+  if (qtyUpBtn && qtyInput) {
+    qtyUpBtn.addEventListener('click', () => {
+      let val = parseInt(qtyInput.value) || 1;
+      qtyInput.value = val + 1;
+    });
+  }
+
+  if (qtyDownBtn && qtyInput) {
+    qtyDownBtn.addEventListener('click', () => {
+      let val = parseInt(qtyInput.value) || 1;
+      if (val > 1) {
+        qtyInput.value = val - 1;
+      }
+    });
+  }
+
+  if (qtyInput) {
+    qtyInput.addEventListener('change', () => {
+      let val = parseInt(qtyInput.value) || 1;
+      if (val < 1) {
+        qtyInput.value = 1;
+      }
+    });
+  }
+
+  if (qvAddToCartBtn) {
+    qvAddToCartBtn.addEventListener('click', () => {
+      if (!qvModal) return;
+      const baseTitle = qvModal.querySelector('.qv-title').textContent.trim();
+      
+      // Get selected option values
+      const activeSize = qvModal.querySelector('#qv-size-group .qv-option-pill.active')?.textContent.trim() || '3" x 3"';
+      const activeFrame = qvModal.querySelector('#qv-frame-group .qv-option-pill.active')?.textContent.trim() || 'Without Frame';
+      
+      // Construct formatted title
+      const title = `${baseTitle} (${activeSize}, ${activeFrame})`;
+      
+      const priceText = qvModal.querySelector('.qv-price-current').textContent.trim();
+      const price = parseFloat(priceText.replace('Rs. ', '').trim()) || 0;
+      const img = qvModal.querySelector('.qv-main-image img')?.src || CONFIG.CART_IMAGE_DEFAULT;
+      const qty = parseInt(qtyInput?.value) || 1;
+      const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(baseTitle);
+
+      const existingItem = cart.find(item => item.title === title);
+      if (existingItem) {
+        existingItem.quantity += qty;
+      } else {
+        cart.push({ title, price, image: img, quantity: qty, url: productUrl });
+      }
+
+      updateCartUI();
+      closeQuickView();
+
+      // Open cart drawer for feedback
+      if (cartDrawer && cartOverlay) {
+        cartDrawer.classList.add('active');
+        cartOverlay.classList.add('active');
+        document.body.classList.add('modal-open');
+        document.documentElement.classList.add('modal-open');
+      }
+    });
+  }
+}
+
 initProductGrid();
 initLazyLoad();
 updateCartUI();
 handleDeepLink();
 initSearch();
+initQuickViewZoom();
+initQuickViewActions();

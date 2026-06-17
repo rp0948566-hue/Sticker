@@ -1446,6 +1446,7 @@ main {
   grid-template-columns: 1fr 1fr;
   gap: 30px;
   padding: 40px;
+  position: relative; /* Anchor absolute position of the side zoom window */
 }
 
 /* Left Gallery */
@@ -1458,10 +1459,7 @@ main {
 }
 
 .qv-thumbnails {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  width: 70px;
+  display: none !important;
 }
 
 .qv-thumb {
@@ -1480,42 +1478,205 @@ main {
 }
 
 .qv-main-image {
-  flex-grow: 1;
-  background-color: #FFFAFA;
+  flex-grow: 0 !important;
+  border-radius: 16px !important;
+  position: relative !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  cursor: zoom-in !important;
+  max-width: 100% !important;
+  width: fit-content !important;
+  height: auto !important;
+  margin: 0 auto !important;
+}
+
+.qv-main-image img {
+  display: block !important;
+  max-width: 100% !important;
+  max-height: 450px !important;
+  width: auto !important;
+  height: auto !important;
+  object-fit: contain !important;
+  border-radius: 16px !important;
+  pointer-events: none !important; /* Prevents pointer/hover flashing between wrapper and img */
+  mix-blend-mode: multiply !important;
+}
+
+/* Dotted Blue Zoom Lens */
+.qv-zoom-lens {
+  position: absolute;
+  border: 1.5px dashed #3b82f6;
+  background-color: rgba(59, 130, 246, 0.08);
+  background-image: radial-gradient(#3b82f6 1px, transparent 1px);
+  background-size: 6px 6px;
+  pointer-events: none; /* Mouse events pass through to main image container */
+  z-index: 10;
+  display: none;
+  box-shadow: 0 0 10px rgba(59, 130, 246, 0.25);
+  border-radius: 8px;
+}
+
+/* Side Zoom Window */
+.qv-zoom-window {
+  position: absolute;
+  top: 40px;
+  right: 40px;
+  width: calc(50% - 15px);
+  height: calc(100% - 80px);
+  background-color: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 16px;
-  position: relative;
   overflow: hidden;
-  aspect-ratio: 1;
-  box-shadow: inset 0 0 0 1px rgba(0,0,0,0.05);
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  z-index: 100;
+  display: none;
+  box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+  pointer-events: none;
+}
+
+.qv-zoom-image {
+  position: absolute;
+  object-fit: contain;
+  display: block;
+  max-width: none !important;
+  max-height: none !important;
+  mix-blend-mode: multiply;
+}
+
+@media (max-width: 768px) {
+  .qv-zoom-window,
+  .qv-zoom-lens {
+    display: none !important;
+  }
 }
 
 .qv-expand-icon {
+  display: none !important;
+}
+
+.qv-main-image {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease, background-color 0.3s ease;
+}
+
+/* Glass Frame Preview Styles */
+.qv-main-image.has-frame {
+  padding: 0 !important;
+  border-width: 22px !important;
+  border-style: solid !important;
+  /* Hyper-realistic sliced mahogany wood frame image with 45-degree miter joints at corners */
+  border-image: url('/luxury_wood_frame.png') 145 stretch !important;
+  border-radius: 12px;
+  /* Outer frame drop shadows for wall-hanging elevation */
+  box-shadow:
+    0 15px 35px rgba(0, 0, 0, 0.35),
+    0 5px 15px rgba(0, 0, 0, 0.2),
+    inset 0 0 10px rgba(0, 0, 0, 0.45); /* Inset shadow on the wood edge */
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), padding 0.3s ease, border-width 0.3s ease, box-shadow 0.3s ease;
+}
+
+/* White isolation backdrop behind image inside the frame to prevent background bleed-through */
+.qv-main-image::before {
+  content: "";
   position: absolute;
-  bottom: 15px;
-  right: 15px;
-  background: #fff;
-  border: 1px solid rgba(0,0,0,0.1);
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  z-index: 0;
+  border-radius: 2px;
+  display: none;
+}
+
+.qv-main-image.has-frame::before {
+  display: block;
+}
+
+.qv-main-image.has-frame img {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18));
+  border-radius: 2px;
+  z-index: 1; /* Render above the white backdrop */
+}
+
+.qv-frame-glass {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  /* Hyper-realistic museum glass reflections (double diagonal window light + ambient room reflection) */
+  background: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 25%, transparent 26%, transparent 100%),
+    linear-gradient(135deg, transparent 28%, rgba(255, 255, 255, 0.12) 29%, rgba(255, 255, 255, 0.22) 32%, rgba(255, 255, 255, 0.04) 38%, transparent 39%),
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+  pointer-events: none; /* Allows hover zoom events to pass through */
+  z-index: 5;
+  display: none;
+  border-radius: 2px;
+  box-shadow: 
+    inset 0 0 15px rgba(255, 255, 255, 0.12),
+    inset 2px 2px 3px rgba(255, 255, 255, 0.2),
+    inset -2px -2px 3px rgba(0, 0, 0, 0.08);
+}
+
+.qv-main-image.has-frame .qv-frame-glass {
+  display: block;
+}
+
+/* Quick View Options Section */
+.qv-options {
   display: flex;
-  align-items: center;
-  justify-content: center;
+  flex-direction: column;
+  gap: 15px;
+  margin: 15px 0;
+  padding: 15px 0;
+  border-top: 1px dashed rgba(0, 0, 0, 0.08);
+  border-bottom: 1px dashed rgba(0, 0, 0, 0.08);
+}
+
+.qv-option-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.qv-option-label {
+  font-size: 13px;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: #555;
+  letter-spacing: 0.5px;
+}
+
+.qv-option-pills {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
+.qv-option-pill {
+  background: #fff;
+  border: 1px solid #d1d5db;
+  border-radius: 20px; /* Pill style */
+  padding: 8px 16px;
+  font-size: 13px;
+  font-weight: 500;
   cursor: pointer;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-  transition: all 0.2s;
+  transition: all 0.2s ease;
+  user-select: none;
 }
 
-.qv-expand-icon:hover {
-  transform: scale(1.05);
+.qv-option-pill:hover {
+  border-color: #000;
+  background-color: #f9fafb;
 }
 
-.qv-expand-icon svg {
-  width: 18px;
-  height: 18px;
+.qv-option-pill.active {
+  border-color: #000;
+  background-color: #000;
+  color: #fff;
+  font-weight: 600;
 }
 
 /* Right Info */
@@ -1582,12 +1743,7 @@ main {
 }
 
 .qv-unlock-box {
-  background: #fff;
-  border-radius: 12px;
-  padding: 20px;
-  margin: 10px 0;
-  border: 1px solid rgba(0,0,0,0.05);
-  box-shadow: 0 4px 15px rgba(0,0,0,0.02);
+  display: none !important;
 }
 
 .qv-unlock-text {
