@@ -4,14 +4,12 @@
   align-items: center;
   padding: 40px 0;
   width: 100%;
-  contain: layout style paint;
 }
 
 .tetrominos {
   position: relative;
   width: 96px;
   height: 112px;
-  contain: layout style paint;
 }
 
 .tetromino {

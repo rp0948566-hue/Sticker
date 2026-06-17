@@ -31,7 +31,7 @@ dist-ssr
 .claude/
 
 # Large image folders (served locally / via LFS separately)
-# whatsapp catalogue/ — tracked via Git LFS, pushed separately
+whatsapp catalogue/
 
 # Auto-generated analysis files
 ANALYSIS_SUMMARY.md

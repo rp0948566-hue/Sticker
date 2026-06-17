@@ -47,7 +47,7 @@ const PROD_TYPE_PAGES = {
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────
-function detectPage() {
+export function detectPage() {
   const p = window.location.pathname.toUpperCase();
   if (p.includes('MACBOOK'))  return 'M';
   if (p.includes('CARD'))     return 'C';
@@ -58,11 +58,14 @@ function detectPage() {
   return 'HOME';
 }
 
+export function isDynamicPage() {
+  const pageCode = detectPage();
+  return ['M', 'C', 'A', 'F', 'N'].includes(pageCode);
+}
+
 function getProductsForPage(catalogue, pageCode) {
-  // CARD SKINS page shows ALL catalogue products
-  if (pageCode === 'C') return catalogue;
-  // All other pages: no products
-  return [];
+  if (pageCode === 'HOME') return [];
+  return catalogue.filter(item => item[1] === pageCode);
 }
 
 // Descriptive name prefixes per category code
@@ -225,28 +228,18 @@ function setupChunkLoader(grid, products, catFolders, catNames, pageCode) {
     busy = true;
     obs.unobserve(sentinel);
 
-    if (isHome) {
-      // Home page: silent chunk load, no animation
+    // Show tetromino animation for 2 seconds max then load next chunk
+    animEl.style.display = 'flex';
+    setTimeout(() => {
       requestAnimationFrame(() => {
         loaded = appendChunk(grid, products, loaded, catFolders, catNames);
+        animEl.style.display = 'none';
         busy = false;
         if (loaded < products.length) obs.observe(sentinel);
         else { sentinel.remove(); animEl.remove(); }
       });
-    } else {
-      // Other pages: show tetromino animation for 1.5 s then load
-      animEl.style.display = 'flex';
-      setTimeout(() => {
-        requestAnimationFrame(() => {
-          loaded = appendChunk(grid, products, loaded, catFolders, catNames);
-          animEl.style.display = 'none';
-          busy = false;
-          if (loaded < products.length) obs.observe(sentinel);
-          else { sentinel.remove(); animEl.remove(); }
-        });
-      }, 1500);
-    }
-  }, { rootMargin: '100px' });
+    }, 2000);
+  }, { rootMargin: '50px' });
 
   grid._obs = obs;
   obs.observe(sentinel);

@@ -1,4 +1,5 @@
 import { getLoadingHTML } from './Loading animion/Loading.js';
+import { isDynamicPage } from './catalogue.js';
 
 const INITIAL_BATCH = 30;
 const CHUNK_SIZE = 30;
@@ -6,6 +7,8 @@ let currentIndex = 0;
 let isLoading = false;
 
 export function initLazyLoad() {
+  if (isDynamicPage()) return;
+
   const grid = document.querySelector('.products-grid');
   // Skip if no grid or if it's a carousel (carousels handle their own display)
   if (!grid || grid.classList.contains('products-carousel')) {
