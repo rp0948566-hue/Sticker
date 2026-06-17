@@ -58,7 +58,7 @@
 }
 
 /* --- UNIVERSAL BUTTON WAVE ANIMATION --- */
-button:not(.qty-arrow-btn):not(.recom-arrow):not(.cart-close):not(.remove-btn):not(.qty-btn):not(.filter-pill):not(.reset-btn), input[type="submit"], .add-to-cart-btn, .buy-now-btn, .continue-shopping-btn-new, .qv-add-to-cart-btn, .recom-add-btn, .view-all-btn { background-color: transparent !important; color: #ffffff !important; position: relative; overflow: hidden; z-index: 1; border-color: #000000; transition: color 0.4s ease, border-color 0.4s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
+button:not(.qty-arrow-btn):not(.recom-arrow):not(.cart-close):not(.quick-view-close):not(.remove-btn):not(.qty-btn):not(.filter-pill):not(.reset-btn), input[type="submit"], .add-to-cart-btn, .buy-now-btn, .continue-shopping-btn-new, .qv-add-to-cart-btn, .recom-add-btn, .view-all-btn { background-color: transparent !important; color: #ffffff !important; position: relative; overflow: hidden; z-index: 1; border-color: #000000; transition: color 0.4s ease, border-color 0.4s ease, transform 0.35s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.35s cubic-bezier(0.16, 1, 0.3, 1); }
 
 .add-to-cart-btn::before, .buy-now-btn::before, .continue-shopping-btn-new::before, .qv-add-to-cart-btn::before, .recom-add-btn::before, .view-all-btn::before { content: ""; position: absolute; top: 0; left: 0; width: 100%; height: 100%; background-color: #000000; z-index: -2; border-radius: inherit; }
 
