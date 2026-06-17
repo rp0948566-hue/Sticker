@@ -2240,7 +2240,22 @@ main {
 }
 
 .stars {
-  color: #facc15;
+  color: #ffca08 !important; /* Rich gold-yellow color, overrides inline gray styles */
+  text-shadow: 0 0 8px rgba(255, 202, 8, 0.75), 0 0 15px rgba(255, 202, 8, 0.45) !important; /* Premium realistic gold glow */
+  display: inline-block !important;
+}
+
+/* Custom selection highlight for rating stars: pink background, glowing gold stars */
+.stars::selection {
+  background: rgba(244, 63, 94, 0.35) !important; /* Premium pink glow selection background */
+  color: #ffca08 !important; /* Preserve glowing yellow color inside stars */
+  text-shadow: 0 0 8px rgba(255, 202, 8, 0.9), 0 0 15px rgba(255, 202, 8, 0.6) !important;
+}
+
+.stars::-moz-selection {
+  background: rgba(244, 63, 94, 0.35) !important;
+  color: #ffca08 !important;
+  text-shadow: 0 0 8px rgba(255, 202, 8, 0.9), 0 0 15px rgba(255, 202, 8, 0.6) !important;
 }
 
 .reviews-count {
@@ -3638,20 +3653,23 @@ main {
 
 .review-stars {
   font-size: 20px;
-  color: #facc15; /* Solid gold/yellow stars */
+  color: #ffca08 !important; /* Rich gold-yellow color */
+  text-shadow: 0 0 8px rgba(255, 202, 8, 0.75), 0 0 15px rgba(255, 202, 8, 0.45) !important; /* Realistic gold glow */
   margin-bottom: 12px;
   display: flex;
   user-select: all;
 }
 
 .review-stars::selection {
-  background-color: #add8e6;
-  color: #facc15;
+  background: rgba(244, 63, 94, 0.35) !important; /* Premium pink selection background */
+  color: #ffca08 !important; /* Keep stars yellow inside highlight */
+  text-shadow: 0 0 8px rgba(255, 202, 8, 0.9), 0 0 15px rgba(255, 202, 8, 0.6) !important;
 }
 
 .review-stars::-moz-selection {
-  background-color: #add8e6;
-  color: #facc15;
+  background: rgba(244, 63, 94, 0.35) !important;
+  color: #ffca08 !important;
+  text-shadow: 0 0 8px rgba(255, 202, 8, 0.9), 0 0 15px rgba(255, 202, 8, 0.6) !important;
 }
 
 .review-text {
