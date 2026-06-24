@@ -617,3 +617,20 @@ handleDeepLink();
 initSearch();
 initQuickViewZoom();
 initQuickViewActions();
+
+// Close FRAME dropdown smoothly when user scrolls
+(function () {
+  const dropdownItem = document.querySelector('.nav-links li.has-dropdown');
+  if (!dropdownItem) return;
+  let scrollTimer;
+  window.addEventListener('scroll', () => {
+    dropdownItem.classList.add('force-closed');
+    clearTimeout(scrollTimer);
+    scrollTimer = setTimeout(() => {
+      dropdownItem.classList.remove('force-closed');
+    }, 1200);
+  }, { passive: true });
+  dropdownItem.addEventListener('mouseenter', () => {
+    dropdownItem.classList.remove('force-closed');
+  });
+})();

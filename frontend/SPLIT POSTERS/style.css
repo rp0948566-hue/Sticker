@@ -4119,7 +4119,7 @@ img {
   opacity: 0;
   visibility: hidden;
   transform: translateY(-8px);
-  transition: opacity 0.25s ease 0.4s, transform 0.25s ease 0.4s, visibility 0.25s ease 0.4s;
+  transition: opacity 0.3s ease 0.9s, transform 0.3s ease 0.9s, visibility 0.3s ease 0.9s;
   pointer-events: none;
   z-index: 9500 !important;
 }
@@ -4131,6 +4131,18 @@ img {
   transform: translateY(0);
   pointer-events: auto;
   transition: opacity 0.22s ease, transform 0.22s ease, visibility 0.22s;
+}
+
+/* Force-close on scroll — overrides :hover */
+.nav-links li.has-dropdown.force-closed .frame-categories-dropdown {
+  opacity: 0 !important;
+  visibility: hidden !important;
+  transform: translateY(-8px) !important;
+  pointer-events: none !important;
+  transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease !important;
+}
+.nav-links li.has-dropdown.force-closed .dropdown-caret {
+  transform: rotate(0deg) !important;
 }
 
 /* 3-column grid */
