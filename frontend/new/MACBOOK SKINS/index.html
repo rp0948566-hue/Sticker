@@ -5,12 +5,12 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Snow White Website</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
-    <link rel="stylesheet" href="/src/loader.css" />
-    <link rel="stylesheet" href="/src/home.css?v=3" />
-    <link rel="stylesheet" href="/src/style.css?v=3" />
+    <link rel="stylesheet" href="./loader.css" />
+    <link rel="stylesheet" href="./home.css" />
+    <link rel="stylesheet" href="./style.css" />
   </head>
   <body class="loader-active">
-    <script src="/src/loader.js"></script>
+    <script src="./loader.js"></script>
     <div id="global-loader" class="loader-container">
       <div class="loader-wrapper">
         <div class="loader">
@@ -55,7 +55,48 @@
             <li><a href="/" class="underlined">NEW ARRIVALS</a></li>
             <li><a href="/frontend/CARD SKINS/index.html">CARD SKINS</a></li>
             <li><a href="/frontend/MACBOOK SKINS/index.html">MACBOOK SKINS</a></li>
-            <li><a href="/frontend/FRAME/FRAME/index.html">FRAME</a></li>
+            <li class="has-dropdown">
+              <a href="/frontend/FRAME/FRAME/index.html">FRAME <span class="dropdown-caret">&#9660;</span></a>
+              <div class="frame-categories-dropdown">
+              <div class="fcd-grid">
+                <div class="fcd-col">
+                  <div class="fcd-col-title">Anime &amp; Pop</div>
+                    <ul>
+                    <li><a href="/frontend/ANIME/index.html">Anime</a></li>
+                    <li><a href="/frontend/ANIME MINI/index.html">Anime Mini</a></li>
+                    <li><a href="/frontend/NEW ANIME/index.html">New Anime</a></li>
+                    <li><a href="/frontend/MARVELS/index.html">Marvels</a></li>
+                    <li><a href="/frontend/MOVIES/index.html">Movies</a></li>
+                    <li><a href="/frontend/SHINCHAN/index.html">Shinchan</a></li>
+                    <li><a href="/frontend/CARS/index.html">Cars</a></li>
+                    </ul>
+                </div>
+                <div class="fcd-col">
+                  <div class="fcd-col-title">Art &amp; Style</div>
+                    <ul>
+                    <li><a href="/frontend/AESTHETIC/index.html">Aesthetic</a></li>
+                    <li><a href="/frontend/ARTIST PRINTS/index.html">Artist Prints</a></li>
+                    <li><a href="/frontend/VAN GOGH/index.html">Van Gogh</a></li>
+                    <li><a href="/frontend/PINK LAVENDER/index.html">Pink Lavender</a></li>
+                    <li><a href="/frontend/VISION BOARD/index.html">Vision Board</a></li>
+                    <li><a href="/frontend/SPLIT POSTERS/index.html">Split Posters</a></li>
+                    <li><a href="/frontend/SPLIT ART/index.html">Split Art</a></li>
+                    </ul>
+                </div>
+                <div class="fcd-col">
+                  <div class="fcd-col-title">More</div>
+                    <ul>
+                    <li><a href="/frontend/SPORTS/index.html">Sports</a></li>
+                    <li><a href="/frontend/DEVOTIONAL/index.html">Devotional</a></li>
+                    <li><a href="/frontend/QUOTES/index.html">Quotes</a></li>
+                    <li><a href="/frontend/SONGS/index.html">Songs</a></li>
+                    <li><a href="/frontend/A3 SIZE/index.html">A3 Size</a></li>
+                    <li><a href="/frontend/SONG COVER 8X8/index.html">Song Cover 8x8</a></li>
+                    </ul>
+                </div>
+              </div>
+              </div>
+            </li>
             <li><a href="/frontend/ACCESSORIES/index.html">ACCESSORIES</a></li>
             <li><a href="../EXPERIENCE MAGIC/CUTE/index.html">EXPERIENCE MAGIC</a></li>
           </ul>
@@ -3761,6 +3802,6 @@
       </div>
     </div>
     
-    <script type="module" src="/src/app.js"></script>
+    <script type="module" src="./app.js"></script>
   </body>
 </html>

@@ -1,4 +1,5 @@
 import { getLoadingHTML } from './Loading animion/Loading.js';
+import { isDynamicPage } from './catalogue.js';
 
 const INITIAL_BATCH = 30;
 const CHUNK_SIZE = 30;
@@ -6,8 +7,21 @@ let currentIndex = 0;
 let isLoading = false;
 
 export function initLazyLoad() {
+  if (isDynamicPage()) return;
+
   const grid = document.querySelector('.products-grid');
-  if (!grid) return; // Only runs on the New Arrivals page
+  // Skip if no grid or if it's a carousel (carousels handle their own display)
+  if (!grid || grid.classList.contains('products-carousel')) {
+    // If it's a carousel, just make sure cards are visible
+    if (grid) {
+      grid.querySelectorAll('.product-card').forEach(card => {
+        card.style.display = '';
+        card.style.opacity = '1';
+        card.style.transform = 'translateY(0)';
+      });
+    }
+    return;
+  }
 
   // Get all product cards
   const allCards = Array.from(grid.querySelectorAll('.product-card'));
@@ -32,14 +46,13 @@ export function initLazyLoad() {
   const animationNode = loadingEl.firstElementChild;
   grid.parentNode.insertBefore(animationNode, grid.nextSibling);
 
-  // Show the first 39 cards immediately, then load 30 more at a time.
+  // Show the first batch immediately
   showNextChunk(allCards, animationNode, INITIAL_BATCH);
 
   // Sentinel div at bottom triggers next load
   const sentinel = document.createElement('div');
   sentinel.id = 'lazy-sentinel';
   sentinel.style.height = '10px';
-  // Place sentinel AFTER the loading animation
   animationNode.parentNode.insertBefore(sentinel, animationNode.nextSibling);
 
   // IntersectionObserver watches the sentinel
@@ -63,7 +76,7 @@ function showNextChunk(allCards, animationNode, batchSize = CHUNK_SIZE) {
 
   for (let i = currentIndex; i < end; i++) {
     allCards[i].style.display = '';
-    const delay = (i - currentIndex) * 50; // stagger 50ms per card
+    const delay = (i - currentIndex) * 30; // Reduced stagger from 50ms to 30ms
     setTimeout(() => {
       allCards[i].style.opacity = '1';
       allCards[i].style.transform = 'translateY(0)';
@@ -81,11 +94,11 @@ function triggerLoad(allCards, animationNode) {
   if (isLoading) return;
   isLoading = true;
 
-  // Show loading animation
+  // Show loading animation briefly
   animationNode.style.display = 'flex';
 
-  // Exactly 3 seconds (3000ms) delay to show the gorgeous animation as requested
-  const loadTime = 3000;
+  // Reduced delay from 3000ms to 400ms for a snappier feel
+  const loadTime = 400;
 
   setTimeout(() => {
     showNextChunk(allCards, animationNode, CHUNK_SIZE);
