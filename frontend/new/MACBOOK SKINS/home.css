@@ -249,18 +249,19 @@ body.modal-open {
 
 .cart-info-text .subtotal-label {
     font-size: 0.6rem;
-    color: #888;
+    color: #666;
     font-weight: 500;
 }
 
 .cart-info-text .amount {
-    font-size: 0.9rem;
+    font-size: 0.85rem;
     font-weight: 800;
-    color: var(--white);
+    color: #000000;
 }
 
 .nav-mobile-menu {
     display: none;
+    color: #000000; /* Dark hamburger for white background */
 }
 
 /* Navbar Responsive Breakpoints */
@@ -290,7 +291,7 @@ body.modal-open {
         font-size: 1.4rem;
         cursor: pointer;
         flex: 1;
-        color: var(--white);
+        color: #000000; /* Dark hamburger for white background */
     }
     .nav-left {
         flex: 2;
