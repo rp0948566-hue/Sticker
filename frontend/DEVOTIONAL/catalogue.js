@@ -94,6 +94,8 @@ export function isDynamicPage() {
 function getProductsForPage(catalogue, pageCode) {
   if (pageCode === 'HOME') return [];
   if (CAT_CODES.has(pageCode)) return catalogue.filter(item => item[0] === pageCode);
+  // New Arrivals: show both N and NF (frame mix) entries
+  if (pageCode === 'N') return catalogue.filter(item => item[1] === 'N' || item[1] === 'NF');
   return catalogue.filter(item => item[1] === pageCode);
 }
 
@@ -118,19 +120,20 @@ function getProductName(cc, filename, catNames) {
 function revCount(idx) { return 12 + ((idx * 41 + 17) % 238); }
 
 function createCard(record, idx, catFolders, catNames) {
-  const [cc,, filename] = record;
+  const [cc, pageCode, filename] = record;
   const folder = catFolders[cc] || '';
   const imgSrc = cc === 'LAP'
     ? encodeURI(`/STICKER/laptop stickers file/laptopp stickers/${filename}`)
     : encodeURI(`/STICKER/FRAME/${folder}/${filename}`);
   const name = getProductName(cc, filename, catNames);
+  const isFramed = pageCode === 'NF' || pageCode === 'F';
   const card = document.createElement('div');
   card.className = 'product-card';
   card.dataset.cc = cc;
   card.innerHTML = `
-    <div class="product-image-container">
+    <div class="product-image-container${isFramed ? ' has-frame' : ''}">
       <div class="save-badge">Save Rs. 64.00</div>
-      <div class="placeholder-image">
+      <div class="placeholder-image${isFramed ? ' frame-on' : ''}">
         <img src="${imgSrc}" alt="${name}" loading="lazy">
       </div>
       <div class="quick-view">
@@ -160,14 +163,24 @@ function createCard(record, idx, catFolders, catNames) {
         <div class="card-sel-row">
           <span class="card-sel-label">Frame</span>
           <div class="card-pills">
-            <button class="card-pill active" data-group="frame" data-val="without">Without</button>
-            <button class="card-pill" data-group="frame" data-val="with">With</button>
+            <button class="card-pill${isFramed ? '' : ' active'}" data-group="frame" data-val="without">Without</button>
+            <button class="card-pill${isFramed ? ' active' : ''}" data-group="frame" data-val="with">With</button>
           </div>
         </div>
       </div>
       <button class="add-to-cart-btn">Add to cart</button>
     </div>
   `;
+  // Wire frame pill toggle
+  card.querySelectorAll('[data-group="frame"]').forEach(btn => {
+    btn.addEventListener('click', () => {
+      card.querySelectorAll('[data-group="frame"]').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      const img = card.querySelector('.placeholder-image');
+      if (btn.dataset.val === 'with') img.classList.add('frame-on');
+      else img.classList.remove('frame-on');
+    });
+  });
   return card;
 }
 

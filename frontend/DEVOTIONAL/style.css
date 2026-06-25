@@ -4362,3 +4362,17 @@ img {
 .card-pill:not(.active){color:#333 !important;background:#fff !important;}
 .card-pill.active{color:#fff !important;background:#111 !important;border-color:#111 !important;}
 
+
+/* FRAME visual effect on product card image */
+.placeholder-image.frame-on {
+  padding: 10px;
+  background: linear-gradient(135deg, #c8a96e 0%, #f5d89c 40%, #b8862a 60%, #e8c97a 100%);
+  border-radius: 10px;
+  box-shadow: inset 0 0 0 3px #9a6e28, 0 4px 18px rgba(180,130,40,0.25);
+}
+.placeholder-image.frame-on img {
+  border-radius: 6px;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
