@@ -116,6 +116,23 @@ function createCard(record, idx, catFolders, catNames) {
         <span class="price-badge">-Rs. 64.00</span>
       </div>
       <div class="price-current">Rs. 15.00</div>
+      <div class="card-selectors">
+        <div class="card-sel-row">
+          <span class="card-sel-label">Size</span>
+          <div class="card-pills">
+            <button class="card-pill" data-group="size" data-val='3"×3"'>3"×3"</button>
+            <button class="card-pill" data-group="size" data-val='4"×4"'>4"×4"</button>
+            <button class="card-pill active" data-group="size" data-val='5"×5"'>5"×5"</button>
+          </div>
+        </div>
+        <div class="card-sel-row">
+          <span class="card-sel-label">Frame</span>
+          <div class="card-pills">
+            <button class="card-pill active" data-group="frame" data-val="without">Without</button>
+            <button class="card-pill" data-group="frame" data-val="with">With</button>
+          </div>
+        </div>
+      </div>
       <button class="add-to-cart-btn">Add to cart</button>
     </div>
   `;

@@ -618,6 +618,21 @@ initSearch();
 initQuickViewZoom();
 initQuickViewActions();
 
+// Card inline size + frame pill selection
+(function () {
+  const grid = document.querySelector('.products-grid');
+  if (!grid) return;
+  grid.addEventListener('click', (e) => {
+    const pill = e.target.closest('.card-pill');
+    if (!pill) return;
+    e.stopPropagation();
+    const card = pill.closest('.product-card');
+    const group = pill.dataset.group;
+    card.querySelectorAll(`.card-pill[data-group="${group}"]`).forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+  });
+})();
+
 // Close FRAME dropdown smoothly when user scrolls
 (function () {
   const dropdownItem = document.querySelector('.nav-links li.has-dropdown');
@@ -632,5 +647,27 @@ initQuickViewActions();
   }, { passive: true });
   dropdownItem.addEventListener('mouseenter', () => {
     dropdownItem.classList.remove('force-closed');
+  });
+})();
+
+// Mobile FRAME submenu accordion
+(function () {
+  const caret   = document.querySelector('.mobile-frame-caret');
+  const submenu = document.querySelector('.mobile-frame-submenu');
+  if (!caret || !submenu) return;
+
+  caret.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const isOpen = submenu.classList.toggle('open');
+    caret.classList.toggle('open', isOpen);
+  });
+
+  // Close submenu when any category link is tapped
+  submenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      submenu.classList.remove('open');
+      caret.classList.remove('open');
+    });
   });
 })();
