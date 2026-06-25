@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
 
 :root {
   --black-nav: #000000;
@@ -3900,17 +3900,23 @@ button:not(.qty-arrow-btn):not(.recom-arrow):not(.cart-close):not(.quick-view-cl
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 8px;
-  box-sizing: border-box;
+  overflow: hidden;
+  border-radius: 12px;
+  background: #fafafa;
 }
 
 .placeholder-image img {
-  max-width: 100%;
-  max-height: 100%;
-  width: auto;
-  height: auto;
-  object-fit: contain;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
   display: block;
+  border-radius: 12px;
+  transition: transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.product-card:hover .placeholder-image img {
+  transform: scale(1.06);
 }
 
 /* ── GLOBAL BUG FIXES ───────────────────────────────────────────────────── */

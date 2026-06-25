@@ -14,6 +14,7 @@ const CAT_VIBES = {
   SC:['Chill','Romantic'],     A3:['Artistic','Minimalist'],
   SPL:['Artistic'],            SPLA:['Artistic'],
   ANM3:['Adventurous','Artistic'], ANM2:['Adventurous','Artistic'],
+  LAP:['Adventurous','Funny','Artistic','Edgy'],
 };
 
 const CAT_GIFT = {
@@ -24,25 +25,28 @@ const CAT_GIFT = {
   GIR:['Her','Friends','Anyone'],SHCN:['Kids','Anyone'],
   SC:['Anyone'],          A3:['Anyone'],       SPL:['Anyone'],
   SPLA:['Anyone'],        ANM3:['Anyone'],     ANM2:['Anyone'],
+  LAP:['Him','Her','Anyone'],
 };
 
 // Theme label (lowercase) → matching category codes
 const THEME_MAP = {
-  'anime':['ANM','ANM2','ANM3'],     'pop culture':['MOV','MAR'],
-  'quotes':['QOU'],                   'movie':['MOV'],
-  'marvels':['MAR'],                  'cars':['CAR'],
-  'sports':['SPO'],                   'aesthetic':['AST'],
+  'anime':['ANM','ANM2','ANM3'],     'pop culture':['MOV','MAR','LAP'],
+  'quotes':['QOU'],                   'movie':['MOV','LAP'],
+  'marvels':['MAR','LAP'],            'cars':['CAR','LAP'],
+  'sports':['SPO','LAP'],             'aesthetic':['AST'],
   'artist':['ART'],                   'van gogh':['VVG'],
   'songs':['SONM','SC'],              'devotional':['DEV'],
   'vision board':['VSN'],             'pink lavender':['GIR'],
   'shinchan':['SHCN'],               'a3':['A3'],
   'split':['SPL','SPLA'],            'new anime':['ANM3'],
+  'laptop stickers':['LAP'],         'meme':['LAP'],
+  'funny':['LAP','SHCN'],
 };
 
 // Product type label (lowercase) → page codes that match
 const PROD_TYPE_PAGES = {
-  'laptop skins':['M'], 'macbook':['M'], 'card skin':['C'],
-  'sticker sheets':['C','A'], 'sticker packs':['A'],
+  'laptop skins':['M','LAP'], 'macbook':['M'], 'laptop stickers':['LAP','M'],
+  'card skin':['C'], 'sticker sheets':['C','A'], 'sticker packs':['A'],
   'accessory':['A'],          'frame':['F'],
 };
 
@@ -54,7 +58,7 @@ export function detectPage() {
   if (p.includes('MYSTERY'))  return 'MYSTERY';
   if (p.includes('FRAME'))    return 'F';
   if (p.includes('ACCESSORIES')) return 'A';
-  if (p.includes('NEW') && p.includes('ARRIVAL')) return 'N';
+  if (p.includes('NEW') && (p.includes('ARRIVAL') || p.endsWith('/NEW/') || p.endsWith('/NEW'))) return 'N';
   return 'HOME';
 }
 
@@ -76,7 +80,7 @@ const PROD_LABELS = {
   DEV: 'Devotional Art', VSN: 'Vision Board', GIR: 'Pink Lavender Art',
   SHCN: 'Shinchan Art', SC: 'Song Cover', A3: 'A3 Wall Poster',
   SPL: 'Split Poster', SPLA: 'Split Art Design', ANM3: 'New Anime Art',
-  ANM2: 'Anime Mini Art',
+  ANM2: 'Anime Mini Art', LAP: 'Laptop Sticker',
 };
 
 function getProductName(cc, filename, catNames) {
@@ -91,7 +95,9 @@ function revCount(idx) { return 12 + ((idx * 41 + 17) % 238); }
 function createCard(record, idx, catFolders, catNames) {
   const [cc,, filename] = record;
   const folder = catFolders[cc] || '';
-  const imgSrc = encodeURI(`/whatsapp catalogue/${folder}/${filename}`);
+  const imgSrc = cc === 'LAP'
+    ? encodeURI(`/STICKER/laptop stickers file/laptopp stickers/${filename}`)
+    : encodeURI(`/STICKER/FRAME/${folder}/${filename}`);
   const name = getProductName(cc, filename, catNames);
   const card = document.createElement('div');
   card.className = 'product-card';
@@ -100,6 +106,7 @@ function createCard(record, idx, catFolders, catNames) {
     <div class="product-image-container">
       <div class="save-badge">Save Rs. 64.00</div>
       <div class="placeholder-image">
+        <img src="${imgSrc}" alt="${name}" loading="lazy">
       </div>
       <div class="quick-view">
         <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -116,6 +123,23 @@ function createCard(record, idx, catFolders, catNames) {
         <span class="price-badge">-Rs. 64.00</span>
       </div>
       <div class="price-current">Rs. 15.00</div>
+      <div class="card-selectors">
+        <div class="card-sel-row">
+          <span class="card-sel-label">Size</span>
+          <div class="card-pills">
+            <button class="card-pill" data-group="size" data-val='3"×3"'>3"×3"</button>
+            <button class="card-pill" data-group="size" data-val='4"×4"'>4"×4"</button>
+            <button class="card-pill active" data-group="size" data-val='5"×5"'>5"×5"</button>
+          </div>
+        </div>
+        <div class="card-sel-row">
+          <span class="card-sel-label">Frame</span>
+          <div class="card-pills">
+            <button class="card-pill active" data-group="frame" data-val="without">Without</button>
+            <button class="card-pill" data-group="frame" data-val="with">With</button>
+          </div>
+        </div>
+      </div>
       <button class="add-to-cart-btn">Add to cart</button>
     </div>
   `;
