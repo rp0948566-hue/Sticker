@@ -1,4 +1,4 @@
-@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
+﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
 
 :root {
   --black-nav: #000000;
@@ -4357,3 +4357,8 @@ img {
 .nav-links li.has-dropdown.open .dropdown-caret {
   transform: rotate(180deg);
 }
+
+/* PILL TEXT final override (after all wave animation rules) */
+.card-pill:not(.active){color:#333 !important;background:#fff !important;}
+.card-pill.active{color:#fff !important;background:#111 !important;border-color:#111 !important;}
+
