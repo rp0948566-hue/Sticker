@@ -32,6 +32,8 @@ dist-ssr
 
 # Large image folders (served locally / via LFS separately)
 whatsapp catalogue/
+STICKER/
+public/STICKER/
 
 # Auto-generated analysis files
 ANALYSIS_SUMMARY.md
