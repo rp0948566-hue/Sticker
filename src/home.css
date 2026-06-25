@@ -1056,6 +1056,144 @@ main {
   display: block;
 }
 
+/* ── Branded Hero Banner ─────────────────────────────── */
+.siu-hero {
+  background: #0a0a0a;
+  min-height: 420px;
+  display: flex;
+  align-items: center;
+  overflow: hidden;
+  position: relative;
+}
+.siu-hero::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(ellipse 60% 80% at 30% 50%, rgba(250,204,21,0.12) 0%, transparent 70%);
+  pointer-events: none;
+}
+.siu-hero-inner {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 48px 32px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 40px;
+  width: 100%;
+}
+.siu-hero-text {
+  flex: 1;
+  min-width: 0;
+}
+.siu-hero-tag {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 3px;
+  color: #facc15;
+  text-transform: uppercase;
+  margin: 0 0 14px;
+}
+.siu-hero-title {
+  font-size: clamp(42px, 7vw, 86px);
+  font-weight: 900;
+  color: #fff;
+  line-height: 1;
+  margin: 0 0 16px;
+  letter-spacing: -2px;
+}
+.siu-yellow { color: #facc15; }
+.siu-hero-sub {
+  font-size: 16px;
+  color: #aaa;
+  margin: 0 0 32px;
+  max-width: 400px;
+}
+.siu-hero-btns { display: flex; gap: 12px; flex-wrap: wrap; }
+.siu-btn-primary {
+  background: #facc15;
+  color: #000;
+  font-weight: 800;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  padding: 14px 32px;
+  border-radius: 4px;
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: background 0.2s, transform 0.2s;
+}
+.siu-btn-primary:hover { background: #f59e0b; transform: translateY(-2px); }
+.siu-btn-ghost {
+  background: transparent;
+  color: #fff;
+  font-weight: 700;
+  font-size: 14px;
+  letter-spacing: 1.5px;
+  padding: 14px 32px;
+  border-radius: 4px;
+  border: 1.5px solid rgba(255,255,255,0.3);
+  text-decoration: none;
+  text-transform: uppercase;
+  transition: border-color 0.2s, transform 0.2s;
+}
+.siu-btn-ghost:hover { border-color: #facc15; color: #facc15; transform: translateY(-2px); }
+
+/* Sticker collage */
+.siu-hero-collage {
+  flex-shrink: 0;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-template-rows: 1fr 1fr;
+  gap: 10px;
+  width: 340px;
+  height: 320px;
+}
+.siu-col-card {
+  border-radius: 10px;
+  overflow: hidden;
+  background: #1a1a1a;
+}
+.siu-col-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform 0.4s ease;
+}
+.siu-col-card:hover img { transform: scale(1.06); }
+.siu-col-1 { border-radius: 14px 6px 6px 6px; }
+.siu-col-4 { border-radius: 6px 6px 14px 6px; }
+
+/* Promo strip replacing top-banner */
+.siu-promo-strip {
+  background: #facc15 !important;
+  padding: 0 !important;
+  overflow: hidden;
+  white-space: nowrap;
+}
+.siu-promo-inner {
+  display: inline-flex;
+  gap: 32px;
+  padding: 13px 32px;
+  animation: promoScroll 20s linear infinite;
+  font-size: 13px;
+  font-weight: 800;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: #000;
+}
+.siu-dot { color: #000; opacity: 0.5; }
+@keyframes promoScroll {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@media (max-width: 768px) {
+  .siu-hero-inner { flex-direction: column; padding: 36px 20px; }
+  .siu-hero-collage { width: 100%; height: 220px; }
+  .siu-hero-title { letter-spacing: -1px; }
+}
+
 /* Features Bar */
 .features-bar {
   display: flex;
