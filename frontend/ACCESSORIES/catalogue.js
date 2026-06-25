@@ -56,19 +56,44 @@ export function detectPage() {
   if (p.includes('MACBOOK'))  return 'M';
   if (p.includes('CARD'))     return 'C';
   if (p.includes('MYSTERY'))  return 'MYSTERY';
-  if (p.includes('FRAME'))    return 'F';
   if (p.includes('ACCESSORIES')) return 'A';
-  if (p.includes('NEW') && (p.includes('ARRIVAL') || p.endsWith('/NEW/') || p.endsWith('/NEW'))) return 'N';
+  if (p.includes('NEW') && p.includes('ARRIVAL')) return 'N';
+  if (p.includes('FRAME'))    return 'F';
+  // Category-specific pages — order matters (more specific first)
+  if (p.includes('ANIME%20MINI') || p.includes('ANIME MINI')) return 'ANM2';
+  if (p.includes('NEW%20ANIME') || p.includes('NEW ANIME'))   return 'ANM3';
+  if (p.includes('ANIME'))          return 'ANM';
+  if (p.includes('MOVIES') || p.includes('MOVIE')) return 'MOV';
+  if (p.includes('CARS') || (p.includes('CAR') && !p.includes('CARD'))) return 'CAR';
+  if (p.includes('SPORTS') || p.includes('SPORT')) return 'SPO';
+  if (p.includes('MARVEL'))         return 'MAR';
+  if (p.includes('AESTHETIC'))      return 'AST';
+  if (p.includes('QUOTES') || p.includes('QUOTE')) return 'QOU';
+  if (p.includes('ARTIST'))         return 'ART';
+  if (p.includes('VAN') && p.includes('GOGH')) return 'VVG';
+  if (p.includes('SONG%20COVER') || p.includes('SONG COVER') || p.includes('8X8')) return 'SC';
+  if (p.includes('SONGS') || (p.includes('SONG') && !p.includes('COVER'))) return 'SONM';
+  if (p.includes('DEVOTIONAL'))     return 'DEV';
+  if (p.includes('VISION'))         return 'VSN';
+  if (p.includes('PINK') || p.includes('LAVENDER')) return 'GIR';
+  if (p.includes('SHINCHAN'))       return 'SHCN';
+  if (p.includes('A3'))             return 'A3';
+  if (p.includes('SPLIT%20ART') || p.includes('SPLIT ART')) return 'SPLA';
+  if (p.includes('SPLIT'))          return 'SPL';
+  if (p.includes('LAPTOP'))         return 'LAP';
   return 'HOME';
 }
 
+const CAT_CODES = new Set(['ANM','ANM2','ANM3','MOV','CAR','SPO','MAR','AST','QOU','ART','VVG','SONM','SC','DEV','VSN','GIR','SHCN','A3','SPL','SPLA','LAP']);
+
 export function isDynamicPage() {
   const pageCode = detectPage();
-  return ['M', 'C', 'A', 'F', 'N'].includes(pageCode);
+  return ['M', 'C', 'A', 'F', 'N'].includes(pageCode) || CAT_CODES.has(pageCode);
 }
 
 function getProductsForPage(catalogue, pageCode) {
   if (pageCode === 'HOME') return [];
+  if (CAT_CODES.has(pageCode)) return catalogue.filter(item => item[0] === pageCode);
   return catalogue.filter(item => item[1] === pageCode);
 }
 
