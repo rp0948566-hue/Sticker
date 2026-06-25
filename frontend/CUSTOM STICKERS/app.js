@@ -1,6 +1,4 @@
-import './home.css';
-import './loader.css';
-import './loader.js';
+﻿import './loader.js';
 import { initLazyLoad } from './lazy-load.js';
 import { initProductGrid } from './catalogue.js';
 import { initSearch } from './search.js';
@@ -671,3 +669,4 @@ initQuickViewActions();
     });
   });
 })();
+

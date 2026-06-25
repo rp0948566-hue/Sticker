@@ -1,5 +1,4 @@
-import './style.css';
-
+﻿
 export function getLoadingHTML() {
   return `
     <div class="tetrominos-wrapper" id="loading-animation" style="display: none;">
@@ -12,3 +11,4 @@ export function getLoadingHTML() {
     </div>
   `;
 }
+
