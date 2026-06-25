@@ -2334,12 +2334,13 @@ main {
   border-top: 1px solid #f0f0f0;
   display: flex;
   flex-direction: column;
-  gap: 6px;
+  gap: 5px;
 }
 .card-sel-row {
   display: flex;
   align-items: center;
-  gap: 6px;
+  gap: 5px;
+  flex-wrap: nowrap;
 }
 .card-sel-label {
   font-size: 9px;
@@ -2347,7 +2348,7 @@ main {
   text-transform: uppercase;
   color: #aaa;
   font-weight: 600;
-  min-width: 34px;
+  min-width: 30px;
   flex-shrink: 0;
 }
 .card-pills {
@@ -2357,7 +2358,7 @@ main {
 }
 .card-pill {
   font-size: 10px;
-  padding: 3px 9px;
+  padding: 3px 8px;
   border-radius: 20px;
   border: 1px solid #ddd;
   background: transparent;
@@ -2375,6 +2376,39 @@ main {
   background: #111;
   border-color: #111;
   color: #fff;
+}
+
+/* Mobile — tighter sizing at 768px (2-column grid) */
+@media (max-width: 768px) {
+  .card-selectors {
+    margin: 7px 0 0;
+    padding-top: 6px;
+    gap: 4px;
+  }
+  .card-sel-label {
+    font-size: 8px;
+    min-width: 26px;
+    letter-spacing: 0.05em;
+  }
+  .card-pills {
+    gap: 3px;
+  }
+  .card-pill {
+    font-size: 9px;
+    padding: 2px 6px;
+  }
+}
+
+/* Very small phones — stack label above pills */
+@media (max-width: 400px) {
+  .card-sel-row {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 3px;
+  }
+  .card-sel-label {
+    min-width: unset;
+  }
 }
 
 .add-to-cart-btn {
