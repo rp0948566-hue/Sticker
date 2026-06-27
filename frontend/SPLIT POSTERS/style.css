@@ -1,4 +1,4 @@
-﻿@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&display=swap');
 
 :root {
   --black-nav: #000000;
@@ -21,7 +21,7 @@ body {
   background-color: #FFFAFA; /* Snow white color */
   min-height: 100vh;
   font-family: 'Outfit', sans-serif;
-  overflow-x: hidden; /* prevent horizontal scroll from marquees */
+  overflow-x: clip; /* prevent horizontal scroll from marquees */
 }
 
 html.menu-open,
@@ -2067,7 +2067,7 @@ main {
 /* Products Grid */
 .products-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  grid-template-columns: repeat(3, 1fr) !important;
   gap: 30px;
   padding: 40px;
   background-color: #FFFAFA;
@@ -2658,10 +2658,10 @@ main {
     background-color: #FFFAFA;
   }
 
-  /* Product Grid: 2 columns on mobile */
+  /* Product Grid: 3 columns on mobile for split posters */
   .products-grid {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(3, 1fr) !important;
     gap: 12px !important;
     padding: 12px !important;
     width: 100% !important;
@@ -2669,10 +2669,10 @@ main {
     background-color: #FFFAFA !important;
   }
   
-  /* Show exactly 2 product cards per row properly in carousels on mobile */
+  /* Show exactly 3 product cards per row properly in carousels on mobile */
   .products-carousel {
     display: grid !important;
-    grid-template-columns: repeat(2, 1fr) !important;
+    grid-template-columns: repeat(3, 1fr) !important;
     gap: 12px !important;
     padding: 12px !important;
     flex-direction: unset !important;
@@ -2725,8 +2725,8 @@ main {
   .save-badge {
     font-size: 9px !important;
     padding: 2px 6px !important;
-    top: 6px !important;
-    right: 6px !important;
+    top: 2px !important;
+    right: 2px !important;
   }
   
   /* Mobile Add To Cart always visible, black bg, yellow text matching user screenshot */
@@ -4362,6 +4362,10 @@ img {
 .card-pill:not(.active){color:#333 !important;background:#fff !important;}
 .card-pill.active{color:#fff !important;background:#111 !important;border-color:#111 !important;}
 
+/* PILL NUCLEAR FIX — element+class+pseudo specificity (0,2,1) beats all class-only rules */
+button.card-pill:not(.active){color:#333 !important;background:#f5f5f5 !important;background-color:#f5f5f5 !important;position:static !important;overflow:visible !important;}
+button.card-pill.active{color:#fff !important;background:#111 !important;background-color:#111 !important;border-color:#111 !important;position:static !important;overflow:visible !important;}
+
 
 /* FRAME visual effect on product card image */
 .placeholder-image.frame-on {
@@ -4375,4 +4379,88 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+
+/* Added to show product images properly without cropping (with padding all around) */
+.placeholder-image img, 
+.recom-img img, 
+.qv-main-image img,
+.qv-thumb img,
+.product-image-container img {
+  object-fit: contain !important;
+  background-color: transparent !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* Mirror Quick View frame effect onto Product Card frame */
+.placeholder-image.frame-on {
+  padding: 15px !important;
+  background: radial-gradient(circle at top left, #3a3a3a, #141414) !important;
+  box-shadow: 
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 0 0 12px #1f1f1f,
+    inset 0 0 0 13px rgba(255, 255, 255, 0.05),
+    0 15px 35px rgba(0, 0, 0, 0.4),
+    0 5px 15px rgba(0, 0, 0, 0.3) !important;
+  border-radius: 4px !important;
+  position: relative !important;
+}
+
+.placeholder-image.frame-on::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  box-shadow: inset 0 8px 15px rgba(0, 0, 0, 0.7),
+              inset 0 -2px 5px rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+  z-index: 2;
+  border-radius: 2px;
+  background: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 25%, transparent 26%, transparent 100%),
+    linear-gradient(135deg, transparent 28%, rgba(255, 255, 255, 0.12) 29%, rgba(255, 255, 255, 0.22) 32%, rgba(255, 255, 255, 0.04) 38%, transparent 39%),
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+}
+
+.placeholder-image.frame-on::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  z-index: 0;
+  border-radius: 2px;
+}
+
+.placeholder-image.frame-on img {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18)) !important;
+  border-radius: 2px !important;
+  z-index: 1 !important;
+  position: relative;
+  background-color: transparent !important;
+}
+
+/* Update save badge position to be closer to top right edge */
+.save-badge {
+  top: 2px !important;
+  right: 2px !important;
+}
+
+/* Updated cart overlay coverage and z-indexes to keep navbar visible */
+.cart-overlay {
+  top: 0 !important;
+  height: 100vh !important;
+  z-index: 999 !important;
+}
+.cart-drawer {
+  z-index: 2001 !important;
+}
+.navbar {
+  z-index: 2000 !important;
 }

@@ -630,6 +630,40 @@ initQuickViewActions();
     const group = pill.dataset.group;
     card.querySelectorAll(`.card-pill[data-group="${group}"]`).forEach(p => p.classList.remove('active'));
     pill.classList.add('active');
+
+    if (group === 'frame') {
+      const imgContainer = card.querySelector('.placeholder-image');
+      if (imgContainer) {
+        if (pill.dataset.val === 'with') {
+          imgContainer.classList.add('frame-on');
+        } else {
+          imgContainer.classList.remove('frame-on');
+        }
+      }
+    } // Add visual frame logic
+    
+    // Update card price based on size
+    if (group === 'size') {
+      const priceDisplay = card.querySelector('.price-current');
+      const oldPriceDisplay = card.querySelector('.price-old');
+      const badgeDisplay = card.querySelector('.price-badge');
+      
+      let newPrice = '15.00';
+      let oldPrice = '79.00';
+      let discount = '64.00';
+      
+      if (pill.dataset.val.includes('3')) {
+        newPrice = '15.00'; oldPrice = '79.00'; discount = '64.00';
+      } else if (pill.dataset.val.includes('4')) {
+        newPrice = '29.00'; oldPrice = '89.00'; discount = '60.00';
+      } else if (pill.dataset.val.includes('5')) {
+        newPrice = '39.00'; oldPrice = '99.00'; discount = '60.00';
+      }
+      
+      if (priceDisplay) priceDisplay.textContent = 'Rs. ' + newPrice;
+      if (oldPriceDisplay) oldPriceDisplay.textContent = 'Rs. ' + oldPrice;
+      if (badgeDisplay) badgeDisplay.textContent = '-Rs. ' + discount;
+    }
   });
 })();
 

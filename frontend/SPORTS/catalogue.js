@@ -94,7 +94,6 @@ export function isDynamicPage() {
 function getProductsForPage(catalogue, pageCode) {
   if (pageCode === 'HOME') return [];
   if (CAT_CODES.has(pageCode)) return catalogue.filter(item => item[0] === pageCode);
-  // New Arrivals: show both N and NF (frame mix) entries
   if (pageCode === 'N') return catalogue.filter(item => item[1] === 'N' || item[1] === 'NF');
   return catalogue.filter(item => item[1] === pageCode);
 }
@@ -155,9 +154,9 @@ function createCard(record, idx, catFolders, catNames) {
         <div class="card-sel-row">
           <span class="card-sel-label">Size</span>
           <div class="card-pills">
-            <button class="card-pill" data-group="size" data-val='3"×3"'>3"×3"</button>
+            <button class="card-pill active" data-group="size" data-val='3"×3"'>3"×3"</button>
             <button class="card-pill" data-group="size" data-val='4"×4"'>4"×4"</button>
-            <button class="card-pill active" data-group="size" data-val='5"×5"'>5"×5"</button>
+            <button class="card-pill" data-group="size" data-val='5"×5"'>5"×5"</button>
           </div>
         </div>
         <div class="card-sel-row">

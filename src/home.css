@@ -21,7 +21,7 @@ body {
   background-color: #FFFAFA; /* Snow white */
   min-height: 100vh;
   font-family: 'Outfit', sans-serif;
-  overflow-x: hidden; /* prevent horizontal scroll from marquees */
+  overflow-x: clip; /* prevent horizontal scroll from marquees */
 }
 
 html.menu-open,
@@ -2917,7 +2917,7 @@ main {
     box-sizing: border-box;
     gap: 12px;
     overflow-y: auto;
-    overflow-x: hidden;
+    overflow-x: clip;
     transition: left 0.38s cubic-bezier(0.16, 1, 0.3, 1);
     box-shadow: 12px 0 40px rgba(0, 0, 0, 0.6);
     /* webkit momentum scroll on iOS */
@@ -4929,3 +4929,87 @@ button:not(.qty-arrow-btn):not(.recom-arrow):not(.cart-close):not(.quick-view-cl
 .add-to-cart-btn:hover, .buy-now-btn:hover, .continue-shopping-btn-new:hover, .qv-add-to-cart-btn:hover, .recom-add-btn:hover, .view-all-btn:hover { color: #000000 !important; border-color: #facc15 !important; }
 
 .add-to-cart-btn:hover::after, .buy-now-btn:hover::after, .continue-shopping-btn-new:hover::after, .qv-add-to-cart-btn:hover::after, .recom-add-btn:hover::after, .view-all-btn:hover::after { top: -350px; transform: translateX(-50%) rotate(180deg); }
+
+
+/* Added to show product images properly without cropping (with padding all around) */
+.placeholder-image img, 
+.recom-img img, 
+.qv-main-image img,
+.qv-thumb img,
+.product-image-container img {
+  object-fit: contain !important;
+  background-color: transparent !important;
+  padding: 20px !important;
+  box-sizing: border-box !important;
+}
+
+/* Mirror Quick View frame effect onto Product Card frame */
+.placeholder-image.frame-on {
+  padding: 15px !important;
+  background: radial-gradient(circle at top left, #3a3a3a, #141414) !important;
+  box-shadow: 
+    inset 0 0 0 1px rgba(255, 255, 255, 0.1),
+    inset 0 0 0 12px #1f1f1f,
+    inset 0 0 0 13px rgba(255, 255, 255, 0.05),
+    0 15px 35px rgba(0, 0, 0, 0.4),
+    0 5px 15px rgba(0, 0, 0, 0.3) !important;
+  border-radius: 4px !important;
+  position: relative !important;
+}
+
+.placeholder-image.frame-on::after {
+  content: '';
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  right: 12px;
+  bottom: 12px;
+  box-shadow: inset 0 8px 15px rgba(0, 0, 0, 0.7),
+              inset 0 -2px 5px rgba(255, 255, 255, 0.05);
+  pointer-events: none;
+  z-index: 2;
+  border-radius: 2px;
+  background: 
+    linear-gradient(135deg, rgba(255, 255, 255, 0.4) 0%, rgba(255, 255, 255, 0.1) 25%, transparent 26%, transparent 100%),
+    linear-gradient(135deg, transparent 28%, rgba(255, 255, 255, 0.12) 29%, rgba(255, 255, 255, 0.22) 32%, rgba(255, 255, 255, 0.04) 38%, transparent 39%),
+    radial-gradient(circle at 30% 20%, rgba(255, 255, 255, 0.08) 0%, transparent 60%);
+}
+
+.placeholder-image.frame-on::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ffffff;
+  z-index: 0;
+  border-radius: 2px;
+}
+
+.placeholder-image.frame-on img {
+  filter: drop-shadow(0 3px 6px rgba(0, 0, 0, 0.18)) !important;
+  border-radius: 2px !important;
+  z-index: 1 !important;
+  position: relative;
+  background-color: transparent !important;
+}
+
+/* Update save badge position to be closer to top right edge */
+.save-badge {
+  top: 2px !important;
+  right: 2px !important;
+}
+
+/* Updated cart overlay coverage and z-indexes to keep navbar visible */
+.cart-overlay {
+  top: 0 !important;
+  height: 100vh !important;
+  z-index: 999 !important;
+}
+.cart-drawer {
+  z-index: 2001 !important;
+}
+.navbar {
+  z-index: 2000 !important;
+}

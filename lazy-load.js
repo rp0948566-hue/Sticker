@@ -7,7 +7,6 @@ let isLoading = false;
 
 export function initLazyLoad() {
   const grid = document.querySelector('.products-grid');
-  if (!grid) return; // Only runs on the New Arrivals page
 
   // Get all product cards
   const allCards = Array.from(grid.querySelectorAll('.product-card'));
