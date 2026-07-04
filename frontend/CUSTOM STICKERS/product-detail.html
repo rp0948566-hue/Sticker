@@ -1,0 +1,481 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>STICK IT UP | Custom Premium Vinyl Sticker</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link rel="stylesheet" href="./loader.css" />
+    <link rel="stylesheet" href="./home.css" />
+    <link rel="stylesheet" href="./style.css" />
+  </head>
+  <body class="loader-active">
+    <script src="./loader.js"></script>
+    <div id="global-loader" class="loader-container">
+      <div class="loader-wrapper">
+        <div class="loader">
+          <svg viewBox="0 0 80 80">
+            <circle id="test" cx="40" cy="40" r="32"></circle>
+          </svg>
+        </div>
+        <div class="loader triangle">
+          <svg viewBox="0 0 86 80">
+            <polygon points="43 8 79 72 7 72"></polygon>
+          </svg>
+        </div>
+        <div class="loader">
+          <svg viewBox="0 0 80 80">
+            <rect x="8" y="8" width="64" height="64"></rect>
+          </svg>
+        </div>
+      </div>
+    </div>
+    
+    <nav class="navbar">
+      <div class="nav-container">
+        <!-- MOBILE ONLY: Hamburger -->
+        <div class="nav-mobile-menu mobile-menu-btn">
+          <i class="fas fa-bars"></i>
+        </div>
+
+        <!-- Logo section -->
+        <div class="nav-left">
+          <a href="/" class="logo">
+            <span>STICK</span>
+            <span style="color: #facc15;">IT UP</span>
+          </a>
+        </div>
+
+        <!-- Navigation links section -->
+        <div class="nav-center desktop-only">
+          <ul class="nav-links">
+            <li><a href="/home">Home</a></li>
+            <li><a href="/frontend/CUSTOM STICKERS/index.html" class="active-link">CUSTOM STICKERS</a></li>
+            <li><a href="/frontend/CARD SKINS/index.html">CARD SKINS</a></li>
+            <li><a href="/frontend/MACBOOK SKINS/index.html">MACBOOK SKINS</a></li>
+            <li class="has-dropdown">
+              <a href="/frontend/FRAME/FRAME/index.html">POSTER <span class="dropdown-caret">&#9660;</span></a>
+              <div class="frame-categories-dropdown">
+              <div class="fcd-grid">
+                <div class="fcd-col">
+                  <div class="fcd-col-title">Anime &amp; Pop</div>
+                    <ul>
+                    <li><a href="/frontend/ANIME/index.html">Anime</a></li>
+                    <li><a href="/frontend/ANIME MINI/index.html">Anime Mini</a></li>
+                    <li><a href="/frontend/NEW ANIME/index.html">New Anime</a></li>
+                    <li><a href="/frontend/MARVELS/index.html">Marvels</a></li>
+                    <li><a href="/frontend/MOVIES/index.html">Movies</a></li>
+                    <li><a href="/frontend/SHINCHAN/index.html">Shinchan</a></li>
+                    <li><a href="/frontend/CARS/index.html">Cars</a></li>
+                    </ul>
+                </div>
+                <div class="fcd-col">
+                  <div class="fcd-col-title">Art &amp; Style</div>
+                    <ul>
+                    <li><a href="/frontend/AESTHETIC/index.html">Aesthetic</a></li>
+                    <li><a href="/frontend/ARTIST PRINTS/index.html">Artist Prints</a></li>
+                    <li><a href="/frontend/VAN GOGH/index.html">Van Gogh</a></li>
+                    <li><a href="/frontend/PINK LAVENDER/index.html">Pink Lavender</a></li>
+                    <li><a href="/frontend/VISION BOARD/index.html">Vision Board</a></li>
+                    <li><a href="/frontend/SPLIT POSTERS/index.html">Split Posters</a></li>
+                    <li><a href="/frontend/SPLIT ART/index.html">Split Art</a></li>
+                    </ul>
+                </div>
+                <div class="fcd-col">
+                  <div class="fcd-col-title">More</div>
+                    <ul>
+                    <li><a href="/frontend/SPORTS/index.html">Sports</a></li>
+                    <li><a href="/frontend/DEVOTIONAL/index.html">Devotional</a></li>
+                    <li><a href="/frontend/QUOTES/index.html">Quotes</a></li>
+                    <li><a href="/frontend/SONGS/index.html">Songs</a></li>
+                    <li><a href="/frontend/A3 SIZE/index.html">A3 Size</a></li>
+                    <li><a href="/frontend/SONG COVER 8X8/index.html">Song Cover 8x8</a></li>
+                    </ul>
+                </div>
+              </div>
+              </div>
+            </li>
+            <li><a href="/frontend/ACCESSORIES/index.html">LAPTOP STICKERS</a></li>
+          </ul>
+        </div>
+
+        <!-- Right actions section -->
+        <div class="nav-right">
+          <!-- Support Box (Desktop Only) -->
+          <div class="support-box desktop-only">
+            <i class="fas fa-headset"></i>
+            <div class="support-info">
+              <span class="label">Customer support</span>
+              <span class="email">wecare@stickitup.xyz</span>
+            </div>
+          </div>
+
+          <!-- Icons Group -->
+          <div class="nav-icons-group">
+            <!-- Search Icon -->
+            <i class="fa-solid fa-search search-btn"></i>
+            
+            <!-- User Icon -->
+            <i class="far fa-user user-btn" onclick="window.location.href='../Glassmorphism Login Page/index.html'"></i>
+            
+            <!-- Cart Section -->
+            <div class="cart-wrapper" id="cart-btn">
+              <i class="fa-solid fa-shopping-bag"></i>
+              <span class="cart-badge" id="cart-badge">0</span>
+            </div>
+            
+            <!-- Cart Subtotal Info (Desktop Only) -->
+            <div class="cart-info-text desktop-only" id="cart-info-btn">
+              <span class="subtotal-label">Subtotal</span>
+              <span class="subtotal-amount amount" id="topbar-subtotal">Rs. 0.00</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </nav>
+
+    <!-- Mobile Menu Overlay -->
+    <div class="mobile-menu-overlay" id="mobile-menu-overlay"></div>
+
+    <!-- Mobile Menu Drawer -->
+    <div class="mobile-menu-drawer" id="mobile-menu">
+      <div class="mobile-menu-links">
+        <a href="#" class="search-btn-mobile"><i class="fa-solid fa-search"></i> SEARCH</a>
+        <a href="../Glassmorphism Login Page/index.html"><i class="far fa-user"></i> MY ACCOUNT</a>
+        <div style="height: 1px; background: #2a2a2a; margin: 5px 0;"></div>
+        <a href="/home">Home</a>
+        <a href="/frontend/CUSTOM STICKERS/index.html">CUSTOM STICKERS</a>
+        <a href="/frontend/CARD SKINS/index.html">CARD SKINS</a>
+        <a href="/frontend/MACBOOK SKINS/index.html">MACBOOK SKINS</a>
+        <a href="/frontend/FRAME/FRAME/index.html">POSTER</a>
+        <a href="/frontend/ACCESSORIES/index.html">LAPTOP STICKERS</a>
+      </div>
+
+      <div class="customer-support mobile-support">
+        <svg class="icon-headset" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 18v-6a9 9 0 0 1 18 0v6"></path><path d="M21 19a2 2 0 0 1-2 2h-1a2 2 0 0 1-2-2v-3a2 2 0 0 1 2-2h3zM3 19a2 2 0 0 0 2 2h1a2 2 0 0 0 2-2v-3a2 2 0 0 0-2-2H3z"></path></svg>
+        <div class="support-text">
+          <span class="support-label">Customer support</span>
+          <span class="support-email">wecare@stickitup.xyz</span>
+        </div>
+      </div>
+    </div>
+
+    <main>
+      <section class="pd-section">
+        <div class="pd-container">
+          <!-- Breadcrumb -->
+          <div class="pd-breadcrumb">
+            <a href="/home">Home</a>
+            <span class="divider">&gt;</span>
+            <a href="/frontend/CUSTOM STICKERS/index.html">Custom Stickers</a>
+            <span class="divider">&gt;</span>
+            <span>Custom Premium Vinyl Sticker</span>
+          </div>
+          
+          <!-- Product Grid -->
+          <div class="pd-grid">
+            <!-- Left Side: Product Image -->
+            <div class="pd-left">
+              <div class="pd-image-box">
+                <img id="pd-main-img" src="/IMAGE/partners/material_holographic.png" alt="Custom Premium Vinyl Sticker">
+              </div>
+            </div>
+            
+            <!-- Right Side: Details & Actions -->
+            <div class="pd-right">
+              <div class="pd-title-row">
+                <h1 class="pd-title">Custom Premium Vinyl Sticker</h1>
+                <button class="pd-share-btn">
+                  <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="18" cy="5" r="3"></circle>
+                    <circle cx="6" cy="12" r="3"></circle>
+                    <circle cx="18" cy="19" r="3"></circle>
+                    <line x1="8.59" y1="13.51" x2="15.42" y2="17.49"></line>
+                    <line x1="15.41" y1="6.51" x2="8.59" y2="10.49"></line>
+                  </svg>
+                </button>
+              </div>
+              
+              <div class="pd-rating">
+                ★★★★★ <span style="font-size: 13px; color: #707070; margin-left: 5px;">(0 reviews)</span>
+              </div>
+              
+              <div class="pd-price">Rs. 59.00</div>
+              <div class="pd-shipping-text"><u>Shipping</u> calculated at checkout.</div>
+              
+              <!-- Customization Form -->
+              <!-- Shape Select -->
+              <div class="pd-form-group">
+                <label class="pd-form-label">Shape <span class="required">*</span></label>
+                <div class="pd-form-content">
+                  <select class="pd-select" id="pd-shape-select">
+                    <option value="">-- Please select --</option>
+                    <option value="Circle">Circle</option>
+                    <option value="Square">Square</option>
+                    <option value="Rectangle">Rectangle</option>
+                    <option value="Oval">Oval</option>
+                    <option value="Die-Cut">Die-Cut</option>
+                  </select>
+                </div>
+              </div>
+              
+              <!-- Size Select (Visible after shape select) -->
+              <div class="pd-form-group" id="pd-size-group" style="display: none;">
+                <label class="pd-form-label" id="pd-size-label">Size <span class="required">*</span></label>
+                <div class="pd-form-content">
+                  <div class="pd-size-options" id="pd-size-options-container">
+                    <!-- Dynamic buttons -->
+                  </div>
+                </div>
+              </div>
+
+              <!-- Quantity Select Dropdown (Visible after size select) -->
+              <div class="pd-form-group" id="pd-qty-dropdown-group" style="display: none;">
+                <label class="pd-form-label" id="pd-qty-dropdown-label">Quantity - Shape *</label>
+                <div class="pd-form-content">
+                  <select class="pd-select" id="pd-qty-select">
+                    <option value="">-- Please select --</option>
+                    <option value="50" data-price="2160">50 (43.2/Sticker) (+ Rs. 2,160.00)</option>
+                    <option value="100" data-price="3960">100 (39.6/Sticker) (+ Rs. 3,960.00)</option>
+                    <option value="250" data-price="8100">250 (32.4/Sticker) (+ Rs. 8,100.00)</option>
+                    <option value="500" data-price="12600">500 (25.2/Sticker) (+ Rs. 12,600.00)</option>
+                    <option value="1000" data-price="21600">1000 (21.6/Sticker) (+ Rs. 21,600.00)</option>
+                    <option value="2500" data-price="36000">2500 (14.4/Sticker) (+ Rs. 36,000.00)</option>
+                    <option value="5000" data-price="54000">5000 (10.8/Sticker) (+ Rs. 54,000.00)</option>
+                  </select>
+                </div>
+              </div>
+              
+              <!-- File Upload -->
+              <div class="pd-form-group">
+                <label class="pd-form-label">File Upload <span class="required">*</span></label>
+                <div class="pd-form-content">
+                  <!-- Hidden input -->
+                  <input type="file" id="pd-file-input" style="display: none;" accept="image/*">
+                  
+                  <!-- Dotted Area -->
+                  <div class="pd-upload-area" id="pd-upload-area">
+                    <span class="pd-upload-link" id="pd-upload-trigger">Choose file</span> or drop file to upload
+                  </div>
+                  
+                  <!-- Upload Active Banner -->
+                  <div class="pd-upload-active-container" id="pd-upload-active" style="display: none;">
+                    <img id="pd-upload-thumb" src="" alt="Thumbnail">
+                    <span class="pd-upload-filename" id="pd-upload-filename">filename.png</span>
+                    <button class="pd-upload-remove-btn" id="pd-upload-remove-btn">
+                      <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M12 2C6.47 2 2 6.47 2 12s4.47 10 10 10 10-4.47 10-10S17.53 2 12 2zm5 13.59L15.59 17 12 13.41 8.41 17 7 15.59 10.59 12 7 8.41 8.41 7 12 10.59 15.59 7 17 8.41 13.41 12 17 15.59z"/></svg>
+                    </button>
+                  </div>
+
+                  <div class="pd-upload-banner">
+                    Upload High Quality File
+                  </div>
+                </div>
+              </div>
+              
+              <!-- Actions -->
+              <div class="pd-actions">
+                <div class="pd-qty-container">
+                  <button class="pd-qty-btn" id="pd-qty-down"><i class="fas fa-minus"></i></button>
+                  <input type="text" class="pd-qty-input" id="pd-qty-val" value="1" readonly>
+                  <button class="pd-qty-btn" id="pd-qty-up"><i class="fas fa-plus"></i></button>
+                </div>
+                
+                <button class="pd-add-to-cart-btn">
+                  <span>Add to cart</span>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <!-- Slide Cart Drawer Overlay -->
+    <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
+
+    <!-- Slide Cart Drawer Wrapper -->
+    <div class="cart-drawer" id="cart-drawer">
+      <div class="cart-header">
+        <span class="cart-title">Your Cart</span>
+        <button class="cart-close" id="cart-close-btn">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
+        </button>
+      </div>
+
+      <!-- SCROLLABLE CART CONTENT -->
+      <div class="cart-content" id="cart-content">
+        <div class="cart-empty" id="cart-empty">
+          <div class="cart-empty-main">
+            <h2 class="cart-empty-title-new">Your cart is empty</h2>
+            <button class="continue-shopping-btn-new" id="continue-shopping">Continue shopping</button>
+          </div>
+        </div>
+        <div id="cart-items-container" class="cart-items-container"></div>
+      </div>
+
+      <!-- FIXED FOOTER -->
+      <div class="cart-footer">
+        <div class="cart-subtotal-row">
+          <span class="subtotal-label">SUBTOTAL</span>
+          <span class="subtotal-amount" id="drawer-subtotal">Rs. 0.00</span>
+        </div>
+        <button class="buy-now-btn" id="checkout-btn">
+          <span>BUY NOW</span>
+        </button>
+      </div>
+    </div>
+
+    <script type="module" src="./app.js"></script>
+    <script>
+      (function() {
+        // Read query parameters
+        const params = new URLSearchParams(window.location.search);
+        const material = params.get('material') || 'holographic';
+        
+        const images = {
+          holographic: '/IMAGE/partners/material_holographic.png',
+          glitter_black: '/IMAGE/partners/material_glitter_black.png',
+          orange_metallic: '/IMAGE/partners/material_orange_metallic.png',
+          orange_matte: '/IMAGE/partners/material_orange_matte.png'
+        };
+        
+        const titles = {
+          holographic: 'Custom Premium Holographic Sticker',
+          glitter_black: 'Custom Premium Glitter Black Sticker',
+          orange_metallic: 'Custom Premium Orange Metallic Sticker',
+          orange_matte: 'Custom Premium Orange Matte Sticker'
+        };
+
+        const imgEl = document.getElementById('pd-main-img');
+        const titleEl = document.querySelector('.pd-title');
+        
+        if (imgEl && images[material]) {
+          imgEl.src = images[material];
+        }
+        if (titleEl && titles[material]) {
+          titleEl.textContent = titles[material];
+        }
+
+        // Shape and Size selectors
+        const shapeSelect = document.getElementById('pd-shape-select');
+        const sizeGroup = document.getElementById('pd-size-group');
+        const sizeContainer = document.getElementById('pd-size-options-container');
+        const qtyDropdownGroup = document.getElementById('pd-qty-dropdown-group');
+        const qtyDropdownLabel = document.getElementById('pd-qty-dropdown-label');
+        const qtySelect = document.getElementById('pd-qty-select');
+        const priceEl = document.querySelector('.pd-price');
+
+        const squareCircleSizes = ['1.5 X 1.5 (Inches)', '2 X 2 (Inches)', '3 X 3 (Inches)', '4 X 4 (Inches)', '5 X 5 (Inches)'];
+        const rectOvalSizes = ['2 X 1 (Inches)', '3 X 1 (Inches)', '3 X 2 (Inches)', '4 X 2 (Inches)', '5 X 3 (Inches)'];
+
+        shapeSelect.addEventListener('change', () => {
+          const shape = shapeSelect.value;
+          if (!shape) {
+            sizeGroup.style.display = 'none';
+            qtyDropdownGroup.style.display = 'none';
+            priceEl.textContent = 'Rs. 0.00';
+            qtySelect.value = '';
+            return;
+          }
+
+          // Populate sizes
+          sizeContainer.innerHTML = '';
+          const targetSizes = (shape === 'Circle' || shape === 'Square') ? squareCircleSizes : rectOvalSizes;
+          
+          targetSizes.forEach(size => {
+            const btn = document.createElement('button');
+            btn.className = 'pd-size-btn';
+            btn.textContent = size;
+            btn.type = 'button';
+            btn.addEventListener('click', () => {
+              // Deactivate others
+              document.querySelectorAll('.pd-size-btn').forEach(b => b.classList.remove('active'));
+              btn.classList.add('active');
+              
+              // Show quantity dropdown
+              qtyDropdownLabel.textContent = `Quantity - ${shape} *`;
+              qtyDropdownGroup.style.display = 'block';
+            });
+            sizeContainer.appendChild(btn);
+          });
+
+          sizeGroup.style.display = 'block';
+          qtyDropdownGroup.style.display = 'none';
+          priceEl.textContent = 'Rs. 0.00';
+          qtySelect.value = '';
+        });
+
+        // Price updates based on Quantity dropdown
+        qtySelect.addEventListener('change', () => {
+          const selectedOption = qtySelect.options[qtySelect.selectedIndex];
+          const price = selectedOption.getAttribute('data-price');
+          if (price) {
+            // Format price with comma
+            const formatted = parseFloat(price).toLocaleString('en-IN');
+            priceEl.textContent = `Rs. ${formatted}.00`;
+          } else {
+            priceEl.textContent = 'Rs. 0.00';
+          }
+        });
+
+        // File upload handling
+        const fileInput = document.getElementById('pd-file-input');
+        const uploadArea = document.getElementById('pd-upload-area');
+        const uploadTrigger = document.getElementById('pd-upload-trigger');
+        const uploadActive = document.getElementById('pd-upload-active');
+        const uploadThumb = document.getElementById('pd-upload-thumb');
+        const uploadFilename = document.getElementById('pd-upload-filename');
+        const uploadRemoveBtn = document.getElementById('pd-upload-remove-btn');
+
+        function triggerUpload() {
+          fileInput.click();
+        }
+
+        uploadArea.addEventListener('click', triggerUpload);
+        
+        fileInput.addEventListener('change', () => {
+          if (fileInput.files && fileInput.files[0]) {
+            const file = fileInput.files[0];
+            uploadFilename.textContent = file.name;
+            
+            // Show thumbnail
+            const reader = new FileReader();
+            reader.onload = (e) => {
+              uploadThumb.src = e.target.result;
+              uploadArea.style.display = 'none';
+              uploadActive.style.display = 'flex';
+            };
+            reader.readAsDataURL(file);
+          }
+        });
+
+        uploadRemoveBtn.addEventListener('click', (e) => {
+          e.stopPropagation(); // Avoid triggering parent click events
+          fileInput.value = '';
+          uploadArea.style.display = 'block';
+          uploadActive.style.display = 'none';
+          uploadThumb.src = '';
+        });
+
+        // Quantity input counter
+        const qtyVal = document.getElementById('pd-qty-val');
+        const qtyUp = document.getElementById('pd-qty-up');
+        const qtyDown = document.getElementById('pd-qty-down');
+        
+        if (qtyVal && qtyUp && qtyDown) {
+          qtyUp.addEventListener('click', () => {
+            let val = parseInt(qtyVal.value);
+            qtyVal.value = val + 1;
+          });
+          qtyDown.addEventListener('click', () => {
+            let val = parseInt(qtyVal.value);
+            if (val > 1) {
+              qtyVal.value = val - 1;
+            }
+          });
+        }
+      })();
+    </script>
+  </body>
+</html>
