@@ -266,6 +266,8 @@ document.addEventListener('click', (e) => {
 if (cartBtn) cartBtn.addEventListener('click', toggleCart);
 if (cartInfoBtn) cartInfoBtn.addEventListener('click', toggleCart);
 if (cartClose) cartClose.addEventListener('click', closeCart);
+const continueShoppingBtn = document.getElementById('continue-shopping');
+if (continueShoppingBtn) continueShoppingBtn.addEventListener('click', closeCart);
 if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 if (qvClose) qvClose.addEventListener('click', closeQuickView);
 if (qvOverlay) qvOverlay.addEventListener('click', closeQuickView);

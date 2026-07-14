@@ -268,6 +268,8 @@ document.addEventListener('click', (e) => {
 if (cartBtn) cartBtn.addEventListener('click', toggleCart);
 if (cartInfoBtn) cartInfoBtn.addEventListener('click', toggleCart);
 if (cartClose) cartClose.addEventListener('click', closeCart);
+const continueShoppingBtn = document.getElementById('continue-shopping');
+if (continueShoppingBtn) continueShoppingBtn.addEventListener('click', closeCart);
 if (cartOverlay) cartOverlay.addEventListener('click', closeCart);
 if (qvClose) qvClose.addEventListener('click', closeQuickView);
 if (qvOverlay) qvOverlay.addEventListener('click', closeQuickView);
@@ -704,4 +706,91 @@ initQuickViewActions();
       caret.classList.remove('open');
     });
   });
+})();
+
+// Home page product carousel — prev/next arrow scrolling
+(function () {
+  const carousel = document.getElementById('products-carousel');
+  const prevBtn = document.getElementById('carousel-prev');
+  const nextBtn = document.getElementById('carousel-next');
+  if (!carousel || !prevBtn || !nextBtn) return;
+
+  let isAnimating = false;
+
+  function smoothScrollTo(target, direction) {
+    if (isAnimating) return;
+    isAnimating = true;
+
+    const start = carousel.scrollLeft;
+    const change = target - start;
+    const startTime = performance.now();
+    const duration = 750;
+    carousel.classList.add(direction === 'next' ? 'sliding-next' : 'sliding-prev');
+
+    function animateScroll(currentTime) {
+      const elapsed = currentTime - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const ease = 1 - Math.pow(1 - progress, 5);
+      carousel.scrollLeft = start + change * ease;
+
+      if (progress < 1) {
+        requestAnimationFrame(animateScroll);
+      } else {
+        setTimeout(() => {
+          carousel.classList.remove('sliding-next', 'sliding-prev');
+          isAnimating = false;
+        }, 150);
+      }
+    }
+    requestAnimationFrame(animateScroll);
+  }
+
+  function scrollAmount() {
+    const isMobile = window.innerWidth <= 768;
+    const gap = isMobile ? 12 : 30;
+    const cardWidth = isMobile ? (carousel.clientWidth - 12) / 2 : 340;
+    const cardScale = cardWidth + gap;
+    const visibleCards = Math.max(1, Math.floor(carousel.clientWidth / cardScale));
+    return visibleCards * cardScale;
+  }
+
+  prevBtn.addEventListener('click', () => {
+    const target = Math.max(0, carousel.scrollLeft - scrollAmount());
+    smoothScrollTo(target, 'prev');
+  });
+
+  nextBtn.addEventListener('click', () => {
+    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+    const target = Math.min(maxScroll, carousel.scrollLeft + scrollAmount());
+    smoothScrollTo(target, 'next');
+  });
+
+  carousel.addEventListener('scroll', () => {
+    prevBtn.classList.toggle('is-dash', carousel.scrollLeft <= 5);
+    const maxScroll = carousel.scrollWidth - carousel.clientWidth;
+    nextBtn.classList.toggle('is-dash', carousel.scrollLeft >= maxScroll - 5);
+  });
+  prevBtn.classList.add('is-dash');
+})();
+
+// Testimonial carousel — prev/next review switching
+(function () {
+  const panel = document.getElementById('customer-voices-panel');
+  const prevBtn = document.getElementById('review-prev');
+  const nextBtn = document.getElementById('review-next');
+  if (!panel || !prevBtn || !nextBtn) return;
+
+  const slides = Array.from(panel.querySelectorAll('.voice-slide'));
+  if (slides.length === 0) return;
+  let activeIndex = slides.findIndex(s => s.classList.contains('active'));
+  if (activeIndex === -1) activeIndex = 0;
+
+  function showSlide(index) {
+    slides[activeIndex].classList.remove('active');
+    activeIndex = (index + slides.length) % slides.length;
+    slides[activeIndex].classList.add('active');
+  }
+
+  prevBtn.addEventListener('click', () => showSlide(activeIndex - 1));
+  nextBtn.addEventListener('click', () => showSlide(activeIndex + 1));
 })();

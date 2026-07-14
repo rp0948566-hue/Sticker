@@ -7,10 +7,16 @@ const cloudinary = require('cloudinary').v2;
 const fs = require('fs');
 const path = require('path');
 
+// Set these in your shell before running, e.g.:
+// CLOUDINARY_CLOUD_NAME=xxx CLOUDINARY_API_KEY=xxx CLOUDINARY_API_SECRET=xxx node upload-to-cloudinary.cjs
+if (!process.env.CLOUDINARY_CLOUD_NAME || !process.env.CLOUDINARY_API_KEY || !process.env.CLOUDINARY_API_SECRET) {
+  console.error('Missing CLOUDINARY_CLOUD_NAME / CLOUDINARY_API_KEY / CLOUDINARY_API_SECRET env vars.');
+  process.exit(1);
+}
 cloudinary.config({
-  cloud_name: 'dsi45vpfz',
-  api_key:    '392554513725553',
-  api_secret: 'w2123OaDzydc7sbOtkqExvGEdHQ',
+  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
+  api_key:    process.env.CLOUDINARY_API_KEY,
+  api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
 const STICKER_FOLDER = path.join(__dirname, 'STICKER');

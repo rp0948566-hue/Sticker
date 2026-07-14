@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Artist Prints - Stick It Up</title>
+    <title>Artist Prints - Classic Cult</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="./loader.css" />
     <link rel="stylesheet" href="./home.css" />
@@ -40,10 +40,7 @@
 
         <!-- Logo section -->
         <div class="nav-left">
-          <a href="/" class="logo">
-            <span>STICK</span>
-            <span style="color: #facc15;">IT UP</span>
-          </a>
+          <a href="/" class="logo"><img src="/classic-cult-logo.png" alt="Classic Cult" class="logo-img"></a>
         </div>
 
         <!-- Navigation links section -->
@@ -116,7 +113,7 @@
             <i class="fa-solid fa-search search-btn"></i>
             
             <!-- User Icon -->
-            <i class="far fa-user user-btn" onclick="window.location.href='../Glassmorphism Login Page/index.html'"></i>
+            <i class="far fa-user user-btn" onclick="window.location.href='../Login Page/index.html'"></i>
             
             <!-- Cart Section -->
             <div class="cart-wrapper" id="cart-btn">
@@ -141,7 +138,7 @@
     <div class="mobile-menu-drawer" id="mobile-menu">
       <div class="mobile-menu-links">
         <a href="#" class="search-btn-mobile"><i class="fa-solid fa-search"></i> SEARCH</a>
-        <a href="/frontend/Glassmorphism Login Page/index.html"><i class="far fa-user"></i> MY ACCOUNT</a>
+        <a href="/frontend/Login Page/index.html"><i class="far fa-user"></i> MY ACCOUNT</a>
         <div style="height: 1px; background: #2a2a2a; margin: 5px 0;"></div>
         <a href="/home">Home</a>
         <a href="/frontend/CUSTOM STICKERS/index.html">CUSTOM STICKERS</a>
@@ -3647,7 +3644,7 @@
         
         <!-- Right: Product Info -->
         <div class="qv-info">
-          <div class="qv-vendor">By STICK IT UP</div>
+          <div class="qv-vendor">By CLASSIC CULT</div>
           <h2 class="qv-title" id="qv-title">Xox Sticker Glitter Sticker</h2>
           <div class="qv-rating">
             <span class="stars" style="color:#d1d5db;font-size:18px;">★★★★★</span>
@@ -3682,7 +3679,7 @@
           </div>
           
           <div class="qv-description">
-            <p><strong><a href="#" style="color:#1d4ed8;text-decoration:underline;text-underline-offset:4px;">STICK IT UP Premium Glitter Stickers:</a></strong></p>
+            <p><strong><a href="#" style="color:#1d4ed8;text-decoration:underline;text-underline-offset:4px;">CLASSIC CULT Premium Glitter Stickers:</a></strong></p>
             <p>Add instant sparkle to your everyday essentials with our premium glitter stickers, designed with high-quality glitter material and a smooth protective finish that shines beautifully from every angle. Perfect for adding bold personality and shimmer to any surface.</p>
             <ul>
               <li><strong>Dimensions -</strong></li>
@@ -3690,7 +3687,6 @@
               <li>Height & width depends on the aspect ratio of the design.</li>
             </ul>
             <p class="qv-note"><span class="highlight-text"><span style="color:#1d4ed8; font-weight: bold;">Please Note:</span> Colours and glitter effect may slightly vary depending on your screen brightness and lighting conditions.</span></p>
-            <p class="qv-disclaimer">* This is a demonstration store — no orders shall be fulfilled.</p>
           </div>
         </div>
       </div>
@@ -3703,53 +3699,28 @@
     <!-- Cart Drawer -->
     <div class="cart-drawer" id="cart-drawer">
       <div class="cart-header">
-        <h2 class="cart-title">Your cart</h2>
+        <h2 class="cart-title">Your Cart</h2>
         <button class="cart-close" id="cart-close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 6L6 18M6 6l12 12"></path></svg>
         </button>
-      </div>
-
-      <!-- FIXED DISCOUNT PROGRESS BANNER -->
-      <div class="cart-discount-banner" id="cart-discount-banner" >
-        <div class="discount-text">
-          <span class="lightning">⚡</span> Add <strong id="discount-delta">4</strong> more stickers — Get 25 for just <strong style="color: #facc15;">₹300 (₹12 each)</strong>!
-        </div>
-        <div class="discount-progress-wrapper">
-          <div class="discount-progress-track">
-            <div class="discount-progress-bar" id="discount-progress-bar"></div>
-            <div class="discount-progress-badge" id="discount-progress-badge">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="width: 11px; height: 11px; color: #000;">
-                <path d="M3.85 8.62a4 4 0 0 1 4.78-4.77 4 4 0 0 1 6.74 0 4 4 0 0 1 4.78 4.78 4 4 0 0 1 0 6.74 4 4 0 0 1-4.77 4.78 4 4 0 0 1-6.75 0 4 4 0 0 1-4.78-4.77 4 4 0 0 1 0-6.76Z"></path>
-                <line x1="15" x2="9" y1="9" y2="15"></line>
-                <path d="M9 9h.01"></path>
-                <path d="M15 15h.01"></path>
-              </svg>
-            </div>
-          </div>
-        </div>
       </div>
 
       <!-- SCROLLABLE CART CONTENT -->
       <div class="cart-content" id="cart-content">
         <div class="cart-empty" id="cart-empty">
           <div class="cart-empty-main">
+            <svg class="cart-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
             <h2 class="cart-empty-title-new">Your cart is empty</h2>
-            <h3 class="cart-empty-subtitle-new">Check out our most wanted collections!</h3>
-            
-            <a href="#" class="wanted-collection-card">
-              <div class="wanted-logo-box">
-                <span class="wasted-logo" style="color: #d10000; font-weight: 900; font-size: 11px; letter-spacing: -0.5px; font-family: Impact, sans-serif; text-transform: lowercase;">wasted</span>
-              </div>
-              <span class="wanted-text">All Stickers</span>
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" class="wanted-chevron"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </a>
-
-            <button class="continue-shopping-btn-new" id="continue-shopping">Continue shopping</button>
+            <h3 class="cart-empty-subtitle-new">Looks like you haven't added any stickers yet.</h3>
+            <button class="continue-shopping-btn-new" id="continue-shopping">Continue Shopping</button>
           </div>
-          
+
           <div class="cart-empty-footer-new">
-            <h2>Have an account?</h2>
-            <p><a href="#">Log in</a> to check out faster.</p>
+            <p><a href="/frontend/Login Page/index.html">Log in</a> to check out faster.</p>
           </div>
         </div>
 
@@ -3757,44 +3728,20 @@
         <div id="cart-items-container" class="cart-items-container"></div>
       </div>
 
-      <!-- FIXED BOTTOM RECOMMENDATION WIDGET -->
-      <div class="cart-recommendation-section" id="cart-recommendation-section" >
-        <div class="recom-header">
-          <span class="recom-title">Lowest AF Deals 😈</span>
-          <div class="recom-arrows">
-            <button class="recom-arrow prev" id="recom-prev">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"></polyline></svg>
-            </button>
-            <button class="recom-arrow next" id="recom-next">
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="9 18 15 12 9 6"></polyline></svg>
-            </button>
-          </div>
-        </div>
-        <div class="recom-card" id="recom-card"></div>
-      </div>
-
       <!-- FIXED FOOTER -->
-      <div class="cart-footer" >
+      <div class="cart-footer">
         <div class="cart-subtotal-row">
-          <span class="subtotal-label">SUBTOTAL</span>
-          <span class="subtotal-amount" id="drawer-subtotal">Rs. 0.00</span>
+          <span class="subtotal-label">Subtotal</span>
+          <span class="subtotal-amount" id="footer-subtotal">Rs. 0.00</span>
         </div>
         <div class="cart-shipping-note">
-          Taxes and <a href="#" style="text-decoration: underline; color: #000; text-underline-offset: 3px;">shipping</a> calculated at checkout
-        </div>
-        <div class="free-shipping-badge">
-          FREE SHIPPING ON ALL ORDERS
+          Taxes and shipping calculated at checkout
         </div>
         <button class="buy-now-btn" id="checkout-btn">
-          <span>BUY NOW</span>
-          <div class="payment-icons">
-            <svg viewBox="0 0 40 16" width="30" height="12" style="display:block;"><path fill="#4285F4" d="M5.4,8.2V4.5H2.6v3.7c0,1.2,0.9,2.1,2.1,2.1h0.7V8.2C5.4,8.2,5.4,8.2,5.4,8.2z"/><path fill="#34A853" d="M10.8,4.5H8v3.7c0,1.2,0.9,2.1,2.1,2.1h0.7V8.2L10.8,4.5z"/><path fill="#FBBC05" d="M8,12v1.5H5.4v-2c0-1.2,0.9-2.1,2.1-2.1h0.7V10.9L8,12z"/><path fill="#EA4335" d="M2.6,12v1.5H5.4v-2c0-1.2-0.9-2.1-2.1-2.1H2.6V12z"/></svg>
-            <span style="font-size: 8px; font-weight: 800; color: #00baf2; font-family: sans-serif;">paytm</span>
-          </div>
+          <span>Proceed to Checkout</span>
         </button>
       </div>
     </div>
-    
     <script type="module" src="./app.js"></script>
   </body>
 </html>

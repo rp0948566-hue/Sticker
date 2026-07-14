@@ -2,7 +2,7 @@
  * PRODUCTION-READY BACKEND v4.2 (FINAL CLEAN LINK)
  */
 const CONFIG = {
-  ADMIN_TOKEN: "CHANGE_THIS_TO_A_SECURE_TOKEN", // Set your password here
+  ADMIN_TOKEN: "cdBBfngoULsxvLPtQTzWmPdwd7M3OuJR", // Rotate this in the Apps Script console if it is ever exposed
   MAX_ORDERS_PER_SHEET: 300,
   BASE_SHEET_NAME: "Orders",
   LOG_SHEET_NAME: "SystemLogs",
@@ -161,8 +161,9 @@ function isDuplicateOrder(data) {
   const sheets = SpreadsheetApp.getActiveSpreadsheet().getSheets().filter(s => s.getName().includes(CONFIG.BASE_SHEET_NAME));
   if (sheets.length === 0) return false;
   const s = sheets[sheets.length - 1];
-  if (s.getLastRow() <= 1) return false;
-  const recent = s.getRange(Math.max(2, s.getLastRow() - 5), 1, Math.min(lastRow - 1, 5), 16).getValues();
+  const lastRow = s.getLastRow();
+  if (lastRow <= 1) return false;
+  const recent = s.getRange(Math.max(2, lastRow - 5), 1, Math.min(lastRow - 1, 5), 16).getValues();
   return recent.some(r => r[4].toString().replace(/\D/g,'') === data.phone && r[13].toString() === data.totalPrice.toString());
 }
 
