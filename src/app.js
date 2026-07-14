@@ -772,25 +772,3 @@ initQuickViewActions();
   });
   prevBtn.classList.add('is-dash');
 })();
-
-// Testimonial carousel — prev/next review switching
-(function () {
-  const panel = document.getElementById('customer-voices-panel');
-  const prevBtn = document.getElementById('review-prev');
-  const nextBtn = document.getElementById('review-next');
-  if (!panel || !prevBtn || !nextBtn) return;
-
-  const slides = Array.from(panel.querySelectorAll('.voice-slide'));
-  if (slides.length === 0) return;
-  let activeIndex = slides.findIndex(s => s.classList.contains('active'));
-  if (activeIndex === -1) activeIndex = 0;
-
-  function showSlide(index) {
-    slides[activeIndex].classList.remove('active');
-    activeIndex = (index + slides.length) % slides.length;
-    slides[activeIndex].classList.add('active');
-  }
-
-  prevBtn.addEventListener('click', () => showSlide(activeIndex - 1));
-  nextBtn.addEventListener('click', () => showSlide(activeIndex + 1));
-})();

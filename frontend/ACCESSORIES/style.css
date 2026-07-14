@@ -690,7 +690,7 @@ body.modal-open {
 
 .recom-img {
   width: 60px;
-  height: 60px;
+  height: 96px;
   background-color: #fafafa;
   border-radius: 12px;
   overflow: hidden;
@@ -2884,7 +2884,7 @@ main {
   .desktop-logo-placeholder {
     width: 100px;
     min-width: 100px;
-    height: 60px;
+    height: 96px;
   }
   .desktop-logo-placeholder .brand-stick,
   .desktop-logo-placeholder .brand-itup {
@@ -3876,7 +3876,7 @@ main {
   opacity: 1;
   user-select: none;
   pointer-events: none;
-  height: 60px;
+  height: 96px;
   display: flex;
   align-items: flex-end;
   z-index: 4; /* sit on top of the card border */
@@ -5226,14 +5226,14 @@ button.card-pill.active{color:#fff !important;background:#111 !important;backgro
   align-items: center;
 }
 .logo-img{
-  height: 60px;
+  height: 96px;
   width: auto;
   display: block;
   object-fit: contain;
 }
 @media (max-width: 768px){
-  .logo-img{ height: 48px; }
+  .logo-img{ height: 76px; }
 }
 @media (max-width: 480px){
-  .logo-img{ height: 40px; }
+  .logo-img{ height: 60px; }
 }

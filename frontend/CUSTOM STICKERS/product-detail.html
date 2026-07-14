@@ -289,13 +289,13 @@
     </main>
 
     <!-- Slide Cart Drawer Overlay -->
-    <div class="cart-drawer-overlay" id="cart-drawer-overlay"></div>
+    <div class="cart-overlay" id="cart-overlay"></div>
 
     <!-- Slide Cart Drawer Wrapper -->
     <div class="cart-drawer" id="cart-drawer">
       <div class="cart-header">
         <span class="cart-title">Your Cart</span>
-        <button class="cart-close" id="cart-close-btn">
+        <button class="cart-close" id="cart-close">
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line></svg>
         </button>
       </div>
@@ -304,8 +304,16 @@
       <div class="cart-content" id="cart-content">
         <div class="cart-empty" id="cart-empty">
           <div class="cart-empty-main">
+            <svg class="cart-empty-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round">
+              <circle cx="9" cy="21" r="1"></circle>
+              <circle cx="20" cy="21" r="1"></circle>
+              <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"></path>
+            </svg>
             <h2 class="cart-empty-title-new">Your cart is empty</h2>
             <button class="continue-shopping-btn-new" id="continue-shopping">Continue shopping</button>
+          </div>
+          <div class="cart-empty-footer-new">
+            <p><a href="/frontend/Login Page/index.html">Log in</a> to check out faster.</p>
           </div>
         </div>
         <div id="cart-items-container" class="cart-items-container"></div>
@@ -315,7 +323,7 @@
       <div class="cart-footer">
         <div class="cart-subtotal-row">
           <span class="subtotal-label">SUBTOTAL</span>
-          <span class="subtotal-amount" id="drawer-subtotal">Rs. 0.00</span>
+          <span class="subtotal-amount" id="footer-subtotal">Rs. 0.00</span>
         </div>
         <button class="buy-now-btn" id="checkout-btn">
           <span>BUY NOW</span>
@@ -470,6 +478,28 @@
             if (val > 1) {
               qtyVal.value = val - 1;
             }
+          });
+        }
+
+        // Add to cart
+        const addToCartBtn = document.querySelector('.pd-add-to-cart-btn');
+        if (addToCartBtn) {
+          addToCartBtn.addEventListener('click', () => {
+            const priceText = priceEl?.textContent.replace('Rs. ', '').replace(/,/g, '').trim() || '0';
+            const price = parseFloat(priceText) || 0;
+            if (!shapeSelect.value || price === 0) {
+              alert('Please select a shape and size first.');
+              return;
+            }
+            const qty = parseInt(qtyVal?.value) || 1;
+            window.__addToCart?.({
+              title: titleEl?.textContent.trim() || 'Custom Sticker',
+              price,
+              image: imgEl?.src || '/IMAGE/1.png',
+              quantity: qty,
+              url: window.location.href
+            });
+            window.__openCart?.();
           });
         }
       })();

@@ -706,3 +706,15 @@ initQuickViewActions();
   });
 })();
 
+// Expose cart internals for pages with page-specific add-to-cart buttons (e.g. product-detail.html)
+window.__addToCart = function (item) {
+  const existingItem = cart.find(i => i.title === item.title);
+  if (existingItem) {
+    existingItem.quantity += item.quantity || 1;
+  } else {
+    cart.push({ quantity: 1, ...item });
+  }
+  updateCartUI();
+};
+window.__openCart = toggleCart;
+
