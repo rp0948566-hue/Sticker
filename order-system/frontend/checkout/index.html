@@ -123,12 +123,19 @@
 
           <div class="co-field-group">
             <h2 class="co-section-label">Payment Method</h2>
-            <div class="co-payment-option">
+            <label class="co-payment-option" data-method="online">
+              <input type="radio" name="paymentMethod" value="online" checked>
+              <span class="co-payment-radio"></span>
+              <i class="fas fa-shield-halved"></i>
+              <span>Pay Online — Cards, UPI, Netbanking (Razorpay)</span>
+            </label>
+            <label class="co-payment-option" data-method="cod">
+              <input type="radio" name="paymentMethod" value="cod">
               <span class="co-payment-radio"></span>
               <i class="fas fa-wallet"></i>
-              <span>Paytm — Cash on Delivery</span>
-            </div>
-            <p class="co-payment-note">Pay via Paytm at your doorstep when your order arrives.</p>
+              <span>Cash on Delivery</span>
+            </label>
+            <p class="co-payment-note">Online payments are processed securely by Razorpay — we never see or store your card details.</p>
           </div>
 
           <div class="co-honeypot" aria-hidden="true">
