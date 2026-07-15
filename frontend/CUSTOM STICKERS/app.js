@@ -165,7 +165,15 @@ function updateQuickViewPrice(qvModal) {
 }
 
 function updateCartUI() {
-  localStorage.setItem('cart', JSON.stringify(cart));
+  try {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  } catch (err) {
+    // Uploaded design images can be large — if storage is full, drop the last
+    // item's design data rather than silently breaking the whole cart.
+    alert('Your uploaded design is too large to add to the cart. Please upload a smaller image file.');
+    cart.pop();
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
   const cartItemsContainer = document.querySelector('.cart-items-container');
   const cartEmpty = document.querySelector('.cart-empty');
   const cartFooter = document.querySelector('.cart-footer');

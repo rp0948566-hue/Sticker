@@ -538,13 +538,30 @@
               alert('Please select a shape and size first.');
               return;
             }
+            if (!fileInput.files || !fileInput.files[0]) {
+              alert('Please upload your design file first.');
+              return;
+            }
+            const activeSizeBtn = document.querySelector('.pd-size-btn.active');
+            const size = activeSizeBtn ? activeSizeBtn.textContent.trim() : '';
+            const shape = shapeSelect.value;
+            const qtyOption = qtySelect.options[qtySelect.selectedIndex];
+            const qtyLabel = qtyOption ? qtyOption.value : '';
             const qty = parseInt(qtyVal?.value) || 1;
+
+            const baseTitle = titleEl?.textContent.trim() || 'Custom Sticker';
+            const title = `${baseTitle} (${shape}, ${size}, Qty ${qtyLabel})`;
+
+            // Use the customer's uploaded design as the cart thumbnail/reference,
+            // not the generic material template image, so it carries through to checkout.
             window.__addToCart?.({
-              title: titleEl?.textContent.trim() || 'Custom Sticker',
+              title,
               price,
-              image: imgEl?.src || '/IMAGE/1.png',
+              image: uploadThumb?.src || imgEl?.src || '/IMAGE/1.png',
               quantity: qty,
-              url: window.location.href
+              url: window.location.href,
+              customDesign: uploadThumb?.src || '',
+              customFileName: fileInput.files[0].name
             });
             window.__openCart?.();
           });

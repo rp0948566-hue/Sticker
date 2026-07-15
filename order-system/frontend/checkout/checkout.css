@@ -211,18 +211,38 @@ body {
   align-items: center;
   gap: 12px;
   padding: 16px 18px;
-  border: 1.5px solid var(--co-ink);
+  border: 1.5px solid var(--co-border);
   border-radius: var(--co-radius-sm);
   background: #fcfcfd;
   font-weight: 600;
   font-size: 14.5px;
+  cursor: pointer;
+  transition: border-color .15s ease, background-color .15s ease;
+  margin-bottom: 10px;
+}
+.co-payment-option:last-of-type { margin-bottom: 0; }
+.co-payment-option input[type="radio"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 .co-payment-radio {
   width: 18px;
   height: 18px;
   border-radius: 50%;
-  border: 5.5px solid var(--co-ink);
+  border: 1.5px solid var(--co-border);
   flex-shrink: 0;
+  transition: border-color .15s ease;
+  position: relative;
+}
+.co-payment-option input:checked ~ .co-payment-radio {
+  border: 5.5px solid var(--co-ink);
+}
+.co-payment-option:has(input:checked) {
+  border-color: var(--co-ink);
+  background: #fff;
+  box-shadow: 0 0 0 3px rgba(10, 10, 10, 0.05);
 }
 .co-payment-option i { color: var(--co-ink-soft); font-size: 15px; }
 .co-payment-note {
