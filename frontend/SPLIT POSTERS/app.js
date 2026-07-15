@@ -359,6 +359,8 @@ document.addEventListener('click', (e) => {
         const basePrice = parseFloat(currentPrice.replace('Rs. ', '').trim()) || 0;
         qvModal.dataset.basePrice = basePrice;
         qvModal.dataset.cc = card.dataset.cc || '';
+        qvModal.dataset.ref = card.dataset.ref || '';
+        qvModal.dataset.sku = card.dataset.sku || '';
         injectQuickViewOptions(qvModal);
         updateQuickViewPrice(qvModal);
 
@@ -394,13 +396,19 @@ document.addEventListener('click', (e) => {
       ? `${baseTitle} (${sizePill.textContent.trim()}, ${framePill?.textContent.trim() === 'With' ? 'With Frame' : 'Without Frame'})`
       : baseTitle;
 
+    // The visible title no longer includes the design number, so two
+    // different designs in the same category can share the same title —
+    // match/merge cart lines by the hidden sku (which still includes it)
+    // instead, so distinct designs never collapse into one cart entry.
+    const sku = `${card.dataset.sku || baseTitle}::${sizePill?.textContent.trim() || ''}::${framePill?.textContent.trim() || ''}`;
+
     const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(baseTitle);
 
-    const existingItem = cart.find(item => item.title === title);
+    const existingItem = cart.find(item => item.sku === sku);
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      cart.push({ title, price, image, quantity: 1, url: productUrl, categoryCode: card.dataset.cc || '' });
+      cart.push({ title, price, image, quantity: 1, url: productUrl, categoryCode: card.dataset.cc || '', sku, ref: card.dataset.ref || '' });
     }
     updateCartUI();
   }
@@ -600,12 +608,13 @@ function initQuickViewActions() {
       const img = qvModal.querySelector('.qv-main-image img')?.src || CONFIG.CART_IMAGE_DEFAULT;
       const qty = parseInt(qtyInput?.value) || 1;
       const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(baseTitle);
+      const sku = `${qvModal.dataset.sku || baseTitle}::${activeSize}::${activeFrame}`;
 
-      const existingItem = cart.find(item => item.title === title);
+      const existingItem = cart.find(item => item.sku === sku);
       if (existingItem) {
         existingItem.quantity += qty;
       } else {
-        cart.push({ title, price, image: img, quantity: qty, url: productUrl, categoryCode: qvModal.dataset.cc || '' });
+        cart.push({ title, price, image: img, quantity: qty, url: productUrl, categoryCode: qvModal.dataset.cc || '', sku, ref: qvModal.dataset.ref || '' });
       }
 
       updateCartUI();

@@ -357,9 +357,12 @@ document.addEventListener('click', (e) => {
         if (qvOld) qvOld.textContent = oldPrice;
         if (qvSave) qvSave.textContent = saveBadge;
 
-        // Parse and store base price, then inject size and frame options
+        // Parse and store base price + category code, then inject size and frame options
         const basePrice = parseFloat(currentPrice.replace('Rs. ', '').trim()) || 0;
         qvModal.dataset.basePrice = basePrice;
+        qvModal.dataset.cc = card.dataset.cc || '';
+        qvModal.dataset.ref = card.dataset.ref || '';
+        qvModal.dataset.sku = card.dataset.sku || '';
         injectQuickViewOptions(qvModal);
         updateQuickViewPrice(qvModal);
 
@@ -379,18 +382,26 @@ document.addEventListener('click', (e) => {
   const addToCartBtn = e.target.closest('.add-to-cart-btn');
   if (addToCartBtn) {
     const card = addToCartBtn.closest('.product-card');
-    const title = card.querySelector('.product-title').textContent.trim();
+    const baseTitle = card.querySelector('.product-title').textContent.trim();
     const priceText = card.querySelector('.price-current').textContent.trim();
     const price = parseFloat(priceText.replace('Rs. ', '').trim());
     const cartImgEl = card.querySelector('.placeholder-image img') || card.querySelector('img.placeholder-image') || card.querySelector('.product-image-container img') || card.querySelector('img');
     const image = cartImgEl?.src || CONFIG.CART_IMAGE_DEFAULT;
-    const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(title);
 
-    const existingItem = cart.find(item => item.title === title);
+    const sizePill = card.querySelector('[data-group="size"].active');
+    const framePill = card.querySelector('[data-group="frame"].active');
+    const title = sizePill
+      ? `${baseTitle} (${sizePill.textContent.trim()}, ${framePill?.textContent.trim() === 'With' ? 'With Frame' : 'Without Frame'})`
+      : baseTitle;
+    const sku = `${card.dataset.sku || baseTitle}::${sizePill?.textContent.trim() || ''}::${framePill?.textContent.trim() || ''}`;
+
+    const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(baseTitle);
+
+    const existingItem = cart.find(item => item.sku === sku);
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      cart.push({ title, price, image, quantity: 1, url: productUrl });
+      cart.push({ title, price, image, quantity: 1, url: productUrl, categoryCode: card.dataset.cc || '', sku, ref: card.dataset.ref || '' });
     }
     updateCartUI();
   }
@@ -590,12 +601,13 @@ function initQuickViewActions() {
       const img = qvModal.querySelector('.qv-main-image img')?.src || CONFIG.CART_IMAGE_DEFAULT;
       const qty = parseInt(qtyInput?.value) || 1;
       const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(baseTitle);
+      const sku = `${qvModal.dataset.sku || baseTitle}::${activeSize}::${activeFrame}`;
 
-      const existingItem = cart.find(item => item.title === title);
+      const existingItem = cart.find(item => item.sku === sku);
       if (existingItem) {
         existingItem.quantity += qty;
       } else {
-        cart.push({ title, price, image: img, quantity: qty, url: productUrl });
+        cart.push({ title, price, image: img, quantity: qty, url: productUrl, categoryCode: qvModal.dataset.cc || '', sku, ref: qvModal.dataset.ref || '' });
       }
 
       updateCartUI();

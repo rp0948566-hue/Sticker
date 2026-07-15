@@ -91,8 +91,20 @@ export function isDynamicPage() {
   return ['M', 'C', 'A', 'F', 'N'].includes(pageCode) || CAT_CODES.has(pageCode);
 }
 
+// Home page "Shop Stickers" preview — a handful of products spread across
+// the most popular categories, not the full catalogue.
+const FEATURED_HOME_CODES = ['ANM', 'MOV', 'MAR', 'AST', 'QOU', 'CAR', 'SPO', 'GIR', 'DEV', 'ART', 'SONM', 'LAP'];
+function getFeaturedHomeProducts(catalogue) {
+  const featured = [];
+  FEATURED_HOME_CODES.forEach(code => {
+    const first = catalogue.find(item => item[0] === code);
+    if (first) featured.push(first);
+  });
+  return featured;
+}
+
 function getProductsForPage(catalogue, pageCode) {
-  if (pageCode === 'HOME') return [];
+  if (pageCode === 'HOME') return getFeaturedHomeProducts(catalogue);
   if (CAT_CODES.has(pageCode)) return catalogue.filter(item => item[0] === pageCode);
   if (pageCode === 'N') return catalogue.filter(item => item[1] === 'N' || item[1] === 'NF');
   return catalogue.filter(item => item[1] === pageCode);
@@ -109,31 +121,66 @@ const PROD_LABELS = {
   ANM2: 'Anime Mini Art', LAP: 'Laptop Sticker',
 };
 
+// Display name is just the category label (no "#4" numbering shown on the
+// site) — the number/filename is kept only as a hidden ref (card.dataset.ref)
+// so cart lines for different designs still stay distinct behind the scenes.
 function getProductName(cc, filename, catNames) {
-  const base = PROD_LABELS[cc] || (catNames[cc] ? catNames[cc] + ' Art' : cc);
+  return PROD_LABELS[cc] || (catNames[cc] ? catNames[cc] + ' Art' : cc);
+}
+
+function getProductRef(filename) {
   const m = filename.match(/\((\d+)\)/) || filename.match(/(?:^|[^a-z])(\d+)(?=[.\s_(])/i);
-  const n = m ? m[1] : null;
-  return n ? `${base} #${n}` : base;
+  return m ? m[1] : filename;
 }
 
 function revCount(idx) { return 12 + ((idx * 41 + 17) % 238); }
 
+// Product photos are hosted in a public Google Drive folder rather than
+// bundled with the site. IMAGE_DRIVE_MAP resolves "<category folder>/<filename>"
+// to that file's Drive ID (loaded once in initProductGrid). Falls back to the
+// old local /STICKER path (which won't resolve) only for the handful of files
+// not found in Drive, so a missing mapping fails the same way it always did.
+let IMAGE_DRIVE_MAP = {};
+
+async function loadImageDriveMap() {
+  try {
+    const resp = await fetch('/image-drive-map.json');
+    IMAGE_DRIVE_MAP = await resp.json();
+  } catch (err) {
+    // Best-effort — falls back to local /STICKER paths if the map can't load
+  }
+}
+
+function driveImageUrl(id) {
+  return `https://lh3.googleusercontent.com/d/${id}=w800`;
+}
+
 function createCard(record, idx, catFolders, catNames) {
   const [cc, pageCode, filename] = record;
   const folder = catFolders[cc] || '';
-  const imgSrc = cc === 'LAP'
-    ? encodeURI(`/STICKER/laptop stickers file/laptopp stickers/${filename}`)
-    : encodeURI(`/STICKER/FRAME/${folder}/${filename}`);
+  const relPath = cc === 'LAP' ? `laptop stickers file/laptopp stickers/${filename}` : `FRAME/${folder}/${filename}`;
+  const driveId = IMAGE_DRIVE_MAP[relPath];
+  const imgSrc = driveId
+    ? driveImageUrl(driveId)
+    : (cc === 'LAP'
+        ? encodeURI(`/STICKER/laptop stickers file/laptopp stickers/${filename}`)
+        : encodeURI(`/STICKER/FRAME/${folder}/${filename}`));
   const name = getProductName(cc, filename, catNames);
+  const ref = getProductRef(filename);
   const isFramed = pageCode === 'NF' || pageCode === 'F';
+  // Laptop stickers/skins are cut to a specific laptop model, not sold in
+  // 3"/4"/5" sticker sizes or with a frame — those pills don't apply here.
+  const hasSizeFrameOptions = cc !== 'LAP';
   const card = document.createElement('div');
   card.className = 'product-card';
   card.dataset.cc = cc;
+  card.dataset.ref = ref;
+  card.dataset.sku = `${cc}-${ref}`;
   card.innerHTML = `
     <div class="product-image-container${isFramed ? ' has-frame' : ''}">
       <div class="save-badge">Save Rs. 64.00</div>
       <div class="placeholder-image${isFramed ? ' frame-on' : ''}">
-        <img src="${imgSrc}" alt="${name}" loading="lazy">
+        <img src="${imgSrc}" alt="${name}" loading="lazy" onerror="this.onerror=null;this.src='/IMAGE/1.png';this.closest('.product-card')?.classList.add('img-fallback');">
       </div>
       <div class="quick-view">
         <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
@@ -150,6 +197,7 @@ function createCard(record, idx, catFolders, catNames) {
         <span class="price-badge">-Rs. 64.00</span>
       </div>
       <div class="price-current">Rs. 15.00</div>
+      ${hasSizeFrameOptions ? `
       <div class="card-selectors">
         <div class="card-sel-row">
           <span class="card-sel-label">Size</span>
@@ -166,7 +214,7 @@ function createCard(record, idx, catFolders, catNames) {
             <button class="card-pill${isFramed ? ' active' : ''}" data-group="frame" data-val="with">With</button>
           </div>
         </div>
-      </div>
+      </div>` : ''}
       <button class="add-to-cart-btn">Add to cart</button>
     </div>
   `;
@@ -183,11 +231,11 @@ function createCard(record, idx, catFolders, catNames) {
   return card;
 }
 
-function appendChunk(grid, products, startIdx, catFolders, catNames) {
+function appendChunk(grid, products, startIdx, catFolders, catNames, imageMap) {
   const end = Math.min(startIdx + CHUNK, products.length);
   const frag = document.createDocumentFragment();
   for (let i = startIdx; i < end; i++) {
-    frag.appendChild(createCard(products[i], i, catFolders, catNames));
+    frag.appendChild(createCard(products[i], i, catFolders, catNames, imageMap));
   }
   grid.appendChild(frag);
   return end;
@@ -384,16 +432,69 @@ function initFilters(grid, allProducts, catFolders, catNames, pageCode) {
   });
 }
 
+// ── Stock status (admin-controlled, checked on every page load) ───────────
+const STOCK_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCl2byGPvw17w4axjT7iLxrxPlTNPggDFbwMNuVHM7uDW01o1StjdufxQF9qE8p7cNvw/exec";
+
+function showOutOfStockBanner(grid) {
+  if (document.querySelector('.oos-banner')) return;
+  const banner = document.createElement('div');
+  banner.className = 'oos-banner';
+  banner.innerHTML = `
+    <span>This collection is currently <strong>Out of Stock</strong>.</span>
+    <button type="button" class="oos-notify-btn">Notify Me When Available</button>
+  `;
+  grid.parentNode.insertBefore(banner, grid);
+  banner.querySelector('.oos-notify-btn').addEventListener('click', () => {
+    alert("Thanks! We'll notify you when this collection is back in stock.");
+  });
+}
+
+function disableAddToCart(root = document) {
+  root.querySelectorAll('.add-to-cart-btn, .qv-add-to-cart-btn, #qv-add-btn').forEach(btn => {
+    if (btn.dataset.oosApplied) return;
+    btn.dataset.oosApplied = '1';
+    btn.disabled = true;
+    btn.classList.add('oos-disabled');
+    btn.textContent = 'Out of Stock';
+  });
+}
+
+async function applyStockStatus(pageCode, grid) {
+  if (!pageCode || pageCode === 'HOME') return;
+  try {
+    const resp = await fetch(`${STOCK_SCRIPT_URL}?action=getStock`);
+    const body = await resp.json();
+    const entry = body?.stock?.[pageCode];
+    if (entry && entry.inStock === false) {
+      if (grid) showOutOfStockBanner(grid);
+      disableAddToCart();
+      document.body.classList.add('page-out-of-stock');
+      // Cards keep loading via infinite scroll after this check runs —
+      // keep disabling new "Add to cart" buttons as they're appended.
+      if (grid) {
+        const obs = new MutationObserver(() => disableAddToCart(grid));
+        obs.observe(grid, { childList: true });
+      }
+    }
+  } catch (err) {
+    // Stock check is best-effort — never block shopping if the backend is unreachable
+  }
+}
+
 // ── Main export ───────────────────────────────────────────────────────────
 export async function initProductGrid() {
   const grid = document.querySelector('#products-carousel, .products-grid');
   if (!grid) return;
 
-  const { CATALOGUE, CAT_FOLDERS, CAT_NAMES } = await import('./catalogue-data.js');
+  const [{ CATALOGUE, CAT_FOLDERS, CAT_NAMES }] = await Promise.all([
+    import('./catalogue-data.js'),
+    loadImageDriveMap()
+  ]);
   const pageCode = detectPage();
   const allProducts = getProductsForPage(CATALOGUE, pageCode);
   if (!allProducts.length) return;
 
   setupChunkLoader(grid, allProducts, CAT_FOLDERS, CAT_NAMES, pageCode);
   initFilters(grid, allProducts, CAT_FOLDERS, CAT_NAMES, pageCode);
+  applyStockStatus(pageCode, grid);
 }

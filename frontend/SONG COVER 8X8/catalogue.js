@@ -109,11 +109,16 @@ const PROD_LABELS = {
   ANM2: 'Anime Mini Art', LAP: 'Laptop Sticker',
 };
 
+// Display name is just the category label (no "#4" numbering shown on the
+// site) — the number/filename is kept only as a hidden ref (card.dataset.ref)
+// so cart lines for different designs still stay distinct behind the scenes.
 function getProductName(cc, filename, catNames) {
-  const base = PROD_LABELS[cc] || (catNames[cc] ? catNames[cc] + ' Art' : cc);
+  return PROD_LABELS[cc] || (catNames[cc] ? catNames[cc] + ' Art' : cc);
+}
+
+function getProductRef(filename) {
   const m = filename.match(/\((\d+)\)/) || filename.match(/(?:^|[^a-z])(\d+)(?=[.\s_(])/i);
-  const n = m ? m[1] : null;
-  return n ? `${base} #${n}` : base;
+  return m ? m[1] : filename;
 }
 
 function revCount(idx) { return 12 + ((idx * 41 + 17) % 238); }
@@ -149,6 +154,7 @@ function createCard(record, idx, catFolders, catNames) {
         ? encodeURI(`/STICKER/laptop stickers file/laptopp stickers/${filename}`)
         : encodeURI(`/STICKER/FRAME/${folder}/${filename}`));
   const name = getProductName(cc, filename, catNames);
+  const ref = getProductRef(filename);
   const isFramed = pageCode === 'NF' || pageCode === 'F';
   // Laptop stickers/skins are cut to a specific laptop model, not sold in
   // 3"/4"/5" sticker sizes or with a frame — those pills don't apply here.
@@ -156,11 +162,13 @@ function createCard(record, idx, catFolders, catNames) {
   const card = document.createElement('div');
   card.className = 'product-card';
   card.dataset.cc = cc;
+  card.dataset.ref = ref;
+  card.dataset.sku = `${cc}-${ref}`;
   card.innerHTML = `
     <div class="product-image-container${isFramed ? ' has-frame' : ''}">
       <div class="save-badge">Save Rs. 64.00</div>
       <div class="placeholder-image${isFramed ? ' frame-on' : ''}">
-        <img src="${imgSrc}" alt="${name}" loading="lazy">
+        <img src="${imgSrc}" alt="${name}" loading="lazy" onerror="this.onerror=null;this.src='/IMAGE/1.png';this.closest('.product-card')?.classList.add('img-fallback');">
       </div>
       <div class="quick-view">
         <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
