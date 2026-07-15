@@ -107,6 +107,12 @@ body.modal-open {
     display: inline-block;
 }
 
+.logo-img {
+    height: 38px;
+    width: auto;
+    display: block;
+}
+
 .nav-center {
     flex-grow: 1;
 }

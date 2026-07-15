@@ -43,3 +43,16 @@ signupForm.addEventListener('submit', (e) => {
   showToast('Account created — redirecting...');
   setTimeout(() => { window.location.href = '/home'; }, 900);
 });
+
+const forgotLink = document.querySelector('.forgot-link a');
+if (forgotLink) {
+  forgotLink.addEventListener('click', (e) => {
+    e.preventDefault();
+    const email = loginForm.email.value.trim();
+    if (!email) {
+      showToast('Please enter your email above first!');
+    } else {
+      showToast('Reset link sent to your email!');
+    }
+  });
+}

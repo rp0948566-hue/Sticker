@@ -107,6 +107,12 @@ body.modal-open {
     display: inline-block;
 }
 
+.logo-img {
+    height: 38px;
+    width: auto;
+    display: block;
+}
+
 .nav-center {
     flex-grow: 1;
 }
@@ -4809,4 +4815,23 @@ button:not(.qty-arrow-btn):not(.recom-arrow):not(.cart-close):not(.quick-view-cl
 }
 .navbar {
   z-index: 2000 !important;
+}
+
+/* Home Page Hero Banner (Image Only) */
+.hero-banner-container {
+  width: 100%;
+  margin: 0 0 20px 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.hero-banner-img {
+  width: 100%;
+  height: auto;
+  display: block;
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
+}
+@media (max-width: 768px) {
+  .hero-banner-container {
+    margin-bottom: 14px;
+  }
 }
