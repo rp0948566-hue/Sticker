@@ -384,6 +384,55 @@ function initFilters(grid, allProducts, catFolders, catNames, pageCode) {
   });
 }
 
+// ── Stock status (admin-controlled, checked on every page load) ───────────
+const STOCK_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzCl2byGPvw17w4axjT7iLxrxPlTNPggDFbwMNuVHM7uDW01o1StjdufxQF9qE8p7cNvw/exec";
+
+function showOutOfStockBanner(grid) {
+  if (document.querySelector('.oos-banner')) return;
+  const banner = document.createElement('div');
+  banner.className = 'oos-banner';
+  banner.innerHTML = `
+    <span>This collection is currently <strong>Out of Stock</strong>.</span>
+    <button type="button" class="oos-notify-btn">Notify Me When Available</button>
+  `;
+  grid.parentNode.insertBefore(banner, grid);
+  banner.querySelector('.oos-notify-btn').addEventListener('click', () => {
+    alert("Thanks! We'll notify you when this collection is back in stock.");
+  });
+}
+
+function disableAddToCart(root = document) {
+  root.querySelectorAll('.add-to-cart-btn, .qv-add-to-cart-btn, #qv-add-btn').forEach(btn => {
+    if (btn.dataset.oosApplied) return;
+    btn.dataset.oosApplied = '1';
+    btn.disabled = true;
+    btn.classList.add('oos-disabled');
+    btn.textContent = 'Out of Stock';
+  });
+}
+
+async function applyStockStatus(pageCode, grid) {
+  if (!pageCode || pageCode === 'HOME') return;
+  try {
+    const resp = await fetch(`${STOCK_SCRIPT_URL}?action=getStock`);
+    const body = await resp.json();
+    const entry = body?.stock?.[pageCode];
+    if (entry && entry.inStock === false) {
+      if (grid) showOutOfStockBanner(grid);
+      disableAddToCart();
+      document.body.classList.add('page-out-of-stock');
+      // Cards keep loading via infinite scroll after this check runs —
+      // keep disabling new "Add to cart" buttons as they're appended.
+      if (grid) {
+        const obs = new MutationObserver(() => disableAddToCart(grid));
+        obs.observe(grid, { childList: true });
+      }
+    }
+  } catch (err) {
+    // Stock check is best-effort — never block shopping if the backend is unreachable
+  }
+}
+
 // ── Main export ───────────────────────────────────────────────────────────
 export async function initProductGrid() {
   const grid = document.querySelector('#products-carousel, .products-grid');
@@ -396,4 +445,5 @@ export async function initProductGrid() {
 
   setupChunkLoader(grid, allProducts, CAT_FOLDERS, CAT_NAMES, pageCode);
   initFilters(grid, allProducts, CAT_FOLDERS, CAT_NAMES, pageCode);
+  applyStockStatus(pageCode, grid);
 }

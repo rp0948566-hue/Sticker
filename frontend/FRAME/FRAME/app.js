@@ -355,9 +355,10 @@ document.addEventListener('click', (e) => {
         if (qvOld) qvOld.textContent = oldPrice;
         if (qvSave) qvSave.textContent = saveBadge;
 
-        // Parse and store base price, then inject size and frame options
+        // Parse and store base price + category code, then inject size and frame options
         const basePrice = parseFloat(currentPrice.replace('Rs. ', '').trim()) || 0;
         qvModal.dataset.basePrice = basePrice;
+        qvModal.dataset.cc = card.dataset.cc || '';
         injectQuickViewOptions(qvModal);
         updateQuickViewPrice(qvModal);
 
@@ -388,7 +389,7 @@ document.addEventListener('click', (e) => {
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      cart.push({ title, price, image, quantity: 1, url: productUrl });
+      cart.push({ title, price, image, quantity: 1, url: productUrl, categoryCode: card.dataset.cc || '' });
     }
     updateCartUI();
   }
@@ -593,7 +594,7 @@ function initQuickViewActions() {
       if (existingItem) {
         existingItem.quantity += qty;
       } else {
-        cart.push({ title, price, image: img, quantity: qty, url: productUrl });
+        cart.push({ title, price, image: img, quantity: qty, url: productUrl, categoryCode: qvModal.dataset.cc || '' });
       }
 
       updateCartUI();
@@ -618,6 +619,55 @@ initSearch();
 initQuickViewZoom();
 initQuickViewActions();
 
+// Card inline size + frame pill selection
+(function () {
+  const grid = document.querySelector('.products-grid');
+  if (!grid) return;
+  grid.addEventListener('click', (e) => {
+    const pill = e.target.closest('.card-pill');
+    if (!pill) return;
+    e.stopPropagation();
+    const card = pill.closest('.product-card');
+    const group = pill.dataset.group;
+    card.querySelectorAll(`.card-pill[data-group="${group}"]`).forEach(p => p.classList.remove('active'));
+    pill.classList.add('active');
+
+    if (group === 'frame') {
+      const imgContainer = card.querySelector('.placeholder-image');
+      if (imgContainer) {
+        if (pill.dataset.val === 'with') {
+          imgContainer.classList.add('frame-on');
+        } else {
+          imgContainer.classList.remove('frame-on');
+        }
+      }
+    } // Add visual frame logic
+    
+    // Update card price based on size
+    if (group === 'size') {
+      const priceDisplay = card.querySelector('.price-current');
+      const oldPriceDisplay = card.querySelector('.price-old');
+      const badgeDisplay = card.querySelector('.price-badge');
+      
+      let newPrice = '15.00';
+      let oldPrice = '79.00';
+      let discount = '64.00';
+      
+      if (pill.dataset.val.includes('3')) {
+        newPrice = '15.00'; oldPrice = '79.00'; discount = '64.00';
+      } else if (pill.dataset.val.includes('4')) {
+        newPrice = '29.00'; oldPrice = '89.00'; discount = '60.00';
+      } else if (pill.dataset.val.includes('5')) {
+        newPrice = '39.00'; oldPrice = '99.00'; discount = '60.00';
+      }
+      
+      if (priceDisplay) priceDisplay.textContent = 'Rs. ' + newPrice;
+      if (oldPriceDisplay) oldPriceDisplay.textContent = 'Rs. ' + oldPrice;
+      if (badgeDisplay) badgeDisplay.textContent = '-Rs. ' + discount;
+    }
+  });
+})();
+
 // Close FRAME dropdown smoothly when user scrolls
 (function () {
   const dropdownItem = document.querySelector('.nav-links li.has-dropdown');
@@ -632,6 +682,28 @@ initQuickViewActions();
   }, { passive: true });
   dropdownItem.addEventListener('mouseenter', () => {
     dropdownItem.classList.remove('force-closed');
+  });
+})();
+
+// Mobile FRAME submenu accordion
+(function () {
+  const caret   = document.querySelector('.mobile-frame-caret');
+  const submenu = document.querySelector('.mobile-frame-submenu');
+  if (!caret || !submenu) return;
+
+  caret.addEventListener('click', (e) => {
+    e.preventDefault();
+    e.stopPropagation();
+    const isOpen = submenu.classList.toggle('open');
+    caret.classList.toggle('open', isOpen);
+  });
+
+  // Close submenu when any category link is tapped
+  submenu.querySelectorAll('a').forEach(a => {
+    a.addEventListener('click', () => {
+      submenu.classList.remove('open');
+      caret.classList.remove('open');
+    });
   });
 })();
 
@@ -661,4 +733,75 @@ initQuickViewActions();
       dropdownParent.classList.add('active-parent');
     }
   }
+})();
+
+// Login session UI — reflects whoever is signed in (via localStorage 'cc_user',
+// set by the Login page) on the navbar icon across every page. There's no real
+// backend account system yet, so this is a client-side "remember me" only.
+(function () {
+  function getUser() {
+    try { return JSON.parse(localStorage.getItem('cc_user') || 'null'); } catch { return null; }
+  }
+
+  function closeAuthMenu() {
+    document.querySelector('.auth-menu')?.remove();
+  }
+
+  function toggleAuthMenu(btn, user) {
+    if (document.querySelector('.auth-menu')) { closeAuthMenu(); return; }
+    const menu = document.createElement('div');
+    menu.className = 'auth-menu';
+    menu.innerHTML = `
+      <div class="auth-menu-name">${user.name}</div>
+      <div class="auth-menu-email">${user.email}</div>
+      <button type="button" class="auth-menu-logout">Logout</button>
+    `;
+    (btn.closest('.nav-icons-group') || btn.parentElement).appendChild(menu);
+    menu.querySelector('.auth-menu-logout').addEventListener('click', () => {
+      localStorage.removeItem('cc_user');
+      closeAuthMenu();
+      renderAuthUI();
+    });
+  }
+
+  function renderAuthUI() {
+    const user = getUser();
+
+    document.querySelectorAll('.user-btn').forEach(btn => {
+      if (user) {
+        btn.removeAttribute('onclick');
+        btn.classList.add('is-logged-in');
+        btn.title = `Signed in as ${user.name}`;
+        btn.onclick = (e) => { e.stopPropagation(); toggleAuthMenu(btn, user); };
+      } else {
+        btn.classList.remove('is-logged-in');
+        btn.removeAttribute('title');
+        btn.onclick = null;
+        btn.setAttribute('onclick', "window.location.href='/frontend/Login Page/index.html'");
+      }
+    });
+
+    document.querySelectorAll('.mobile-menu-links a').forEach(a => {
+      if (a.textContent.trim().toUpperCase().includes('MY ACCOUNT')) {
+        if (user) {
+          a.textContent = `Logout (${user.name})`;
+          a.href = '#';
+          a.onclick = (e) => {
+            e.preventDefault();
+            localStorage.removeItem('cc_user');
+            renderAuthUI();
+          };
+        } else {
+          a.innerHTML = '<i class="far fa-user"></i> MY ACCOUNT';
+          a.onclick = null;
+        }
+      }
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.auth-menu') && !e.target.closest('.user-btn')) closeAuthMenu();
+  });
+
+  renderAuthUI();
 })();

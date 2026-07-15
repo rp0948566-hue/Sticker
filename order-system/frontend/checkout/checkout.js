@@ -56,18 +56,38 @@ document.addEventListener('DOMContentLoaded', () => {
         return !firstInvalid;
     }
 
-    function setLoading(isLoading) {
-        btn.disabled = isLoading;
-        btn.classList.toggle('loading', isLoading);
+    function currentMethodLabel() {
+        return (form.querySelector('input[name="paymentMethod"]:checked')?.value === 'cod') ? 'Place Order' : 'Pay Now';
     }
 
-    function showSuccess(orderId) {
+    // During submission the button text doubles as a status line — humans
+    // click buttons repeatedly, so every disabled state needs to say why.
+    function setLoading(isLoading, statusText) {
+        btn.disabled = isLoading;
+        btn.classList.toggle('loading', isLoading);
+        payBtnText.textContent = isLoading ? (statusText || 'Processing...') : currentMethodLabel();
+    }
+
+    function setStatus(text) {
+        payBtnText.textContent = text;
+    }
+
+    function showSuccess(orderId, invoiceNo) {
         localStorage.removeItem('cart');
         document.querySelector('.co-header').style.display = 'none';
         document.querySelector('.co-main').style.display = 'none';
         document.getElementById('checkout-payment-bar').style.display = 'none';
-        document.getElementById('success-order-id').textContent = `Order ID: ${orderId}`;
+        document.getElementById('success-order-id').textContent = invoiceNo ? `Order ID: ${orderId} · Invoice: ${invoiceNo}` : `Order ID: ${orderId}`;
         document.getElementById('success-panel').classList.add('visible');
+    }
+
+    // Fetch with a timeout — a hung request should fail fast with a clear
+    // message instead of leaving the button stuck on "Processing..." forever.
+    function fetchWithTimeout(promise, ms = 20000) {
+        return Promise.race([
+            promise,
+            new Promise((_, reject) => setTimeout(() => reject(new Error('TIMEOUT')), ms))
+        ]);
     }
 
     function getBaseFormData() {
@@ -100,22 +120,39 @@ document.addEventListener('DOMContentLoaded', () => {
         };
     }
 
-    async function postToBackend(payload) {
-        const resp = await fetch(SCRIPT_URL, {
-            method: 'POST',
-            mode: 'cors',
-            headers: { 'Content-Type': 'text/plain' },
-            body: JSON.stringify(payload)
-        });
-        return resp.json();
+    async function postToBackend(payload, timeoutMs) {
+        try {
+            const resp = await fetchWithTimeout(fetch(SCRIPT_URL, {
+                method: 'POST',
+                mode: 'cors',
+                headers: { 'Content-Type': 'text/plain' },
+                body: JSON.stringify(payload)
+            }), timeoutMs);
+            return await resp.json();
+        } catch (err) {
+            if (err.message === 'TIMEOUT') throw new Error('TIMEOUT');
+            throw new Error('NETWORK');
+        }
+    }
+
+    function describeConnectionError(err, fallback) {
+        if (err.message === 'TIMEOUT') return "This is taking longer than expected. Please check your connection and try again.";
+        if (err.message === 'NETWORK') return "Network error — could not reach the server. Check your connection and try again.";
+        return fallback;
     }
 
     async function submitCOD() {
-        const res = await postToBackend({ ...getBaseFormData(), paymentMethod: "Cash on Delivery" });
-        if (res.success) {
-            showSuccess(res.orderId);
-        } else {
-            showMessage(res.message || 'Something went wrong. Please try again.', 'error');
+        setLoading(true, 'Saving Order...');
+        try {
+            const res = await postToBackend({ ...getBaseFormData(), paymentMethod: "Cash on Delivery" });
+            if (res.success) {
+                showSuccess(res.orderId, res.invoiceNo);
+            } else {
+                showMessage(res.message || 'Something went wrong. Please try again.', 'error');
+                setLoading(false);
+            }
+        } catch (err) {
+            showMessage(describeConnectionError(err, 'Something went wrong. Please try again.'), 'error');
             setLoading(false);
         }
     }
@@ -124,7 +161,15 @@ document.addEventListener('DOMContentLoaded', () => {
         const baseData = getBaseFormData();
 
         // Step 1: ask the backend to create a Razorpay order for this amount
-        const orderRes = await postToBackend({ ...baseData, action: 'createRazorpayOrder' });
+        setLoading(true, 'Creating Secure Payment...');
+        let orderRes;
+        try {
+            orderRes = await postToBackend({ ...baseData, action: 'createRazorpayOrder' });
+        } catch (err) {
+            showMessage(describeConnectionError(err, 'Could not start online payment. Try Cash on Delivery instead.'), 'error');
+            setLoading(false);
+            return;
+        }
         if (!orderRes.success) {
             showMessage(orderRes.message || 'Could not start online payment. Try Cash on Delivery instead.', 'error');
             setLoading(false);
@@ -132,6 +177,13 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         // Step 2: open Razorpay Checkout for the shopper to pay
+        setStatus('Opening Razorpay...');
+
+        // Guards against the success handler firing more than once for the
+        // same payment (e.g. a stray duplicate event) — only the first call
+        // through should ever hit the backend for this attempt.
+        let handlerFired = false;
+
         const rzp = new Razorpay({
             key: orderRes.razorpayKeyId,
             amount: orderRes.amount,
@@ -146,8 +198,12 @@ document.addEventListener('DOMContentLoaded', () => {
             },
             theme: { color: "#0a0a0a" },
             handler: async function (response) {
+                if (handlerFired) return;
+                handlerFired = true;
+
                 // Step 3: hand the payment proof back to the backend for signature
                 // verification — only a verified payment gets saved as an order.
+                setLoading(true, 'Verifying Payment...');
                 try {
                     const verifyRes = await postToBackend({
                         ...baseData,
@@ -155,26 +211,32 @@ document.addEventListener('DOMContentLoaded', () => {
                         razorpay_order_id: response.razorpay_order_id,
                         razorpay_payment_id: response.razorpay_payment_id,
                         razorpay_signature: response.razorpay_signature
-                    });
+                    }, 30000);
                     if (verifyRes.success) {
-                        showSuccess(verifyRes.orderId);
+                        setStatus('Saving Order...');
+                        showSuccess(verifyRes.orderId, verifyRes.invoiceNo);
                     } else {
                         showMessage(verifyRes.message || 'Payment verification failed. Contact support with your payment ID: ' + response.razorpay_payment_id, 'error');
                         setLoading(false);
                     }
                 } catch (err) {
-                    showMessage('Payment succeeded but we could not confirm your order. Contact support with your payment ID: ' + response.razorpay_payment_id, 'error');
+                    // The payment itself already succeeded on Razorpay's side at this
+                    // point — a network hiccup here must never be shown as "failed".
+                    showMessage('Payment received! We could not confirm it instantly — contact support with your payment ID if you don\'t get a confirmation shortly: ' + response.razorpay_payment_id, 'success');
                     setLoading(false);
                 }
             },
             modal: {
                 ondismiss: function () {
+                    if (handlerFired) return;
+                    showMessage('Payment cancelled — your card was not charged.', 'error');
                     setLoading(false);
                 }
             }
         });
 
         rzp.on('payment.failed', function (response) {
+            if (handlerFired) return;
             showMessage('Payment failed: ' + (response.error?.description || 'Please try again.'), 'error');
             setLoading(false);
         });

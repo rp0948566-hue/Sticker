@@ -45,3 +45,47 @@
 @media (max-width: 480px) {
   .logo-img { height: 34px; }
 }
+
+/* Login session indicator + account dropdown (shared across every page) */
+.user-btn.is-logged-in {
+  color: #0a0a0a;
+  position: relative;
+}
+.user-btn.is-logged-in::after {
+  content: '';
+  position: absolute;
+  top: -2px;
+  right: -2px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: #1fa84f;
+  border: 1.5px solid #fff;
+}
+
+.auth-menu {
+  position: absolute;
+  top: calc(100% + 12px);
+  right: 0;
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 12px 30px rgba(0,0,0,0.15);
+  padding: 14px 16px;
+  min-width: 190px;
+  z-index: 50;
+  text-align: left;
+}
+.auth-menu-name { font-weight: 700; font-size: 14px; color: #111; }
+.auth-menu-email { font-size: 12.5px; color: #777; margin: 2px 0 12px; word-break: break-all; }
+.auth-menu-logout {
+  width: 100%;
+  background: #111;
+  color: #fff;
+  border: none;
+  padding: 8px 0;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 700;
+  cursor: pointer;
+}
+.nav-icons-group { position: relative; }

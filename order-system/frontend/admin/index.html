@@ -1,98 +1,122 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <title>Classic Cult Admin</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="Admin dashboard for order management at Classic Cult." />
-    <meta name="author" content="Classic Cult" />
-    <meta name="robots" content="noindex, nofollow" />
-    <meta name="theme-color" content="#FFFAFA" />
-    
-    <!-- Open Graph / Facebook -->
-    <meta property="og:type" content="website" />
-    <meta property="og:url" content="https://stickitup.xyz/admin" />
-    <meta property="og:title" content="Classic Cult Admin" />
-    <meta property="og:description" content="Admin dashboard for order management at Classic Cult." />
-    <meta property="og:image" content="https://stickitup.xyz/IMAGE/collection-desktop.png" />
-
-    <!-- Twitter -->
-    <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:url" content="https://stickitup.xyz/admin" />
-    <meta name="twitter:title" content="Classic Cult Admin" />
-    <meta name="twitter:description" content="Admin dashboard for order management at Classic Cult." />
-    <meta name="twitter:image" content="https://stickitup.xyz/IMAGE/collection-desktop.png" />
-
-    <!-- Favicon -->
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="shortcut icon" type="image/svg+xml" href="/favicon.svg" />
-    <link rel="apple-touch-icon" href="/classic-cult-logo-cropped.png" />
-<meta name="author" content="Classic Cult" />
-    
-    
-    
-    <!-- Open Graph / Facebook -->
-    
-    
-    
-    
-    
-
-    <!-- Twitter -->
-    
-    
-    
-    
-    
-
-    <!-- Favicon -->
-    
-    
-    
-<meta charset="UTF-8">
-  
-  
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <style>
-    :root { --primary: #000; --accent: #facc15; --bg: #f4f4f7; }
-    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background: var(--bg); margin: 0; }
-    .sidebar { width: 260px; height: 100vh; background: var(--primary); color: white; position: fixed; padding: 20px; }
-    .main-content { margin-left: 300px; padding: 40px; }
-    .header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 30px; }
-    .stats-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px; margin-bottom: 30px; }
-    .stat-card { background: white; padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-    .filters { background: white; padding: 20px; border-radius: 12px; display: flex; gap: 15px; align-items: center; margin-bottom: 20px; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-    .filters input, .filters select { padding: 10px; border: 1px solid #ddd; border-radius: 8px; font-size: 14px; }
-    .search-input { flex-grow: 1; }
-    table { width: 100%; border-collapse: collapse; background: white; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 6px rgba(0,0,0,0.02); }
-    th { background: #f8f9fa; padding: 15px; text-align: left; font-size: 13px; font-weight: 700; color: #666; text-transform: uppercase; }
-    td { padding: 15px; border-top: 1px solid #eee; font-size: 14px; vertical-align: middle; }
-    .status-badge { padding: 6px 12px; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase; }
-    .status-pending { background: #fff8e1; color: #ffa000; }
-    .status-confirmed { background: #e3f2fd; color: #1976d2; }
-    .status-shipped { background: #f3e5f5; color: #7b1fa2; }
-    .status-delivered { background: #e8f5e9; color: #388e3c; }
-    .status-cancelled { background: #ffebee; color: #d32f2f; }
-    .action-btn { border: none; background: #f0f0f0; padding: 8px; border-radius: 6px; cursor: pointer; margin-right: 5px; }
-    #loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(255,255,255,0.8); display: none; justify-content: center; align-items: center; z-index: 1000; }
-  </style>
-  </head>
+  <title>Admin | Classic Cult</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta charset="UTF-8" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css" />
+</head>
 <body>
-  <div class="sidebar">
-    <h1 style="color: var(--accent); font-style: italic;">CLASSIC CULT Admin</h1>
-    <div style="margin-top: 40px;">
-      <a href="#" style="color: white; text-decoration: none; display: block; margin-bottom: 20px;"><i class="fas fa-shopping-cart"></i> Orders</a>
-    </div>
+
+  <!-- Login gate -->
+  <div class="ap-gate" id="ap-gate">
+    <form class="ap-gate-card" id="ap-gate-form">
+      <img src="/classic-cult-logo-cropped.png" alt="Classic Cult" class="ap-gate-logo">
+      <h1>Admin Panel</h1>
+      <p>Enter your admin password to continue.</p>
+      <input type="password" id="ap-gate-input" placeholder="Admin password" autocomplete="current-password" required>
+      <button type="submit"><span class="ap-gate-btn-text">Unlock</span></button>
+      <div class="ap-gate-error" id="ap-gate-error"></div>
+    </form>
   </div>
-  <div class="main-content">
-    <div class="header"><h2>Order Management</h2><button onclick="loadOrders()" class="action-btn">Refresh</button></div>
-    <div class="filters">
-      <input type="text" id="search-input" class="search-input" placeholder="Search by Phone or Order ID...">
-    </div>
-    <table>
-      <thead><tr><th>Details</th><th>Customer</th><th>Product</th><th>Total</th><th>Status</th><th>Actions</th></tr></thead>
-      <tbody id="order-table-body"></tbody>
-    </table>
+
+  <!-- App shell -->
+  <div class="ap-app" id="ap-app" style="display:none;">
+
+    <aside class="ap-sidebar">
+      <div class="ap-brand">
+        <img src="/classic-cult-logo-cropped.png" alt="Classic Cult">
+        <span>Admin</span>
+      </div>
+      <nav class="ap-nav">
+        <button class="ap-nav-item active" data-view="dashboard"><i class="fa-solid fa-gauge-high"></i> Dashboard</button>
+        <button class="ap-nav-item" data-view="orders"><i class="fa-solid fa-receipt"></i> Orders</button>
+        <button class="ap-nav-item" data-view="stock"><i class="fa-solid fa-boxes-stacked"></i> Stock</button>
+      </nav>
+      <button class="ap-logout" id="ap-logout"><i class="fa-solid fa-arrow-right-from-bracket"></i> Log out</button>
+    </aside>
+
+    <main class="ap-main">
+      <header class="ap-topbar">
+        <div>
+          <h1 id="ap-view-title">Dashboard</h1>
+          <p id="ap-view-sub">Live snapshot of your store</p>
+        </div>
+        <button class="ap-refresh-btn" id="ap-refresh"><i class="fa-solid fa-rotate"></i> Refresh</button>
+      </header>
+
+      <!-- Dashboard view -->
+      <section class="ap-view" id="view-dashboard">
+        <div class="ap-stats-grid">
+          <div class="ap-stat-card">
+            <div class="ap-stat-icon blue"><i class="fa-solid fa-receipt"></i></div>
+            <div><div class="ap-stat-value" id="stat-total-orders">—</div><div class="ap-stat-label">Total Orders</div></div>
+          </div>
+          <div class="ap-stat-card">
+            <div class="ap-stat-icon green"><i class="fa-solid fa-indian-rupee-sign"></i></div>
+            <div><div class="ap-stat-value" id="stat-revenue">—</div><div class="ap-stat-label">Total Revenue</div></div>
+          </div>
+          <div class="ap-stat-card">
+            <div class="ap-stat-icon amber"><i class="fa-solid fa-clock"></i></div>
+            <div><div class="ap-stat-value" id="stat-pending">—</div><div class="ap-stat-label">Pending Orders</div></div>
+          </div>
+          <div class="ap-stat-card">
+            <div class="ap-stat-icon red"><i class="fa-solid fa-box-open"></i></div>
+            <div><div class="ap-stat-value" id="stat-oos">—</div><div class="ap-stat-label">Out of Stock Categories</div></div>
+          </div>
+        </div>
+
+        <div class="ap-card">
+          <div class="ap-card-header"><h2>Recent Orders</h2></div>
+          <div class="ap-table-wrap">
+            <table class="ap-table" id="dash-orders-table">
+              <thead><tr><th>Order ID</th><th>Customer</th><th>Product</th><th>Total</th><th>Status</th></tr></thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Orders view -->
+      <section class="ap-view" id="view-orders" style="display:none;">
+        <div class="ap-card">
+          <div class="ap-card-header">
+            <h2>All Orders</h2>
+            <input type="search" id="orders-search" class="ap-search-input" placeholder="Search by name, phone, order ID...">
+          </div>
+          <div class="ap-table-wrap">
+            <table class="ap-table" id="orders-table">
+              <thead>
+                <tr>
+                  <th>Order ID / Invoice</th><th>Date</th><th>Customer</th><th>Phone</th><th>Address</th><th>Product</th>
+                  <th>Qty</th><th>Total</th><th>Payment Status</th><th>Order Status</th><th></th>
+                </tr>
+              </thead>
+              <tbody></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- Stock view -->
+      <section class="ap-view" id="view-stock" style="display:none;">
+        <div class="ap-card">
+          <div class="ap-card-header">
+            <h2>Category Stock</h2>
+            <p class="ap-card-sub">Toggling a category Out of Stock disables "Add to cart" for every product in it on the live site immediately (next page load).</p>
+          </div>
+          <div class="ap-stock-grid" id="stock-grid"></div>
+        </div>
+      </section>
+
+    </main>
   </div>
+
   <script src="admin.js"></script>
 </body>
 </html>

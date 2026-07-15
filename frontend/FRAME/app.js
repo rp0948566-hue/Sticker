@@ -355,9 +355,10 @@ document.addEventListener('click', (e) => {
         if (qvOld) qvOld.textContent = oldPrice;
         if (qvSave) qvSave.textContent = saveBadge;
 
-        // Parse and store base price, then inject size and frame options
+        // Parse and store base price + category code, then inject size and frame options
         const basePrice = parseFloat(currentPrice.replace('Rs. ', '').trim()) || 0;
         qvModal.dataset.basePrice = basePrice;
+        qvModal.dataset.cc = card.dataset.cc || '';
         injectQuickViewOptions(qvModal);
         updateQuickViewPrice(qvModal);
 
@@ -388,7 +389,7 @@ document.addEventListener('click', (e) => {
     if (existingItem) {
       existingItem.quantity += 1;
     } else {
-      cart.push({ title, price, image, quantity: 1, url: productUrl });
+      cart.push({ title, price, image, quantity: 1, url: productUrl, categoryCode: card.dataset.cc || '' });
     }
     updateCartUI();
   }
@@ -593,7 +594,7 @@ function initQuickViewActions() {
       if (existingItem) {
         existingItem.quantity += qty;
       } else {
-        cart.push({ title, price, image: img, quantity: qty, url: productUrl });
+        cart.push({ title, price, image: img, quantity: qty, url: productUrl, categoryCode: qvModal.dataset.cc || '' });
       }
 
       updateCartUI();
@@ -732,4 +733,75 @@ initQuickViewActions();
       dropdownParent.classList.add('active-parent');
     }
   }
+})();
+
+// Login session UI — reflects whoever is signed in (via localStorage 'cc_user',
+// set by the Login page) on the navbar icon across every page. There's no real
+// backend account system yet, so this is a client-side "remember me" only.
+(function () {
+  function getUser() {
+    try { return JSON.parse(localStorage.getItem('cc_user') || 'null'); } catch { return null; }
+  }
+
+  function closeAuthMenu() {
+    document.querySelector('.auth-menu')?.remove();
+  }
+
+  function toggleAuthMenu(btn, user) {
+    if (document.querySelector('.auth-menu')) { closeAuthMenu(); return; }
+    const menu = document.createElement('div');
+    menu.className = 'auth-menu';
+    menu.innerHTML = `
+      <div class="auth-menu-name">${user.name}</div>
+      <div class="auth-menu-email">${user.email}</div>
+      <button type="button" class="auth-menu-logout">Logout</button>
+    `;
+    (btn.closest('.nav-icons-group') || btn.parentElement).appendChild(menu);
+    menu.querySelector('.auth-menu-logout').addEventListener('click', () => {
+      localStorage.removeItem('cc_user');
+      closeAuthMenu();
+      renderAuthUI();
+    });
+  }
+
+  function renderAuthUI() {
+    const user = getUser();
+
+    document.querySelectorAll('.user-btn').forEach(btn => {
+      if (user) {
+        btn.removeAttribute('onclick');
+        btn.classList.add('is-logged-in');
+        btn.title = `Signed in as ${user.name}`;
+        btn.onclick = (e) => { e.stopPropagation(); toggleAuthMenu(btn, user); };
+      } else {
+        btn.classList.remove('is-logged-in');
+        btn.removeAttribute('title');
+        btn.onclick = null;
+        btn.setAttribute('onclick', "window.location.href='/frontend/Login Page/index.html'");
+      }
+    });
+
+    document.querySelectorAll('.mobile-menu-links a').forEach(a => {
+      if (a.textContent.trim().toUpperCase().includes('MY ACCOUNT')) {
+        if (user) {
+          a.textContent = `Logout (${user.name})`;
+          a.href = '#';
+          a.onclick = (e) => {
+            e.preventDefault();
+            localStorage.removeItem('cc_user');
+            renderAuthUI();
+          };
+        } else {
+          a.innerHTML = '<i class="far fa-user"></i> MY ACCOUNT';
+          a.onclick = null;
+        }
+      }
+    });
+  }
+
+  document.addEventListener('click', (e) => {
+    if (!e.target.closest('.auth-menu') && !e.target.closest('.user-btn')) closeAuthMenu();
+  });
+
+  renderAuthUI();
 })();

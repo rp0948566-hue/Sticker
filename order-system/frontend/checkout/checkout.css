@@ -120,6 +120,7 @@ body {
   margin-bottom: 20px;
 }
 .co-message.error { display: block; background: var(--co-danger-bg); color: var(--co-danger); border: 1px solid #fda29b; }
+.co-message.success { display: block; background: #ecfdf3; color: #17a566; border: 1px solid #a9e8c4; }
 
 /* ---------- Form sections ---------- */
 .co-field-group {
