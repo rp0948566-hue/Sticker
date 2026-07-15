@@ -56,6 +56,52 @@ document.addEventListener('DOMContentLoaded', () => {
         return !firstInvalid;
     }
 
+    // ── Real-time pincode lookup ────────────────────────────────────────
+    // Uses India Post's free public API to confirm the pincode is real and
+    // auto-fill city/state, catching typos before they reach checkout.
+    const pincodeInput = document.getElementById('pincode');
+    const pincodeStatus = document.getElementById('pincode-status');
+    const cityInput = document.getElementById('city');
+    const stateInput = document.getElementById('state');
+    let pincodeLookupToken = 0;
+
+    function setPincodeStatus(text, cls) {
+        pincodeStatus.textContent = text;
+        pincodeStatus.className = `co-pincode-status${cls ? ' ' + cls : ''}`;
+    }
+
+    pincodeInput.addEventListener('input', () => {
+        pincodeInput.value = pincodeInput.value.replace(/\D/g, '').slice(0, 6);
+        const code = pincodeInput.value;
+        const token = ++pincodeLookupToken;
+
+        if (code.length !== 6) {
+            setPincodeStatus('');
+            return;
+        }
+
+        setPincodeStatus('Checking pincode...', 'checking');
+
+        fetch(`https://api.postalpincode.in/pincode/${code}`)
+            .then(resp => resp.json())
+            .then(data => {
+                if (token !== pincodeLookupToken) return; // a newer lookup superseded this one
+                const result = data && data[0];
+                const office = result?.Status === 'Success' ? result.PostOffice?.[0] : null;
+                if (office) {
+                    setPincodeStatus(`✓ ${office.District}, ${office.State}`, 'valid');
+                    if (!cityInput.value.trim()) cityInput.value = office.District;
+                    if (!stateInput.value.trim()) stateInput.value = office.State;
+                } else {
+                    setPincodeStatus('✗ This pincode could not be found. Please double-check it.', 'invalid');
+                }
+            })
+            .catch(() => {
+                if (token !== pincodeLookupToken) return;
+                setPincodeStatus(''); // API unreachable — don't block checkout on a best-effort check
+            });
+    });
+
     function currentMethodLabel() {
         return (form.querySelector('input[name="paymentMethod"]:checked')?.value === 'cod') ? 'Place Order' : 'Pay Now';
     }

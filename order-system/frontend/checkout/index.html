@@ -116,8 +116,9 @@
               </div>
               <div class="co-field">
                 <label for="pincode">Pincode</label>
-                <input type="text" id="pincode" placeholder="400001" autocomplete="postal-code" required pattern="\d{6}">
+                <input type="text" id="pincode" placeholder="400001" autocomplete="postal-code" required pattern="\d{6}" maxlength="6" inputmode="numeric">
                 <span class="co-field-error">Enter a valid 6-digit pincode.</span>
+                <span id="pincode-status" class="co-pincode-status" aria-live="polite"></span>
               </div>
             </div>
           </div>

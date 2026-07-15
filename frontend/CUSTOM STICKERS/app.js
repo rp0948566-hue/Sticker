@@ -386,12 +386,19 @@ document.addEventListener('click', (e) => {
   const addToCartBtn = e.target.closest('.add-to-cart-btn');
   if (addToCartBtn) {
     const card = addToCartBtn.closest('.product-card');
-    const title = card.querySelector('.product-title').textContent.trim();
+    const baseTitle = card.querySelector('.product-title').textContent.trim();
     const priceText = card.querySelector('.price-current').textContent.trim();
     const price = parseFloat(priceText.replace('Rs. ', '').trim());
     const cartImgEl = card.querySelector('.placeholder-image img') || card.querySelector('img.placeholder-image') || card.querySelector('.product-image-container img') || card.querySelector('img');
     const image = cartImgEl?.src || CONFIG.CART_IMAGE_DEFAULT;
-    const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(title);
+
+    const sizePill = card.querySelector('[data-group="size"].active');
+    const framePill = card.querySelector('[data-group="frame"].active');
+    const title = sizePill
+      ? `${baseTitle} (${sizePill.textContent.trim()}, ${framePill?.textContent.trim() === 'With' ? 'With Frame' : 'Without Frame'})`
+      : baseTitle;
+
+    const productUrl = window.location.origin + window.location.pathname + '?product=' + encodeURIComponent(baseTitle);
 
     const existingItem = cart.find(item => item.title === title);
     if (existingItem) {

@@ -9,8 +9,13 @@
    (~4.5:1 aspect ratio) — sizing is height-driven, width follows.
    ============================================================ */
 
+/* !important is deliberate here: in dev, Vite's CSS HMR re-injects an inline
+   copy of a page's own style.css AFTER this file in the DOM (only on pages
+   that reference /src/*.css, e.g. home.html), which otherwise silently wins
+   the cascade and reverts these sizes. Marking them !important makes this
+   file authoritative everywhere regardless of injection order. */
 .navbar {
-  padding: 12px 0;
+  padding: 12px 0 !important;
 }
 
 .nav-left .logo {
@@ -19,31 +24,31 @@
 }
 
 .logo-img {
-  height: 64px;
-  width: auto;
-  max-width: none;
+  height: 64px !important;
+  width: auto !important;
+  max-width: none !important;
   display: block;
   object-fit: contain;
   image-rendering: -webkit-optimize-contrast;
 }
 
 .nav-left {
-  min-width: 300px;
+  min-width: 300px !important;
 }
 
 @media (max-width: 1024px) {
-  .logo-img { height: 52px; }
-  .nav-left { min-width: 240px; }
+  .logo-img { height: 52px !important; }
+  .nav-left { min-width: 240px !important; }
 }
 
 @media (max-width: 768px) {
-  .navbar { padding: 10px 0; }
-  .logo-img { height: 42px; }
-  .nav-left { min-width: 0; }
+  .navbar { padding: 10px 0 !important; }
+  .logo-img { height: 42px !important; }
+  .nav-left { min-width: 0 !important; }
 }
 
 @media (max-width: 480px) {
-  .logo-img { height: 34px; }
+  .logo-img { height: 34px !important; }
 }
 
 /* Login session indicator + account dropdown (shared across every page) */

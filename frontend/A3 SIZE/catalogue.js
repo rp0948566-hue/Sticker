@@ -118,14 +118,41 @@ function getProductName(cc, filename, catNames) {
 
 function revCount(idx) { return 12 + ((idx * 41 + 17) % 238); }
 
+// Product photos are hosted in a public Google Drive folder rather than
+// bundled with the site. IMAGE_DRIVE_MAP resolves "<category folder>/<filename>"
+// to that file's Drive ID (loaded once in initProductGrid). Falls back to the
+// old local /STICKER path (which won't resolve) only for the handful of files
+// not found in Drive, so a missing mapping fails the same way it always did.
+let IMAGE_DRIVE_MAP = {};
+
+async function loadImageDriveMap() {
+  try {
+    const resp = await fetch('/image-drive-map.json');
+    IMAGE_DRIVE_MAP = await resp.json();
+  } catch (err) {
+    // Best-effort — falls back to local /STICKER paths if the map can't load
+  }
+}
+
+function driveImageUrl(id) {
+  return `https://lh3.googleusercontent.com/d/${id}=w800`;
+}
+
 function createCard(record, idx, catFolders, catNames) {
   const [cc, pageCode, filename] = record;
   const folder = catFolders[cc] || '';
-  const imgSrc = cc === 'LAP'
-    ? encodeURI(`/STICKER/laptop stickers file/laptopp stickers/${filename}`)
-    : encodeURI(`/STICKER/FRAME/${folder}/${filename}`);
+  const relPath = cc === 'LAP' ? `laptop stickers file/laptopp stickers/${filename}` : `FRAME/${folder}/${filename}`;
+  const driveId = IMAGE_DRIVE_MAP[relPath];
+  const imgSrc = driveId
+    ? driveImageUrl(driveId)
+    : (cc === 'LAP'
+        ? encodeURI(`/STICKER/laptop stickers file/laptopp stickers/${filename}`)
+        : encodeURI(`/STICKER/FRAME/${folder}/${filename}`));
   const name = getProductName(cc, filename, catNames);
   const isFramed = pageCode === 'NF' || pageCode === 'F';
+  // Laptop stickers/skins are cut to a specific laptop model, not sold in
+  // 3"/4"/5" sticker sizes or with a frame — those pills don't apply here.
+  const hasSizeFrameOptions = cc !== 'LAP';
   const card = document.createElement('div');
   card.className = 'product-card';
   card.dataset.cc = cc;
@@ -150,6 +177,7 @@ function createCard(record, idx, catFolders, catNames) {
         <span class="price-badge">-Rs. 64.00</span>
       </div>
       <div class="price-current">Rs. 15.00</div>
+      ${hasSizeFrameOptions ? `
       <div class="card-selectors">
         <div class="card-sel-row">
           <span class="card-sel-label">Size</span>
@@ -166,7 +194,7 @@ function createCard(record, idx, catFolders, catNames) {
             <button class="card-pill${isFramed ? ' active' : ''}" data-group="frame" data-val="with">With</button>
           </div>
         </div>
-      </div>
+      </div>` : ''}
       <button class="add-to-cart-btn">Add to cart</button>
     </div>
   `;
@@ -183,11 +211,11 @@ function createCard(record, idx, catFolders, catNames) {
   return card;
 }
 
-function appendChunk(grid, products, startIdx, catFolders, catNames) {
+function appendChunk(grid, products, startIdx, catFolders, catNames, imageMap) {
   const end = Math.min(startIdx + CHUNK, products.length);
   const frag = document.createDocumentFragment();
   for (let i = startIdx; i < end; i++) {
-    frag.appendChild(createCard(products[i], i, catFolders, catNames));
+    frag.appendChild(createCard(products[i], i, catFolders, catNames, imageMap));
   }
   grid.appendChild(frag);
   return end;
@@ -438,7 +466,10 @@ export async function initProductGrid() {
   const grid = document.querySelector('#products-carousel, .products-grid');
   if (!grid) return;
 
-  const { CATALOGUE, CAT_FOLDERS, CAT_NAMES } = await import('./catalogue-data.js');
+  const [{ CATALOGUE, CAT_FOLDERS, CAT_NAMES }] = await Promise.all([
+    import('./catalogue-data.js'),
+    loadImageDriveMap()
+  ]);
   const pageCode = detectPage();
   const allProducts = getProductsForPage(CATALOGUE, pageCode);
   if (!allProducts.length) return;
