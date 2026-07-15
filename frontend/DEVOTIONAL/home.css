@@ -4820,28 +4820,19 @@ button:not(.qty-arrow-btn):not(.recom-arrow):not(.cart-close):not(.quick-view-cl
 /* Home Page Hero Banner (Image Only) */
 .hero-banner-container {
   width: 100%;
-  max-width: 1200px;
-  margin: 20px auto 30px auto;
-  padding: 0 15px;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+  line-height: 0;
 }
 .hero-banner-img {
   width: 100%;
   height: auto;
-  max-height: 360px;
-  object-fit: cover;
   display: block;
-  border-radius: 12px;
   box-shadow: 0 8px 30px rgba(0, 0, 0, 0.08);
 }
 @media (max-width: 768px) {
   .hero-banner-container {
-    padding: 0 10px;
-    margin-top: 10px;
-    margin-bottom: 20px;
-  }
-  .hero-banner-img {
-    border-radius: 8px;
-    max-height: 200px;
+    margin-bottom: 0;
   }
 }

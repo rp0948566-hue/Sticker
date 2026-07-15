@@ -53,7 +53,7 @@
     
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
     <link rel="stylesheet" href="./loader.css" />
-    <link rel="stylesheet" href="./home.css" />
+    <link rel="stylesheet" href="./home.css?v=2" />
     <link rel="stylesheet" href="./style.css" />
     <link rel="stylesheet" href="/shared-header.css" />
   
@@ -214,17 +214,34 @@
 
     <main>
       <!-- Hero Banner -->
-      <section class="hero">
-        <img src="/IMAGE/1.png" alt="Sale Banner" class="hero-image" />
-      </section>
-
-      <!-- Top Responsive Banner -->
-      <div class="top-banner-container">
+      <div class="hero-banner-container">
         <picture>
-          <source media="(max-width: 768px)" srcset="/IMAGE/phone/top.png">
-          <img src="/IMAGE/top.png" alt="Top Banner" class="top-banner-img">
+          <source media="(max-width: 768px)" srcset="/banner-mobile-v3.jpg">
+          <img src="/banner-desktop-v3.png" alt="Classic Cult - Timeless Designs. Iconic Vibes." class="hero-banner-img">
         </picture>
       </div>
+
+      <!-- Trust Bar -->
+      <section class="trust-bar">
+        <div class="trust-bar-inner">
+          <div class="trust-item">
+            <div class="trust-icon"><i class="fa-solid fa-users"></i></div>
+            <span>Happy Customers</span>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon"><i class="fa-solid fa-flag"></i></div>
+            <span>Proudly Made In India</span>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon"><i class="fa-solid fa-truck-fast"></i></div>
+            <span>Shipped In 48 Hours</span>
+          </div>
+          <div class="trust-item">
+            <div class="trust-icon"><i class="fa-solid fa-medal"></i></div>
+            <span>Top Grade Materials</span>
+          </div>
+        </div>
+      </section>
 
       <!-- Filters Section -->
       <section class="filters-section">
