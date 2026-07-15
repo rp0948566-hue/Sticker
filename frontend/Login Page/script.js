@@ -43,12 +43,3 @@ signupForm.addEventListener('submit', (e) => {
   showToast('Account created — redirecting...');
   setTimeout(() => { window.location.href = '/home'; }, 900);
 });
-
-function handleGoogleDemo() {
-  localStorage.setItem('demoUserEmail', 'demo.user@gmail.com');
-  showToast('Google sign-in is a demo — redirecting...');
-  setTimeout(() => { window.location.href = '/home'; }, 900);
-}
-
-document.getElementById('google-login-btn')?.addEventListener('click', handleGoogleDemo);
-document.getElementById('google-signup-btn')?.addEventListener('click', handleGoogleDemo);

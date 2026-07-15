@@ -706,3 +706,30 @@ initQuickViewActions();
   });
 })();
 
+
+// Highlight the current page in the nav bar (based on actual path, not a hardcoded guess)
+(function () {
+  const normalize = (p) => decodeURIComponent(p || '').replace(/\/index\.html$/i, '').replace(/\/$/, '').toLowerCase() || '/';
+  const currentPath = normalize(window.location.pathname);
+  const isHome = currentPath === '/home' || currentPath === '/' || currentPath === '/home.html';
+
+  document.querySelectorAll('.nav-links > li > a').forEach(a => {
+    const href = a.getAttribute('href');
+    if (!href || href === '#') return;
+    const hrefPath = normalize(href);
+    const matches = isHome ? hrefPath === '/home' : hrefPath === currentPath;
+    a.classList.toggle('active-link', matches);
+  });
+
+  // POSTER dropdown: highlight the parent link if the current page is one of its submenu items
+  const dropdownParent = document.querySelector('li.has-dropdown');
+  if (dropdownParent && !isHome) {
+    const subLinks = dropdownParent.querySelectorAll('.frame-categories-dropdown a, .mobile-frame-submenu a');
+    const isInDropdown = Array.from(subLinks).some(a => normalize(a.getAttribute('href')) === currentPath);
+    const parentLink = dropdownParent.querySelector(':scope > a');
+    if (isInDropdown && parentLink) {
+      parentLink.classList.add('active-link');
+      dropdownParent.classList.add('active-parent');
+    }
+  }
+})();

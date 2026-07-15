@@ -5211,20 +5211,13 @@ button.card-pill.active{color:#fff !important;background:#111 !important;backgro
   fill: currentColor;
 }
 
-/* ===== Classic Cult logo image ===== */
-.nav-left .logo{
-  display: flex;
-  align-items: center;
-}
-.logo-img{
-  height: 96px;
-  width: auto;
-  display: block;
-  object-fit: contain;
-}
-@media (max-width: 768px){
-  .logo-img{ height: 76px; }
-}
-@media (max-width: 480px){
-  .logo-img{ height: 60px; }
+
+.nav-links a.active-link,
+.nav-links li.has-dropdown.active-parent > a {
+    color: #000000;
+    font-weight: 800;
+    text-decoration: underline;
+    text-underline-offset: 4px;
+    text-decoration-color: #FFC700;
+    text-decoration-thickness: 2px;
 }

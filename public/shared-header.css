@@ -1,0 +1,47 @@
+/* ============================================================
+   Shared header / logo system — single source of truth.
+   Loaded on every page after that page's own stylesheet, so these
+   rules win the cascade without needing !important. Do not duplicate
+   .logo-img / .nav-left .logo / .navbar padding sizing in any per-page
+   stylesheet — edit only here so every page stays in sync automatically.
+
+   Logo source (classic-cult-logo-cropped.png) is a wide/flat lockup
+   (~4.5:1 aspect ratio) — sizing is height-driven, width follows.
+   ============================================================ */
+
+.navbar {
+  padding: 12px 0;
+}
+
+.nav-left .logo {
+  display: flex;
+  align-items: center;
+}
+
+.logo-img {
+  height: 64px;
+  width: auto;
+  max-width: none;
+  display: block;
+  object-fit: contain;
+  image-rendering: -webkit-optimize-contrast;
+}
+
+.nav-left {
+  min-width: 300px;
+}
+
+@media (max-width: 1024px) {
+  .logo-img { height: 52px; }
+  .nav-left { min-width: 240px; }
+}
+
+@media (max-width: 768px) {
+  .navbar { padding: 10px 0; }
+  .logo-img { height: 42px; }
+  .nav-left { min-width: 0; }
+}
+
+@media (max-width: 480px) {
+  .logo-img { height: 34px; }
+}

@@ -16,7 +16,13 @@ function doPost(e) {
   try {
     lock.waitLock(30000);
     const data = JSON.parse(e.postData.contents);
-    
+
+    // Honeypot: real users never fill this hidden field — bots that auto-fill forms do
+    if (data.hp_company) {
+      logEvent("BOT_BLOCKED", "Honeypot field filled", data.phone || "unknown");
+      return createResponse({ success: false, message: "Security Validation Failed" });
+    }
+
     // Security Token Check
     if (data.verify_token !== "USER_VERIFIED_77") {
        return createResponse({ success: false, message: "Security Validation Failed" });

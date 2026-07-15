@@ -11,6 +11,7 @@ export default defineConfig({
         accessories: resolve(__dirname, 'frontend/ACCESSORIES/index.html'),
         cardSkins: resolve(__dirname, 'frontend/CARD SKINS/index.html'),
         customStickers: resolve(__dirname, 'frontend/CUSTOM STICKERS/index.html'),
+        customStickersDetail: resolve(__dirname, 'frontend/CUSTOM STICKERS/product-detail.html'),
         frame: resolve(__dirname, 'frontend/FRAME/FRAME/index.html'),
         login: resolve(__dirname, 'frontend/Login Page/index.html'),
         macbookSkins: resolve(__dirname, 'frontend/MACBOOK SKINS/index.html'),
