@@ -164,8 +164,15 @@ function driveImageUrl(id) {
   return `https://lh3.googleusercontent.com/d/${id}=w800`;
 }
 
-function createCard(record, idx, catFolders, catNames) {
-  const [cc, pageCode, filename] = record;
+function createCard(record, idx, catFolders, catNames, currentPageCode) {
+  const [cc, recordPageCode, filename] = record;
+  // currentPageCode is which PAGE this card is being rendered on. recordPageCode
+  // is whatever page this artwork variant is tagged for in the catalogue —
+  // irrelevant here, since the home page's featured grid can pull in any cc
+  // regardless of recordPageCode, and using recordPageCode for the product
+  // type would mislabel a sticker as a "Macbook Skin" just because that same
+  // artwork is also sold as a skin elsewhere.
+  const pageCode = currentPageCode || recordPageCode;
   const folder = catFolders[cc] || '';
   const relPath = cc === 'LAP' ? `laptop stickers file/laptopp stickers/${filename}` : `FRAME/${folder}/${filename}`;
   // Images now live locally in public/STICKER — fast and reliable. If a
@@ -177,7 +184,7 @@ function createCard(record, idx, catFolders, catNames) {
   const imgFallback = driveId ? driveImageUrl(driveId) : '/IMAGE/1.png';
   const name = getProductName(cc, filename, catNames, pageCode);
   const ref = getProductRef(filename);
-  const isFramed = pageCode === 'NF' || pageCode === 'F';
+  const isFramed = recordPageCode === 'NF' || recordPageCode === 'F';
   // Laptop stickers/skins are cut to a specific laptop model, not sold in
   // 3"/4"/5" sticker sizes or with a frame — those pills don't apply here.
   const hasSizeFrameOptions = cc !== 'LAP' && pageCode !== 'M' && pageCode !== 'C';
@@ -242,11 +249,11 @@ function createCard(record, idx, catFolders, catNames) {
   return card;
 }
 
-function appendChunk(grid, products, startIdx, catFolders, catNames, imageMap) {
+function appendChunk(grid, products, startIdx, catFolders, catNames, currentPageCode) {
   const end = Math.min(startIdx + CHUNK, products.length);
   const frag = document.createDocumentFragment();
   for (let i = startIdx; i < end; i++) {
-    frag.appendChild(createCard(products[i], i, catFolders, catNames, imageMap));
+    frag.appendChild(createCard(products[i], i, catFolders, catNames, currentPageCode));
   }
   grid.appendChild(frag);
   return end;
@@ -323,7 +330,7 @@ function setupChunkLoader(grid, products, catFolders, catNames, pageCode) {
   if (grid._anim) { grid._anim.remove(); grid._anim = null; }
 
   grid.innerHTML = '';
-  let loaded = appendChunk(grid, products, 0, catFolders, catNames);
+  let loaded = appendChunk(grid, products, 0, catFolders, catNames, pageCode);
   if (loaded >= products.length) {
     // All products fit in first chunk — done
     return;
@@ -351,7 +358,7 @@ function setupChunkLoader(grid, products, catFolders, catNames, pageCode) {
     animEl.style.display = 'flex';
     setTimeout(() => {
       requestAnimationFrame(() => {
-        loaded = appendChunk(grid, products, loaded, catFolders, catNames);
+        loaded = appendChunk(grid, products, loaded, catFolders, catNames, pageCode);
         animEl.style.display = 'none';
         busy = false;
         if (loaded < products.length) obs.observe(sentinel);
