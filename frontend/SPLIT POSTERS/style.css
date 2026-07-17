@@ -5285,8 +5285,18 @@ button.card-pill.active{color:#fff !important;background:#111 !important;backgro
 }
 @media (max-width: 560px) {
   .trust-bar { padding: 20px 16px; }
-  .trust-bar-inner { justify-content: flex-start; gap: 18px 24px; }
-  .trust-icon { width: 44px; height: 44px; font-size: 17px; }
+  /* A single stacked column of 4 items reads as unarranged/plain on phone —
+     a 2x2 grid is more compact and looks intentional. */
+  .trust-bar-inner {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    justify-content: initial;
+    justify-items: start;
+    gap: 18px 12px;
+  }
+  .trust-item { min-width: 0; }
+  .trust-item span { white-space: normal; }
+  .trust-icon { width: 44px; height: 44px; font-size: 17px; flex-shrink: 0; }
 }
 
 /* Out-of-stock (admin-controlled) */

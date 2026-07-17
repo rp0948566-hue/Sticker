@@ -93,7 +93,7 @@ export function isDynamicPage() {
 
 // Home page "Shop Stickers" preview — a handful of products spread across
 // the most popular categories, not the full catalogue.
-const FEATURED_HOME_CODES = ['ANM', 'MOV', 'MAR', 'AST', 'QOU', 'CAR', 'SPO', 'GIR', 'DEV', 'ART', 'SONM', 'LAP'];
+const FEATURED_HOME_CODES = ['ANM', 'MOV', 'AST', 'QOU', 'CAR', 'SPO', 'GIR', 'DEV', 'ART', 'SONM', 'VVG', 'LAP'];
 function getFeaturedHomeProducts(catalogue) {
   const featured = [];
   FEATURED_HOME_CODES.forEach(code => {
