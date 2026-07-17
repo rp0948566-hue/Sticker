@@ -86,7 +86,7 @@ function updateQuickViewVisuals(qvModal) {
   }
 }
 
-function injectQuickViewOptions(qvModal) {
+function injectQuickViewOptions(qvModal, showOptions = true) {
   const addSection = qvModal.querySelector('.qv-add-section');
   if (!addSection) return;
 
@@ -144,6 +144,11 @@ function injectQuickViewOptions(qvModal) {
       });
     });
   }
+
+  // Skins (Macbook/Card) aren't sold in 3"/4"/5" sticker sizes or with a
+  // frame — hide the pills entirely instead of showing options that don't
+  // apply to the product being viewed.
+  optionsContainer.style.display = showOptions ? '' : 'none';
 
   // Ensure visuals match the selected options on load/reset
   updateQuickViewVisuals(qvModal);
@@ -382,7 +387,7 @@ document.addEventListener('click', (e) => {
           if (qvDims) qvDims.style.display = '';
         }
 
-        injectQuickViewOptions(qvModal);
+        injectQuickViewOptions(qvModal, pc !== 'M' && pc !== 'C');
         updateQuickViewPrice(qvModal);
 
         // Reset the quantity input to 1
