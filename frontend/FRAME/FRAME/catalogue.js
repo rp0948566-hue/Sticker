@@ -112,7 +112,16 @@ const PROD_LABELS = {
 // Display name is just the category label (no "#4" numbering shown on the
 // site) — the number/filename is kept only as a hidden ref (card.dataset.ref)
 // so cart lines for different designs still stay distinct behind the scenes.
-function getProductName(cc, filename, catNames) {
+//
+// The same artwork is sold as different physical products (a "Movie" design
+// can be printed as a poster on the Poster page, or as a skin on the Macbook
+// Skins page) — the catalogue reuses cc for the artwork's theme regardless
+// of which product page it's sold on, so the displayed name must follow the
+// page's product type, not just the artwork's theme, or a movie-themed
+// design would misleadingly say "Movie Poster" while shown as a laptop skin.
+const PAGE_PRODUCT_LABELS = { M: 'Macbook Skin', C: 'Card Skin' };
+function getProductName(cc, filename, catNames, pageCode) {
+  if (pageCode && PAGE_PRODUCT_LABELS[pageCode]) return PAGE_PRODUCT_LABELS[pageCode];
   return PROD_LABELS[cc] || (catNames[cc] ? catNames[cc] + ' Art' : cc);
 }
 
@@ -154,7 +163,7 @@ function createCard(record, idx, catFolders, catNames) {
   const imgSrc = encodeURI(`/STICKER/${relPath}`);
   const driveId = IMAGE_DRIVE_MAP[relPath];
   const imgFallback = driveId ? driveImageUrl(driveId) : '/IMAGE/1.png';
-  const name = getProductName(cc, filename, catNames);
+  const name = getProductName(cc, filename, catNames, pageCode);
   const ref = getProductRef(filename);
   const isFramed = pageCode === 'NF' || pageCode === 'F';
   // Laptop stickers/skins are cut to a specific laptop model, not sold in
