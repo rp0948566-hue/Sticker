@@ -1,8 +1,0 @@
-{
-  "rewrites": [
-    {
-      "source": "/(.*)",
-      "destination": "/Solar%20panel/$1"
-    }
-  ]
-}

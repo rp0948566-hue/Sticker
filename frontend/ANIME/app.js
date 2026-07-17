@@ -344,7 +344,10 @@ document.addEventListener('click', (e) => {
       
       if (qvModal) {
         qvModal.querySelector('.qv-title').textContent = title;
-        qvModal.querySelector('.qv-main-image img').src = img;
+        // .qv-main-image has two <img> tags (visible photo + zoom source) —
+        // update both, or the second silently keeps whatever product's
+        // image was shown last time Quick View was opened.
+        qvModal.querySelectorAll('.qv-main-image img').forEach(mainImg => { mainImg.src = img; });
         qvModal.querySelectorAll('.qv-thumb img').forEach(thumb => { thumb.src = img; });
         
         const qvCurrent = qvModal.querySelector('.qv-price-current');
