@@ -4022,6 +4022,8 @@ img {
   }
   .filter-wrapper.active .filter-dropdown {
     transform: translateY(0) scale(1) !important;
+    opacity: 1 !important;
+    visibility: visible !important;
   }
   /* Header stays fixed at top of the bottom sheet */
   .filter-dropdown .filter-dropdown-header {
