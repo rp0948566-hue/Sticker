@@ -4821,14 +4821,26 @@ button.card-pill.active{color:#fff !important;background:#111 !important;backgro
   max-width: 1200px;
   width: 90%;
   margin: 0 auto;
-  overflow: hidden;
   padding: 10px 0;
+  /* No prev/next buttons exist on this page — make it natively swipeable/
+     scrollable (touch, trackpad, mouse-drag) instead of relying on JS to
+     translate the track, which left it permanently stuck showing only the
+     first card with no way to reach the rest. */
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x proximity;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
 }
 
 .material-track {
   display: flex;
   gap: 24px;
-  transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  width: max-content;
+}
+
+.material-card {
+  scroll-snap-align: start;
 }
 
 .material-card {

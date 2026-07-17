@@ -94,3 +94,29 @@
   cursor: pointer;
 }
 .nav-icons-group { position: relative; }
+
+/* Mobile menu drawer must actually slide into view. Something in the
+   per-page stylesheets keeps `left` pinned at -100% even with !important
+   overrides here, so drive the slide with `transform` instead — it's an
+   independent property and reliably wins regardless of whatever is holding
+   `left` in place. */
+@media (max-width: 768px) {
+  .mobile-menu-drawer {
+    transform: translateX(-100%) !important;
+    transition: transform 0.4s cubic-bezier(0.16, 1, 0.3, 1) !important;
+  }
+  .mobile-menu-drawer.active {
+    transform: translateX(0) !important;
+  }
+
+  /* Tighter, more compact spacing now that the support/social footer
+     blocks are gone — a shorter list reads more professional than one
+     padded out to fill space. */
+  .mobile-menu-links a {
+    padding: 13px 18px !important;
+    font-size: 13.5px !important;
+  }
+  .mobile-frame-toggle > a {
+    padding: 13px 18px !important;
+  }
+}

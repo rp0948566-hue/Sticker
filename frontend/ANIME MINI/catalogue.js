@@ -147,12 +147,13 @@ function createCard(record, idx, catFolders, catNames) {
   const [cc, pageCode, filename] = record;
   const folder = catFolders[cc] || '';
   const relPath = cc === 'LAP' ? `laptop stickers file/laptopp stickers/${filename}` : `FRAME/${folder}/${filename}`;
+  // Images now live locally in public/STICKER — fast and reliable. If a
+  // specific file is somehow missing locally, fall back to hotlinking the
+  // same file from Drive (see the onerror handler below), then finally to a
+  // placeholder if both fail.
+  const imgSrc = encodeURI(`/STICKER/${relPath}`);
   const driveId = IMAGE_DRIVE_MAP[relPath];
-  const imgSrc = driveId
-    ? driveImageUrl(driveId)
-    : (cc === 'LAP'
-        ? encodeURI(`/STICKER/laptop stickers file/laptopp stickers/${filename}`)
-        : encodeURI(`/STICKER/FRAME/${folder}/${filename}`));
+  const imgFallback = driveId ? driveImageUrl(driveId) : '/IMAGE/1.png';
   const name = getProductName(cc, filename, catNames);
   const ref = getProductRef(filename);
   const isFramed = pageCode === 'NF' || pageCode === 'F';
@@ -168,7 +169,7 @@ function createCard(record, idx, catFolders, catNames) {
     <div class="product-image-container${isFramed ? ' has-frame' : ''}">
       <div class="save-badge">Save Rs. 64.00</div>
       <div class="placeholder-image${isFramed ? ' frame-on' : ''}">
-        <img src="${imgSrc}" alt="${name}" loading="lazy" onerror="this.onerror=null;this.src='/IMAGE/1.png';this.closest('.product-card')?.classList.add('img-fallback');">
+        <img src="${imgSrc}" alt="${name}" loading="lazy" data-fallback="${imgFallback}" onerror="if (this.src !== this.dataset.fallback && this.dataset.fallback) { this.src = this.dataset.fallback; } else { this.onerror=null; this.src='/IMAGE/1.png'; this.closest('.product-card')?.classList.add('img-fallback'); }">
       </div>
       <div class="quick-view">
         <svg viewBox="0 0 24 24"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path><circle cx="12" cy="12" r="3"></circle></svg>
