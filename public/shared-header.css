@@ -95,6 +95,23 @@
 }
 .nav-icons-group { position: relative; }
 
+/* SEO: every page needs exactly one H1 for search engines/screen readers,
+   but the hero banner is a full-bleed image with its own baked-in text —
+   an on-page visible H1 would be redundant. Standard accessible pattern:
+   present in the DOM and readable by crawlers/assistive tech, invisible
+   on screen (not display:none, which crawlers and screen readers skip). */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
 /* Mobile menu drawer must actually slide into view. Something in the
    per-page stylesheets keeps `left` pinned at -100% even with !important
    overrides here, so drive the slide with `transform` instead — it's an
