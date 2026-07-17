@@ -346,13 +346,16 @@ document.addEventListener('click', (e) => {
       
       if (qvModal) {
         qvModal.querySelector('.qv-title').textContent = title;
-        qvModal.querySelector('.qv-main-image img').src = img;
+        // .qv-main-image has two <img> tags (visible photo + zoom source) —
+        // update both, or the second silently keeps whatever product's
+        // image was shown last time Quick View was opened.
+        qvModal.querySelectorAll('.qv-main-image img').forEach(mainImg => { mainImg.src = img; });
         qvModal.querySelectorAll('.qv-thumb img').forEach(thumb => { thumb.src = img; });
-        
+
         const qvCurrent = qvModal.querySelector('.qv-price-current');
         const qvOld = qvModal.querySelector('.qv-price-old');
         const qvSave = qvModal.querySelector('.qv-save-badge');
-        
+
         if (qvCurrent) qvCurrent.textContent = currentPrice;
         if (qvOld) qvOld.textContent = oldPrice;
         if (qvSave) qvSave.textContent = saveBadge;
@@ -363,6 +366,24 @@ document.addEventListener('click', (e) => {
         qvModal.dataset.cc = card.dataset.cc || '';
         qvModal.dataset.ref = card.dataset.ref || '';
         qvModal.dataset.sku = card.dataset.sku || '';
+
+        // Description copy is generic "glitter sticker" text baked into the
+        // modal HTML — wrong for skins, which aren't stickers at all.
+        const qvHeading = qvModal.querySelector('#qv-desc-heading');
+        const qvBody = qvModal.querySelector('#qv-desc-body');
+        const qvDims = qvModal.querySelector('#qv-desc-dims');
+        const pc = card.dataset.pagecode;
+        if (pc === 'M' || pc === 'C') {
+          const skinType = pc === 'M' ? 'Macbook Skin' : 'Card Skin';
+          if (qvHeading) qvHeading.textContent = `CLASSIC CULT Premium ${skinType}:`;
+          if (qvBody) qvBody.textContent = `Protect and personalize your device with our premium ${skinType.toLowerCase()}, printed on durable vinyl with a smooth matte finish that resists scratches and fading. Easy to apply, bubble-free, and residue-free on removal.`;
+          if (qvDims) qvDims.style.display = 'none';
+        } else {
+          if (qvHeading) qvHeading.textContent = 'CLASSIC CULT Premium Glitter Stickers:';
+          if (qvBody) qvBody.textContent = "Add instant sparkle to your everyday essentials with our premium glitter stickers, designed with high-quality glitter material and a smooth protective finish that shines beautifully from every angle. Perfect for adding bold personality and shimmer to any surface.";
+          if (qvDims) qvDims.style.display = '';
+        }
+
         injectQuickViewOptions(qvModal);
         updateQuickViewPrice(qvModal);
 

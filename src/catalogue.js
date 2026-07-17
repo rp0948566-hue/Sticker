@@ -180,12 +180,13 @@ function createCard(record, idx, catFolders, catNames) {
   const isFramed = pageCode === 'NF' || pageCode === 'F';
   // Laptop stickers/skins are cut to a specific laptop model, not sold in
   // 3"/4"/5" sticker sizes or with a frame — those pills don't apply here.
-  const hasSizeFrameOptions = cc !== 'LAP';
+  const hasSizeFrameOptions = cc !== 'LAP' && pageCode !== 'M' && pageCode !== 'C';
   const card = document.createElement('div');
   card.className = 'product-card';
   card.dataset.cc = cc;
   card.dataset.ref = ref;
   card.dataset.sku = `${cc}-${ref}`;
+  card.dataset.pagecode = pageCode;
   card.innerHTML = `
     <div class="product-image-container${isFramed ? ' has-frame' : ''}">
       <div class="save-badge">Save Rs. 64.00</div>
