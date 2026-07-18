@@ -385,10 +385,9 @@ document.addEventListener('click', (e) => {
         const qvBody = qvModal.querySelector('#qv-desc-body');
         const qvDims = qvModal.querySelector('#qv-desc-dims');
         const pc = card.dataset.pagecode;
-        if (pc === 'M' || pc === 'C') {
-          const skinType = pc === 'M' ? 'Macbook Skin' : 'Card Skin';
-          if (qvHeading) qvHeading.textContent = `CLASSIC CULT Premium ${skinType}:`;
-          if (qvBody) qvBody.textContent = `Protect and personalize your device with our premium ${skinType.toLowerCase()}, printed on durable vinyl with a smooth matte finish that resists scratches and fading. Easy to apply, bubble-free, and residue-free on removal.`;
+        if (pc === 'M') {
+          if (qvHeading) qvHeading.textContent = 'CLASSIC CULT Premium Card:';
+          if (qvBody) qvBody.textContent = 'Protect and personalize your device with our premium card, printed on durable vinyl with a smooth matte finish that resists scratches and fading. Easy to apply, bubble-free, and residue-free on removal.';
           if (qvDims) qvDims.style.display = 'none';
         } else {
           if (qvHeading) qvHeading.textContent = 'CLASSIC CULT Premium Glitter Stickers:';
@@ -396,7 +395,7 @@ document.addEventListener('click', (e) => {
           if (qvDims) qvDims.style.display = '';
         }
 
-        injectQuickViewOptions(qvModal, pc !== 'C');
+        injectQuickViewOptions(qvModal);
         updateQuickViewPrice(qvModal);
 
         // Reset the quantity input to 1

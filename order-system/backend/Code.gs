@@ -31,7 +31,7 @@ const ALL_STOCK_CODES = {
   VVG: 'Van Gogh', SONM: 'Songs', SC: 'Song Cover 8x8', DEV: 'Devotional',
   VSN: 'Vision Board', GIR: 'Pink Lavender', SHCN: 'Shinchan', A3: 'A3 Size',
   SPL: 'Split Posters', SPLA: 'Split Art', LAP: 'Laptop Stickers',
-  M: 'Macbook Skins', C: 'Card Skins', A: 'Accessories', F: 'Frame/Poster'
+  M: 'Card', A: 'Accessories', F: 'Frame/Poster'
 };
 
 // Razorpay credentials are never hardcoded here — set them once via

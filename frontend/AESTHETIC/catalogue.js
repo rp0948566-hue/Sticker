@@ -45,16 +45,18 @@ const THEME_MAP = {
 
 // Product type label (lowercase) → page codes that match
 const PROD_TYPE_PAGES = {
-  'laptop skins':['M','LAP'], 'macbook':['M'], 'laptop stickers':['LAP','M'],
-  'card skin':['C'], 'sticker sheets':['C','A'], 'sticker packs':['A'],
-  'accessory':['A'],          'frame':['F'],
+  'laptop skins':['LAP'], 'laptop stickers':['LAP'], 'card':['M'],
+  'sticker sheets':['A'], 'sticker packs':['A'],
+  'accessory':['A'],      'frame':['F'],
 };
 
 // ── Helpers ───────────────────────────────────────────────────────────────
 export function detectPage() {
   const p = window.location.pathname.toUpperCase();
-  if (p.includes('MACBOOK'))  return 'M';
-  if (p.includes('CARD'))     return 'C';
+  // "Card Skins" was removed and "Macbook Skins" was renamed to "Card" —
+  // the page still uses internal code 'M' throughout (stock sheet, admin
+  // panel, saved orders), only the folder/URL/label changed.
+  if (p.includes('CARD'))     return 'M';
   if (p.includes('MYSTERY'))  return 'MYSTERY';
   if (p.includes('ACCESSORIES')) return 'A';
   if (p.includes('NEW') && p.includes('ARRIVAL')) return 'N';
@@ -119,7 +121,7 @@ const PROD_LABELS = {
 // of which product page it's sold on, so the displayed name must follow the
 // page's product type, not just the artwork's theme, or a movie-themed
 // design would misleadingly say "Movie Poster" while shown as a laptop skin.
-const PAGE_PRODUCT_LABELS = { M: 'Macbook Skin', C: 'Card Skin' };
+const PAGE_PRODUCT_LABELS = { M: 'Card' };
 function getProductName(cc, filename, catNames, pageCode) {
   if (pageCode && PAGE_PRODUCT_LABELS[pageCode]) return PAGE_PRODUCT_LABELS[pageCode];
   return PROD_LABELS[cc] || (catNames[cc] ? catNames[cc] + ' Art' : cc);
@@ -178,7 +180,7 @@ function createCard(record, idx, catFolders, catNames, currentPageCode) {
   // Laptop stickers and card skins are cut to a fixed shape, not sold in
   // 3"/4"/5" sizes or with a frame — those pills don't apply on those pages.
   // Macbook Skins DO offer size/frame choices (per store owner's spec).
-  const hasSizeFrameOptions = cc !== 'LAP' && pageCode !== 'C';
+  const hasSizeFrameOptions = cc !== 'LAP';
   const card = document.createElement('div');
   card.className = 'product-card';
   card.dataset.cc = cc;
