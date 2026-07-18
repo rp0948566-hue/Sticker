@@ -185,9 +185,10 @@ function createCard(record, idx, catFolders, catNames, currentPageCode) {
   const name = getProductName(cc, filename, catNames, pageCode);
   const ref = getProductRef(filename);
   const isFramed = recordPageCode === 'NF' || recordPageCode === 'F';
-  // Laptop stickers/skins are cut to a specific laptop model, not sold in
-  // 3"/4"/5" sticker sizes or with a frame — those pills don't apply here.
-  const hasSizeFrameOptions = cc !== 'LAP' && pageCode !== 'M' && pageCode !== 'C';
+  // Laptop stickers and card skins are cut to a fixed shape, not sold in
+  // 3"/4"/5" sizes or with a frame — those pills don't apply on those pages.
+  // Macbook Skins DO offer size/frame choices (per store owner's spec).
+  const hasSizeFrameOptions = cc !== 'LAP' && pageCode !== 'C';
   const card = document.createElement('div');
   card.className = 'product-card';
   card.dataset.cc = cc;

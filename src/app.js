@@ -172,7 +172,16 @@ function updateQuickViewPrice(qvModal) {
 }
 
 function updateCartUI() {
-  localStorage.setItem('cart', JSON.stringify(cart));
+  try {
+    localStorage.setItem('cart', JSON.stringify(cart));
+  } catch (err) {
+    // Custom-sticker uploads carry base64 image data — if storage is full,
+    // drop the just-added item with a clear message rather than silently
+    // corrupting the whole cart.
+    alert('Your uploaded design is too large to add to the cart. Please upload a smaller image file.');
+    cart.pop();
+    localStorage.setItem('cart', JSON.stringify(cart));
+  }
   const cartItemsContainer = document.querySelector('.cart-items-container');
   const cartEmpty = document.querySelector('.cart-empty');
   const cartFooter = document.querySelector('.cart-footer');
@@ -389,7 +398,7 @@ document.addEventListener('click', (e) => {
           if (qvDims) qvDims.style.display = '';
         }
 
-        injectQuickViewOptions(qvModal, pc !== 'M' && pc !== 'C');
+        injectQuickViewOptions(qvModal, pc !== 'C');
         updateQuickViewPrice(qvModal);
 
         // Reset the quantity input to 1
